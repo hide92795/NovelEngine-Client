@@ -1,10 +1,9 @@
 package hide92795.NovelEngine.Panel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import hide92795.NovelEngine.Client.NovelEngine;
 import hide92795.NovelEngine.Gui.Button;
+
+import java.util.HashMap;
 
 public class Panel {
 
@@ -21,7 +20,7 @@ public class Panel {
 
 	}
 
-	public void update() {
+	public void update(int delta) {
 		for (Button b : buttons.values()) {
 			b.update();
 		}

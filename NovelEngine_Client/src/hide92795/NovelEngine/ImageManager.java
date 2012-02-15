@@ -23,7 +23,7 @@ public class ImageManager {
 			try {
 				t = TextureLoader.getTexture("PNG", bis);
 			} catch (IOException e) {
-				System.err.println("ƒCƒ[ƒW‚ğƒ[ƒh‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B");
+				System.err.println("ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚");
 				e.printStackTrace();
 			}
 			images.put(id, t);
@@ -42,7 +42,7 @@ public class ImageManager {
 		try {
 			t = TextureLoader.getTexture("PNG", bis);
 		} catch (Exception e) {
-			System.err.println("ƒCƒ[ƒW‚ğƒ[ƒh‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B");
+			System.err.println("ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚");
 			e.printStackTrace();
 		}
 		images.put(id, t);

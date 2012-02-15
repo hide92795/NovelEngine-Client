@@ -1,21 +1,14 @@
 package hide92795.NovelEngine.Gui;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import hide92795.NovelEngine.Utils;
 import hide92795.NovelEngine.Client.NovelEngine;
 import hide92795.NovelEngine.Command.CommandButton;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.util.Color;
 import org.lwjgl.util.Rectangle;
-import org.newdawn.slick.opengl.ImageIOImageData;
 import org.newdawn.slick.opengl.Texture;
 
 public class Button extends Gui {
@@ -30,18 +23,20 @@ public class Button extends Gui {
 	private Texture imageOm;
 	private Rectangle rectangle;
 	private boolean onmouse;
-	private BufferedImage clickable;
+	private BufferedImage clickableImage;
 	private boolean leftClick;
 	private boolean rightClick;
+	private boolean clickable = true;
 
-	public Button(int name, int[] position, int texid, int texidOm,
+	public Button(NovelEngine engine, int name, int[] position, int texid, int texidOm,
 			BufferedImage clickable, CommandButton command,
 			CommandButton commandOm) {
+		super(engine);
 		this.name = name;
 		this.setPosition(position);
 		this.imageID = texid;
 		this.imageOmID = texidOm;
-		this.clickable = clickable;
+		this.clickableImage = clickable;
 		this.command = command;
 		this.commandOm = commandOm;
 
@@ -49,8 +44,8 @@ public class Button extends Gui {
 
 	@Override
 	public void init() {
-		image = NovelEngine.theEngine.imageManager.getImage(imageID);
-		imageOm = NovelEngine.theEngine.imageManager.getImage(imageOmID);
+		image = engine.imageManager.getImage(imageID);
+		imageOm = engine.imageManager.getImage(imageOmID);
 	}
 
 	@Override
@@ -80,18 +75,22 @@ public class Button extends Gui {
 
 	@Override
 	public void update() {
+		if(!clickable){
+			onmouse = false;
+			return;
+		}
 		int x = rectangle.getX();
 		int y = rectangle.getY();
 		int w = rectangle.getWidth();
 		int h = rectangle.getHeight();
 		int mx = Mouse.getX();
-		int my = Display.getHeight() - Mouse.getY() - 1;
+		int my = engine.height - Mouse.getY() - 1;
 		if (x <= mx && x + w - 1 >= mx && y <= my && y + h - 1 >= my) {
 			int ix = mx - x;
-			int iy = my-y;
-			int col = clickable.getRGB(ix, iy);
+			int iy = my - y;
+			int col = clickableImage.getRGB(ix, iy);
 			Color c = Utils.integerToColor(col);
-			if(c.equals(Color.WHITE)){
+			if (c.equals(Color.WHITE)) {
 				onmouse = false;
 				return;
 			}
@@ -135,7 +134,7 @@ public class Button extends Gui {
 	}
 
 	public void setRectangle(Rectangle rect) {
-		rect.setSize(clickable.getWidth(), clickable.getHeight());
+		rect.setSize(clickableImage.getWidth(), clickableImage.getHeight());
 		this.rectangle = rect;
 	}
 
@@ -149,6 +148,14 @@ public class Button extends Gui {
 
 	public CommandButton getCommandOm() {
 		return commandOm;
+	}
+
+	public boolean isClickable() {
+		return clickable;
+	}
+
+	public void setClickable(boolean clickable) {
+		this.clickable = clickable;
 	}
 
 }

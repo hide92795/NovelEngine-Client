@@ -1,27 +1,33 @@
 package hide92795.NovelEngine.Panel;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import hide92795.NovelEngine.Client.NovelEngine;
 import hide92795.NovelEngine.Command.CommandButton;
+import hide92795.NovelEngine.Fader.Fader;
+import hide92795.NovelEngine.Fader.FaderListener;
+import hide92795.NovelEngine.Fader.FaderOutBlock;
+import hide92795.NovelEngine.Fader.FaderOutDisappear;
+import hide92795.NovelEngine.Fader.FaderOutSlide;
 import hide92795.NovelEngine.Gui.Button;
 import hide92795.NovelEngine.SettingData.DataMainMenu;
 
 import java.util.Random;
 
 import org.lwjgl.Sys;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.Rectangle;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.opengl.Texture;
 
-public class PanelMainMenu extends Panel {
+public class PanelMainMenu extends Panel implements FaderListener{
 	private Texture bgimage;
 	private Random random;
 	private int nowBgImageId = 0;
@@ -30,6 +36,8 @@ public class PanelMainMenu extends Panel {
 	private float alpha = 1.0f;
 	private int[] seq;
 	private Audio bgm;
+	private boolean start = false;
+	private Fader f;
 
 	public PanelMainMenu(NovelEngine engine) {
 		super(engine);
@@ -77,60 +85,60 @@ public class PanelMainMenu extends Panel {
 	private int getLocationById(int id, boolean x) {
 		switch (id) {
 		case 0:
-			// ÉEÉBÉìÉhÉE ç∂è„
+			// „Ç¶„Ç£„É≥„Éâ„Ç¶ Â∑¶‰∏ä
 			if (x) {
 				return 0;
 			} else {
 				return 0;
 			}
 		case 1:
-			// ÉEÉBÉìÉhÉE âEè„
+			// „Ç¶„Ç£„É≥„Éâ„Ç¶ Âè≥‰∏ä
 			if (x) {
-				return Display.getWidth();
+				return engine.width;
 			} else {
 				return 0;
 			}
 		case 2:
-			// ÉEÉBÉìÉhÉE ç∂â∫
+			// „Ç¶„Ç£„É≥„Éâ„Ç¶ Â∑¶‰∏ã
 			if (x) {
 				return 0;
 			} else {
-				return Display.getHeight();
+				return engine.height;
 			}
 		case 3:
-			// ÉEÉBÉìÉhÉE âEâ∫
+			// „Ç¶„Ç£„É≥„Éâ„Ç¶ Âè≥‰∏ã
 			if (x) {
-				return Display.getWidth();
+				return engine.width;
 			} else {
-				return Display.getHeight();
+				return engine.height;
 			}
 		case 4:
-			// ÉEÉBÉìÉhÉE è„íÜâõ{
+			// „Ç¶„Ç£„É≥„Éâ„Ç¶ ‰∏ä‰∏≠Â§Æ{
 			if (x) {
-				return Display.getWidth() / 2;
+				return engine.width / 2;
 			} else {
 				return 0;
 			}
 		case 5:
-			// ÉEÉBÉìÉhÉE ç∂íÜâõ
+			// „Ç¶„Ç£„É≥„Éâ„Ç¶ Â∑¶‰∏≠Â§Æ
 			if (x) {
 				return 0;
 			} else {
-				return Display.getHeight() / 2;
+				return engine.height / 2;
 			}
 		case 6:
-			// ÉEÉBÉìÉhÉE â∫íÜâõ
+			// „Ç¶„Ç£„É≥„Éâ„Ç¶ ‰∏ã‰∏≠Â§Æ
 			if (x) {
-				return Display.getWidth() / 2;
+				return engine.width / 2;
 			} else {
-				return Display.getHeight();
+				return engine.height;
 			}
 		case 7:
-			// ÉEÉBÉìÉhÉE âEíÜâõ
+			// „Ç¶„Ç£„É≥„Éâ„Ç¶ Âè≥‰∏≠Â§Æ
 			if (x) {
-				return Display.getWidth();
+				return engine.width;
 			} else {
-				return Display.getHeight() / 2;
+				return engine.height / 2;
 			}
 		default:
 			Button b = buttons.get(id);
@@ -159,6 +167,7 @@ public class PanelMainMenu extends Panel {
 	public void render() {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		bgimage.bind();
+		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		{
 			glColor4f(1.0f, 1.0f, 1.0f, alpha);
@@ -177,6 +186,9 @@ public class PanelMainMenu extends Panel {
 		}
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		renderButtons();
+		if (start) {
+			f.render();
+		}
 	}
 
 	private void renderButtons() {
@@ -200,34 +212,33 @@ public class PanelMainMenu extends Panel {
 
 	@Override
 	public void actionPerformed(Button b, boolean isLeft) {
-		if(isLeft){
-			CommandButton c = b.getCommand();
-			switch (c.getCommand()) {
-			case CommandButton.MENU_COMMAND_START:
-				System.out.println("Start main story!");
-				System.out.println("Start story at "+ c.getId());
-				break;
-			case CommandButton.MENU_COMMAND_LOAD:
-				System.out.println("Go to load window!");
-				break;
-			case CommandButton.MENU_COMMAND_EXIT:
-				engine.exit();
-				break;
-
-			default:
-				break;
-			}
+		if (isLeft) {
+			commandSwitch(b.getCommand());
 		}
-		
 	}
 
 	@Override
 	public void onMouse(Button b) {
-		CommandButton c = b.getCommandOm();
+		commandSwitch(b.getCommandOm());
+	}
+	
+	private void commandSwitch(CommandButton c) {
 		switch (c.getCommand()) {
 		case CommandButton.MENU_COMMAND_START:
 			System.out.println("Start main story!");
-			System.out.println("Start story at "+ c.getId());
+			System.out.println("Start story at " + c.getId());
+			engine.loadStory(c.getId());
+			bgm.stop();
+			for (Button b1 : buttons.values()) {
+				b1.setClickable(false);
+			}
+			//f = new FaderOutSlide(engine, 40, 40);
+			f = new FaderOutBlock(engine, 12, 9,"#000000");
+			//f= new FaderOutDisappear(engine, 1.7f, "#ff00ff");
+			start = true;
+			break;
+		case CommandButton.MENU_COMMAND_LOAD:
+			System.out.println("Go to load window!");
 			break;
 		case CommandButton.MENU_COMMAND_CHANGEBG:
 			if (!changeBG) {
@@ -236,15 +247,19 @@ public class PanelMainMenu extends Panel {
 						.getBackImageIds());
 			}
 			break;
+		case CommandButton.MENU_COMMAND_EXIT:
+			engine.exit();
+			break;
+
 		default:
 			break;
 		}
 	}
 
 	@Override
-	public void update() {
-		super.update();
-		if(!bgm.isPlaying()){
+	public void update(int delta) {
+		super.update(delta);
+		if (!bgm.isPlaying() && !start) {
 			bgm.playAsMusic(1.0f, 0.5f, true);
 		}
 		if (changeBG) {
@@ -256,5 +271,15 @@ public class PanelMainMenu extends Panel {
 				alpha = 1.0f;
 			}
 		}
+		if (start) {
+			f.update(delta);
+		}
+
+	}
+	
+	@Override
+	public void onFinish() {
+		// TODO Ëá™ÂãïÁîüÊàê„Åï„Çå„Åü„É°„ÇΩ„ÉÉ„Éâ„Éª„Çπ„Çø„Éñ
+		
 	}
 }

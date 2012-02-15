@@ -23,7 +23,7 @@ public class SoundManager {
 			try {
 				p = AudioLoader.getAudio("WAV", bis);
 			} catch (IOException e) {
-				System.err.println("ƒTƒEƒ“ƒh‚ğƒ[ƒh‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B");
+				System.err.println("ã‚µã‚¦ãƒ³ãƒ‰ã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚");
 				e.printStackTrace();
 			}
 			sounds.put(id, p);
@@ -42,7 +42,7 @@ public class SoundManager {
 		try {
 			p = AudioLoader.getAudio("WAV", bis);
 		} catch (Exception e) {
-			System.err.println("ƒTƒEƒ“ƒh‚ğƒ[ƒh‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B");
+			System.err.println("ã‚µã‚¦ãƒ³ãƒ‰ã‚’ãƒ­ãƒ¼ãƒ‰ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚");
 			e.printStackTrace();
 		}
 		sounds.put(id, p);

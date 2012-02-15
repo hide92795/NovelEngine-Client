@@ -118,8 +118,8 @@ public class DataLoader {
 			CommandButton com = new CommandButton(command, id);
 			CommandButton comOm = new CommandButton(commandom, idom);
 
-			Button b = new Button(name, position, texid, texidOm, image, com,
-					comOm);
+			Button b = new Button(NovelEngine.theEngine, name, position, texid,
+					texidOm, image, com, comOm);
 			button[i] = b;
 		}
 		data.setButtons(button);
