@@ -1,7 +1,7 @@
-package hide92795.NovelEngine.Panel;
+package hide92795.NovelEngine.panel;
 
-import hide92795.NovelEngine.Client.NovelEngine;
-import hide92795.NovelEngine.Gui.Button;
+import hide92795.NovelEngine.client.NovelEngine;
+import hide92795.NovelEngine.gui.Button;
 
 import java.util.HashMap;
 

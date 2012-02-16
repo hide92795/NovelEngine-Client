@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.Fader;
+package hide92795.NovelEngine.fader;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
-import hide92795.NovelEngine.Client.NovelEngine;
+import hide92795.NovelEngine.client.NovelEngine;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,7 +41,6 @@ public class FaderOutBlock extends Fader {
 			arr[i] = i;
 		}
 		List<Integer> l = Arrays.asList(arr);
-		System.out.println(l.size());
 		Collections.shuffle(l);
 		list = l.iterator();
 		renderList = new LinkedList<float[]>();

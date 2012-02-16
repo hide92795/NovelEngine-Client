@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.Panel;
+package hide92795.NovelEngine.panel;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -9,15 +9,15 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
-import hide92795.NovelEngine.Client.NovelEngine;
-import hide92795.NovelEngine.Command.CommandButton;
-import hide92795.NovelEngine.Fader.Fader;
-import hide92795.NovelEngine.Fader.FaderListener;
-import hide92795.NovelEngine.Fader.FaderOutBlock;
-import hide92795.NovelEngine.Fader.FaderOutDisappear;
-import hide92795.NovelEngine.Fader.FaderOutSlide;
-import hide92795.NovelEngine.Gui.Button;
-import hide92795.NovelEngine.SettingData.DataMainMenu;
+import hide92795.NovelEngine.client.NovelEngine;
+import hide92795.NovelEngine.command.CommandButton;
+import hide92795.NovelEngine.data.DataMainMenu;
+import hide92795.NovelEngine.fader.Fader;
+import hide92795.NovelEngine.fader.FaderListener;
+import hide92795.NovelEngine.fader.FaderOutBlock;
+import hide92795.NovelEngine.fader.FaderOutDisappear;
+import hide92795.NovelEngine.fader.FaderOutSlide;
+import hide92795.NovelEngine.gui.Button;
 
 import java.util.Random;
 

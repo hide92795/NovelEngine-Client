@@ -1,17 +1,20 @@
-package hide92795.NovelEngine.Client;
+package hide92795.NovelEngine.client;
 
 import hide92795.NovelEngine.DataLoader;
 import hide92795.NovelEngine.QueueHandler;
 import hide92795.NovelEngine.ImageManager;
 import hide92795.NovelEngine.SoundManager;
-import hide92795.NovelEngine.Gui.Button;
-import hide92795.NovelEngine.Panel.Panel;
-import hide92795.NovelEngine.Panel.PanelFadeLogo;
-import hide92795.NovelEngine.SettingData.DataBasic;
-import hide92795.NovelEngine.SettingData.DataMainMenu;
+import hide92795.NovelEngine.data.DataBasic;
+import hide92795.NovelEngine.data.DataMainMenu;
+import hide92795.NovelEngine.data.DataStory;
+import hide92795.NovelEngine.gui.Button;
+import hide92795.NovelEngine.panel.Panel;
+import hide92795.NovelEngine.panel.PanelFadeLogo;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.lwjgl.LWJGLException;
@@ -126,7 +129,6 @@ public class NovelEngine {
 					dataMainMenu = (DataMainMenu) DataLoader.loadData(null,
 							"menu.dat", DataMainMenu.class);
 				} catch (Exception e) {
-					// TODO 自動生成された catch ブロック
 					e.printStackTrace();
 				}
 			}
@@ -282,10 +284,16 @@ public class NovelEngine {
 		t.start();
 	}
 
-	public void loadStory(int id) {
+	public void loadStory(final int id) {
 		Thread t = new Thread() {
 			@Override
 			public void run() {
+				try {
+					DataStory s = (DataStory) DataLoader.loadData(null, id + ".dat", DataStory.class);
+				} catch (Exception e) {
+					// TODO 自動生成された catch ブロック
+					e.printStackTrace();
+				}
 				super.run();
 			}
 		};

@@ -1,6 +1,6 @@
 package hide92795.NovelEngine;
 
-import hide92795.NovelEngine.EventQueue.Queue;
+import hide92795.NovelEngine.queue.Queue;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 

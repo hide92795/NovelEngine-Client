@@ -1,13 +1,15 @@
 package hide92795.NovelEngine;
 
-import hide92795.NovelEngine.Client.NovelEngine;
-import hide92795.NovelEngine.Command.CommandButton;
-import hide92795.NovelEngine.EventQueue.QueueSound;
-import hide92795.NovelEngine.EventQueue.QueueTexture;
-import hide92795.NovelEngine.Gui.Button;
-import hide92795.NovelEngine.SettingData.Data;
-import hide92795.NovelEngine.SettingData.DataBasic;
-import hide92795.NovelEngine.SettingData.DataMainMenu;
+import hide92795.NovelEngine.client.NovelEngine;
+import hide92795.NovelEngine.command.CommandButton;
+import hide92795.NovelEngine.data.Data;
+import hide92795.NovelEngine.data.DataBasic;
+import hide92795.NovelEngine.data.DataMainMenu;
+import hide92795.NovelEngine.data.DataStory;
+import hide92795.NovelEngine.gui.Button;
+import hide92795.NovelEngine.queue.QueueSound;
+import hide92795.NovelEngine.queue.QueueTexture;
+import hide92795.NovelEngine.story.Story;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -18,8 +20,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.Sys;
 import org.msgpack.MessagePack;
+import org.msgpack.type.IntegerValue;
+import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
+import org.msgpack.unpacker.UnpackerIterator;
 
 public class DataLoader {
 	public static Data loadData(String path, String name, Class<?> targetClass)
@@ -37,6 +43,8 @@ public class DataLoader {
 			returnData = parseBasic(unpacker);
 		} else if (targetClass.equals(DataMainMenu.class)) {
 			returnData = parseMainMenu(unpacker);
+		} else if (targetClass.equals(DataStory.class)) {
+			returnData = parseStory(unpacker);
 		}
 		fis.close();
 		return returnData;
@@ -125,5 +133,94 @@ public class DataLoader {
 		data.setButtons(button);
 		data.setButtonRenderingSeq(p.read(int[].class));
 		return data;
+	}
+
+	private static Data parseStory(Unpacker p) throws IOException {
+		DataStory data = new DataStory();
+		UnpackerIterator i = p.iterator();
+		System.out.println(Sys.getTime());
+		while (i.hasNext()) {
+			Value v = i.next();
+			int in = v.asIntegerValue().getInt();
+			switch (in) {
+			case Story.COMMAND_SET_SCENEID:
+				// シーン
+				int sceneid = i.next().asIntegerValue().getInt();
+				break;
+			case Story.COMMAND_LOAD_CHAPTER:
+				// ロード
+				int loadsceneid = i.next().asIntegerValue().getInt();
+				break;
+			case Story.COMMAND_MOVE_CHAPTER:
+				// 移動
+				int movesceneid = i.next().asIntegerValue().getInt();
+				break;
+			case Story.COMMAND_CHANGE_BG:
+				// 背景変更
+				int changebgId = i.next().asIntegerValue().getInt();
+				boolean isFade = i.next().asBooleanValue().getBoolean();
+				break;
+			case Story.COMMAND_CHANGE_CHARACTER:
+				// キャラ変更
+				int charaId = i.next().asIntegerValue().getInt();
+				int faceId = i.next().asIntegerValue().getInt();
+				int placeId = i.next().asIntegerValue().getInt();
+				break;
+			case Story.COMMAND_SHOW_CG:
+				// CG表示
+				int cgId = i.next().asIntegerValue().getInt();
+				boolean isShow = i.next().asBooleanValue().getBoolean();
+				break;
+			case Story.COMMAND_SHOW_WORDS:
+				// セリフ
+				int charaId1 = i.next().asIntegerValue().getInt();
+				int voiceId = i.next().asIntegerValue().getInt();
+				String text = i.next().asRawValue().getString();
+				System.out.println(text);
+				break;
+			case Story.COMMAND_MAKE_BUTTON:
+				// ボタン作成
+				int size = i.next().asIntegerValue().getInt();
+				for (int i1 = 0; i1 < size; i1++) {
+					String b = i.next().asRawValue().getString();
+					int nextSceneId = i.next().asIntegerValue().getInt();
+				}
+				break;
+			case Story.COMMAND_IF:
+				// もし
+				int toSceneId = i.next().asIntegerValue().getInt();
+				int size1 = i.next().asIntegerValue().getInt();
+				for (int i1 = 0; i1 < size1; i1++) {
+					int flagId = i.next().asIntegerValue().getInt();
+					int con = i.next().asIntegerValue().getInt();
+					String b = i.next().asRawValue().getString();
+					
+				}
+				break;
+			case Story.COMMAND_PLAY_BGM:
+				// 再生
+				int sId = i.next().asIntegerValue().getInt();
+				break;
+			case Story.COMMAND_STOP_BGM:
+				// 停止
+				break;
+			case Story.COMMAND_PLAY_SE:
+				// SE再生
+				int seId = i.next().asIntegerValue().getInt();
+				break;
+			case Story.COMMAND_SHOW_BOX:
+				// ボックス表示
+				break;
+			case Story.COMMAND_HIDE_BOX:
+				// ボックス閉じる
+				break;
+
+			default:
+				break;
+			}
+		}
+		System.out.println(Sys.getTime());
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 }

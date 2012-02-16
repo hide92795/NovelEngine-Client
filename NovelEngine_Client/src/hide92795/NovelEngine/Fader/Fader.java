@@ -1,6 +1,6 @@
-package hide92795.NovelEngine.Fader;
+package hide92795.NovelEngine.fader;
 
-import hide92795.NovelEngine.Client.NovelEngine;
+import hide92795.NovelEngine.client.NovelEngine;
 
 public class Fader {
 	public NovelEngine engine;

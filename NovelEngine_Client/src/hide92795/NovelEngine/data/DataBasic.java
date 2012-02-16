@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.SettingData;
+package hide92795.NovelEngine.data;
 
 public class DataBasic extends Data {
 	private String gamename;

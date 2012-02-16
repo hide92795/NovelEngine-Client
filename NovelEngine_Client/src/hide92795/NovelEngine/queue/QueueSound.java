@@ -1,6 +1,6 @@
-package hide92795.NovelEngine.EventQueue;
+package hide92795.NovelEngine.queue;
 
-import hide92795.NovelEngine.Client.NovelEngine;
+import hide92795.NovelEngine.client.NovelEngine;
 
 public class QueueSound extends Queue {
 

@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.Command;
+package hide92795.NovelEngine.command;
 
 public class CommandButton {
 	public static final int MENU_COMMAND_NONE = 4;

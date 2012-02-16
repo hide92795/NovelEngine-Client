@@ -1,6 +1,6 @@
-package hide92795.NovelEngine.SettingData;
+package hide92795.NovelEngine.data;
 
-import hide92795.NovelEngine.Gui.Button;
+import hide92795.NovelEngine.gui.Button;
 
 public class DataMainMenu extends Data {
 	private int[] backImageIds;

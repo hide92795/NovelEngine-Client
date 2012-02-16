@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.Fader;
+package hide92795.NovelEngine.fader;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL11.glVertex2f;
 
 import org.newdawn.slick.Color;
 
-import hide92795.NovelEngine.Client.NovelEngine;
+import hide92795.NovelEngine.client.NovelEngine;
 
 public class FaderOutDisappear extends Fader {
 	private float alpha = 0.0f;

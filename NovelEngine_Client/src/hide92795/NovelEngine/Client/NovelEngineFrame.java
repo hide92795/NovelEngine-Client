@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.Client;
+package hide92795.NovelEngine.client;
 
 import java.awt.Canvas;
 import java.awt.CardLayout;
