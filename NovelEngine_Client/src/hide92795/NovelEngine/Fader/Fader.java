@@ -1,8 +1,8 @@
-package hide92795.NovelEngine.fader;
+package hide92795.novelengine.fader;
 
 import org.newdawn.slick.Color;
 
-import hide92795.NovelEngine.client.NovelEngine;
+import hide92795.novelengine.client.NovelEngine;
 
 public class Fader {
 	public NovelEngine engine;

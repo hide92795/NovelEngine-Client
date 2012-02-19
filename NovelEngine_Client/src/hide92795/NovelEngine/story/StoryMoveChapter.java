@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.story;
+package hide92795.novelengine.story;
 
 public class StoryMoveChapter extends Story {
 	private final int chapterId;

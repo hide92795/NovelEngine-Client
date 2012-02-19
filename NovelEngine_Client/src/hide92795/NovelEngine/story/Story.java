@@ -1,6 +1,6 @@
-package hide92795.NovelEngine.story;
+package hide92795.novelengine.story;
 
-import hide92795.NovelEngine.panel.PanelStory;
+import hide92795.novelengine.panel.PanelStory;
 
 public class Story {
 

@@ -1,6 +1,6 @@
-package hide92795.NovelEngine.gui;
+package hide92795.novelengine.gui;
 
-import hide92795.NovelEngine.client.NovelEngine;
+import hide92795.novelengine.client.NovelEngine;
 
 public class Gui {
 	public NovelEngine engine;

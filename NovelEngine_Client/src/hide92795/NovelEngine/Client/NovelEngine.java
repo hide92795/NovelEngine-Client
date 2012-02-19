@@ -1,17 +1,17 @@
-package hide92795.NovelEngine.client;
+package hide92795.novelengine.client;
 
-import hide92795.NovelEngine.DataLoader;
-import hide92795.NovelEngine.QueueHandler;
-import hide92795.NovelEngine.ImageManager;
-import hide92795.NovelEngine.SoundManager;
-import hide92795.NovelEngine.data.DataBasic;
-import hide92795.NovelEngine.data.DataGui;
-import hide92795.NovelEngine.data.DataMainMenu;
-import hide92795.NovelEngine.data.DataStory;
-import hide92795.NovelEngine.gui.Button;
-import hide92795.NovelEngine.panel.Panel;
-import hide92795.NovelEngine.panel.PanelFadeLogo;
-import hide92795.NovelEngine.panel.PanelStory;
+import hide92795.novelengine.DataLoader;
+import hide92795.novelengine.ImageManager;
+import hide92795.novelengine.QueueHandler;
+import hide92795.novelengine.SoundManager;
+import hide92795.novelengine.data.DataBasic;
+import hide92795.novelengine.data.DataGui;
+import hide92795.novelengine.data.DataMainMenu;
+import hide92795.novelengine.data.DataStory;
+import hide92795.novelengine.gui.Button;
+import hide92795.novelengine.panel.Panel;
+import hide92795.novelengine.panel.PanelFadeLogo;
+import hide92795.novelengine.panel.PanelStory;
 
 import java.awt.Dimension;
 import java.io.File;

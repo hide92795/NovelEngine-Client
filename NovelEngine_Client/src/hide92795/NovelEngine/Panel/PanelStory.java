@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.panel;
+package hide92795.novelengine.panel;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -8,11 +8,11 @@ import java.util.LinkedList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
-import hide92795.NovelEngine.Utils;
-import hide92795.NovelEngine.client.NovelEngine;
-import hide92795.NovelEngine.data.DataStory;
-import hide92795.NovelEngine.story.Story;
-import hide92795.NovelEngine.story.StoryChangeBg;
+import hide92795.novelengine.Utils;
+import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.data.DataStory;
+import hide92795.novelengine.story.Story;
+import hide92795.novelengine.story.StoryChangeBg;
 
 public class PanelStory extends Panel {
 

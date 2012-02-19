@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.data;
+package hide92795.novelengine.data;
 
 public class Data  {
 }

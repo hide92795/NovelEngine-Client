@@ -1,6 +1,6 @@
-package hide92795.NovelEngine.fader;
+package hide92795.novelengine.fader;
 
-import hide92795.NovelEngine.client.NovelEngine;
+import hide92795.novelengine.client.NovelEngine;
 
 public class FaderIn extends Fader {
 

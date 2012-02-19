@@ -1,6 +1,6 @@
-package hide92795.NovelEngine.queue;
+package hide92795.novelengine.queue;
 
-import hide92795.NovelEngine.client.NovelEngine;
+import hide92795.novelengine.client.NovelEngine;
 
 public class QueueTexture extends Queue {
 	private int id;

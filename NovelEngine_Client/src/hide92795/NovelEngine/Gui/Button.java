@@ -1,9 +1,10 @@
-package hide92795.NovelEngine.gui;
+package hide92795.novelengine.gui;
 
 import java.awt.image.BufferedImage;
-import hide92795.NovelEngine.Utils;
-import hide92795.NovelEngine.client.NovelEngine;
-import hide92795.NovelEngine.command.CommandButton;
+
+import hide92795.novelengine.Utils;
+import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.command.CommandButton;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.input.Mouse;

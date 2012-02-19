@@ -1,7 +1,7 @@
-package hide92795.NovelEngine.data;
+package hide92795.novelengine.data;
 
-import hide92795.NovelEngine.story.Story;
-import hide92795.NovelEngine.story.StoryScene;
+import hide92795.novelengine.story.Story;
+import hide92795.novelengine.story.StoryScene;
 
 import java.util.HashMap;
 import java.util.LinkedList;

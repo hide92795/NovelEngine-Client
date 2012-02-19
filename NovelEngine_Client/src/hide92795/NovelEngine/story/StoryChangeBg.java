@@ -1,16 +1,17 @@
-package hide92795.NovelEngine.story;
+package hide92795.novelengine.story;
 
-import hide92795.NovelEngine.fader.Fader;
-import hide92795.NovelEngine.fader.FaderIn;
-import hide92795.NovelEngine.fader.FaderListener;
-import hide92795.NovelEngine.fader.FaderOut;
-import hide92795.NovelEngine.panel.PanelStory;
+import hide92795.novelengine.fader.Fader;
+import hide92795.novelengine.fader.FaderIn;
+import hide92795.novelengine.fader.FaderListener;
+import hide92795.novelengine.fader.FaderOut;
+import hide92795.novelengine.panel.PanelStory;
 
 public class StoryChangeBg extends Story implements FaderListener {
 	private final int nextBgId;
 	private final FaderOut fadeout;
 	private final FaderIn fadein;
 	private Fader fader;
+	protected boolean finish = false;
 
 	public StoryChangeBg(int bgId, FaderOut fadeout, FaderIn fadein) {
 		this.nextBgId = bgId;
@@ -70,6 +71,10 @@ public class StoryChangeBg extends Story implements FaderListener {
 
 	@Override
 	public void onFinish(Fader fader) {
-		System.out.println("StoryChangeBg.onFinish()");
+		if (fader instanceof FaderIn) {
+			fader = fadeout;
+		} else if (fader instanceof FaderOut) {
+			finish = true;
+		}
 	}
 }

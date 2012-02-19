@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.story;
+package hide92795.novelengine.story;
 
 public class StoryLoadChapter extends Story {
 	private final int loadChapterId;

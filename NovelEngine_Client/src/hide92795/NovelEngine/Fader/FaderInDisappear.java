@@ -1,4 +1,4 @@
-package hide92795.NovelEngine.fader;
+package hide92795.novelengine.fader;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
-import hide92795.NovelEngine.client.NovelEngine;
+import hide92795.novelengine.client.NovelEngine;
 
 import org.newdawn.slick.Color;
 
