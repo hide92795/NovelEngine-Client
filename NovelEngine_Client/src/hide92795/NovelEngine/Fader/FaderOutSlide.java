@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.util.BufferedImageUtil;
 
-public class FaderOutSlide extends Fader {
+public class FaderOutSlide extends FaderOut {
 	private int x;
 	private float w;
 	private LinkedList<Float> renderList;
@@ -31,8 +31,8 @@ public class FaderOutSlide extends Fader {
 	private boolean finish;
 	private Texture t;
 
-	public FaderOutSlide(NovelEngine engine, int x, int x1) {
-		super(engine);
+	public FaderOutSlide(NovelEngine engine, FaderListener listener, int x, int x1, String color) {
+		super(engine, listener, color);
 		this.x = x;
 		this.w = (float) engine.width / x;
 		this.decrease = (float) w / x1;
@@ -77,15 +77,14 @@ public class FaderOutSlide extends Fader {
 		if (i < x) {
 			renderList.add(0.0f);
 		} else {
-			finish = true;
+			finish();
 		}
 	}
 
 	@Override
 	public void render() {
 		Iterator<Float> i = renderList.iterator();
-		// glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		glColor4f(color.r, color.g, color.b, 1.0f);
 		glDisable(GL_TEXTURE_2D);
 		float xpos = 0.0f;
 		glBegin(GL_QUADS);

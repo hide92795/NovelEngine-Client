@@ -12,6 +12,10 @@ import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.opengl.Texture;
 
 public class Button extends Gui {
+	/** "_Button".hashCode() */
+	public static final int BUTTON = 414650481;
+	/** "_ButtonOm".hashCode() */
+	public static final int BUTTON_OM = -952843729;
 
 	private int imageID;
 	private int imageOmID;
@@ -27,9 +31,10 @@ public class Button extends Gui {
 	private boolean leftClick;
 	private boolean rightClick;
 	private boolean clickable = true;
+	public static BufferedImage cl;
 
-	public Button(NovelEngine engine, int name, int[] position, int texid, int texidOm,
-			BufferedImage clickable, CommandButton command,
+	public Button(NovelEngine engine, int name, int[] position, int texid,
+			int texidOm, BufferedImage clickable, CommandButton command,
 			CommandButton commandOm) {
 		super(engine);
 		this.name = name;
@@ -50,32 +55,38 @@ public class Button extends Gui {
 
 	@Override
 	public void render() {
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		if (onmouse) {
-			imageOm.bind();
-		} else {
-			image.bind();
+		if(image != null && imageOm != null){
+			glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+			if (onmouse) {
+				imageOm.bind();
+			} else {
+				image.bind();
+			}
+			glBegin(GL_QUADS);
+			{
+				int x = rectangle.getX();
+				int y = rectangle.getY();
+				glTexCoord2f(0, 0);
+				glVertex2f(x, y);
+				glTexCoord2f(1, 0);
+				glVertex2f(x + image.getTextureWidth(), y);
+				glTexCoord2f(1, 1);
+				glVertex2f(x + image.getTextureWidth(),
+						y + image.getTextureHeight());
+				glTexCoord2f(0, 1);
+				glVertex2f(x, y + image.getTextureHeight());
+			}
+			glEnd();
+		}else{
+			image = engine.imageManager.getImage(imageID);
+			imageOm = engine.imageManager.getImage(imageOmID);
 		}
-		glBegin(GL_QUADS);
-		{
-			int x = rectangle.getX();
-			int y = rectangle.getY();
-			glTexCoord2f(0, 0);
-			glVertex2f(x, y);
-			glTexCoord2f(1, 0);
-			glVertex2f(x + image.getTextureWidth(), y);
-			glTexCoord2f(1, 1);
-			glVertex2f(x + image.getTextureWidth(),
-					y + image.getTextureHeight());
-			glTexCoord2f(0, 1);
-			glVertex2f(x, y + image.getTextureHeight());
-		}
-		glEnd();
+		
 	}
 
 	@Override
 	public void update() {
-		if(!clickable){
+		if (!clickable) {
 			onmouse = false;
 			return;
 		}

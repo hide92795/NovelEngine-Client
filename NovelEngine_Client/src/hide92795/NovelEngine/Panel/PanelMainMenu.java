@@ -27,7 +27,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.opengl.Texture;
 
-public class PanelMainMenu extends Panel implements FaderListener{
+public class PanelMainMenu extends Panel implements FaderListener {
 	private Texture bgimage;
 	private Random random;
 	private int nowBgImageId = 0;
@@ -195,7 +195,10 @@ public class PanelMainMenu extends Panel implements FaderListener{
 		int size = seq.length;
 		for (int i = 0; i < size; i++) {
 			Button b = buttons.get(seq[i]);
-			b.render();
+			if (b != null) {
+				b.render();
+			}
+
 		}
 	}
 
@@ -221,7 +224,7 @@ public class PanelMainMenu extends Panel implements FaderListener{
 	public void onMouse(Button b) {
 		commandSwitch(b.getCommandOm());
 	}
-	
+
 	private void commandSwitch(CommandButton c) {
 		switch (c.getCommand()) {
 		case CommandButton.MENU_COMMAND_START:
@@ -232,9 +235,9 @@ public class PanelMainMenu extends Panel implements FaderListener{
 			for (Button b1 : buttons.values()) {
 				b1.setClickable(false);
 			}
-			//f = new FaderOutSlide(engine, 40, 40);
-			f = new FaderOutBlock(engine, 12, 9,"#000000");
-			//f= new FaderOutDisappear(engine, 1.7f, "#ff00ff");
+			// f = new FaderOutSlide(engine, 40, 40);
+			//f = new FaderOutBlock(engine, this, 12, 9, "#000000");
+			 f= new FaderOutDisappear(engine, this, 1.7f, "#ffffff");
 			start = true;
 			break;
 		case CommandButton.MENU_COMMAND_LOAD:
@@ -276,10 +279,10 @@ public class PanelMainMenu extends Panel implements FaderListener{
 		}
 
 	}
-	
+
 	@Override
-	public void onFinish() {
+	public void onFinish(Fader fader) {
 		// TODO 自動生成されたメソッド・スタブ
-		
+		engine.startStory(49);
 	}
 }

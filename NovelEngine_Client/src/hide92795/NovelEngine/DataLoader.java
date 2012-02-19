@@ -4,32 +4,46 @@ import hide92795.NovelEngine.client.NovelEngine;
 import hide92795.NovelEngine.command.CommandButton;
 import hide92795.NovelEngine.data.Data;
 import hide92795.NovelEngine.data.DataBasic;
+import hide92795.NovelEngine.data.DataGui;
 import hide92795.NovelEngine.data.DataMainMenu;
 import hide92795.NovelEngine.data.DataStory;
+import hide92795.NovelEngine.fader.FaderIn;
+import hide92795.NovelEngine.fader.FaderInBlock;
+import hide92795.NovelEngine.fader.FaderInDisappear;
+import hide92795.NovelEngine.fader.FaderOutBlock;
+import hide92795.NovelEngine.fader.FaderOutDisappear;
 import hide92795.NovelEngine.gui.Button;
 import hide92795.NovelEngine.queue.QueueSound;
 import hide92795.NovelEngine.queue.QueueTexture;
 import hide92795.NovelEngine.story.Story;
+import hide92795.NovelEngine.story.StoryChangeBg;
+import hide92795.NovelEngine.story.StoryChangeCharacter;
+import hide92795.NovelEngine.story.StoryLoadChapter;
+import hide92795.NovelEngine.story.StoryMoveChapter;
+import hide92795.NovelEngine.story.StoryScene;
+import hide92795.NovelEngine.story.StoryShowCG;
+import hide92795.NovelEngine.story.StoryWords;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.AttributedString;
 
 import javax.imageio.ImageIO;
 
 import org.lwjgl.Sys;
 import org.msgpack.MessagePack;
-import org.msgpack.type.IntegerValue;
 import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
 import org.msgpack.unpacker.UnpackerIterator;
 
 public class DataLoader {
 	public static Data loadData(String path, String name, Class<?> targetClass)
-			throws FileNotFoundException, IOException, ClassNotFoundException {
+			throws FileNotFoundException, IOException {
 
 		Data returnData = null;
 		File file = NovelEngine.getCurrentDir();
@@ -45,6 +59,8 @@ public class DataLoader {
 			returnData = parseMainMenu(unpacker);
 		} else if (targetClass.equals(DataStory.class)) {
 			returnData = parseStory(unpacker);
+		} else if (targetClass.equals(DataGui.class)) {
+			returnData = parseGui(unpacker);
 		}
 		fis.close();
 		return returnData;
@@ -140,43 +156,67 @@ public class DataLoader {
 		UnpackerIterator i = p.iterator();
 		System.out.println(Sys.getTime());
 		while (i.hasNext()) {
-			Value v = i.next();
-			int in = v.asIntegerValue().getInt();
-			switch (in) {
+			int com = i.next().asIntegerValue().getInt();
+			switch (com) {
+			case Story.COMMAND_SET_CHAPTERID:
+				// チャプター
+				int chapterId = i.next().asIntegerValue().getInt();
+				data.setChapterId(chapterId);
+				break;
 			case Story.COMMAND_SET_SCENEID:
 				// シーン
-				int sceneid = i.next().asIntegerValue().getInt();
+				int sceneId = i.next().asIntegerValue().getInt();
+				StoryScene scene = new StoryScene(sceneId);
+				data.addStory(scene);
 				break;
 			case Story.COMMAND_LOAD_CHAPTER:
 				// ロード
-				int loadsceneid = i.next().asIntegerValue().getInt();
+				int loadChapterId = i.next().asIntegerValue().getInt();
+				StoryLoadChapter loadChapter = new StoryLoadChapter(
+						loadChapterId);
+				data.addStory(loadChapter);
 				break;
 			case Story.COMMAND_MOVE_CHAPTER:
 				// 移動
-				int movesceneid = i.next().asIntegerValue().getInt();
+				int movechapterid = i.next().asIntegerValue().getInt();
+				StoryMoveChapter moveChapter = new StoryMoveChapter(
+						movechapterid);
+				data.addStory(moveChapter);
 				break;
 			case Story.COMMAND_CHANGE_BG:
 				// 背景変更
 				int changebgId = i.next().asIntegerValue().getInt();
 				boolean isFade = i.next().asBooleanValue().getBoolean();
+				StoryChangeBg bg = new StoryChangeBg(changebgId,
+						new FaderOutDisappear(
+								NovelEngine.theEngine, null, 2.5f, "#000000"), new FaderInDisappear(
+								NovelEngine.theEngine, null, 2.5f, "#ffffff"));
+				data.addStory(bg);
 				break;
 			case Story.COMMAND_CHANGE_CHARACTER:
 				// キャラ変更
-				int charaId = i.next().asIntegerValue().getInt();
+				int charId = i.next().asIntegerValue().getInt();
 				int faceId = i.next().asIntegerValue().getInt();
 				int placeId = i.next().asIntegerValue().getInt();
+				StoryChangeCharacter c = new StoryChangeCharacter(charId,
+						faceId, placeId);
+				data.addStory(c);
 				break;
 			case Story.COMMAND_SHOW_CG:
 				// CG表示
 				int cgId = i.next().asIntegerValue().getInt();
 				boolean isShow = i.next().asBooleanValue().getBoolean();
+				StoryShowCG cg = new StoryShowCG(cgId, isShow);
+				data.addStory(cg);
 				break;
 			case Story.COMMAND_SHOW_WORDS:
 				// セリフ
-				int charaId1 = i.next().asIntegerValue().getInt();
+				int charId1 = i.next().asIntegerValue().getInt();
 				int voiceId = i.next().asIntegerValue().getInt();
 				String text = i.next().asRawValue().getString();
-				System.out.println(text);
+				AttributedString as = Utils.parceWords(text);
+				StoryWords w = new StoryWords(charId1, voiceId, as);
+				data.addStory(w);
 				break;
 			case Story.COMMAND_MAKE_BUTTON:
 				// ボタン作成
@@ -184,6 +224,13 @@ public class DataLoader {
 				for (int i1 = 0; i1 < size; i1++) {
 					String b = i.next().asRawValue().getString();
 					int nextSceneId = i.next().asIntegerValue().getInt();
+					String name = "_Story_Button_Chapter_"
+							+ data.getChapterId() + "_" + i1;
+					Button button = new Button(NovelEngine.theEngine,
+							name.hashCode(), null, Button.BUTTON,
+							Button.BUTTON_OM, Button.cl,
+							new CommandButton(4, 0), new CommandButton(4));
+
 				}
 				break;
 			case Story.COMMAND_IF:
@@ -194,7 +241,7 @@ public class DataLoader {
 					int flagId = i.next().asIntegerValue().getInt();
 					int con = i.next().asIntegerValue().getInt();
 					String b = i.next().asRawValue().getString();
-					
+
 				}
 				break;
 			case Story.COMMAND_PLAY_BGM:
@@ -221,6 +268,32 @@ public class DataLoader {
 		}
 		System.out.println(Sys.getTime());
 		// TODO 自動生成されたメソッド・スタブ
+		return data;
+	}
+
+	public static Data parseGui(Unpacker unpacker) throws IOException {
+		File b = new File("./button.png");
+		File bo = new File("./buttonom.png");
+		FileInputStream fis = new FileInputStream(b);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		byte[] byt = new byte[1];
+		while (fis.read(byt) > 0) {
+			bos.write(byt);
+		}
+		fis.close();
+		NovelEngine.theEngine.queue.offer(new QueueTexture(
+				NovelEngine.theEngine, Button.BUTTON, bos.toByteArray()));
+
+		FileInputStream fiso = new FileInputStream(bo);
+		ByteArrayOutputStream boso = new ByteArrayOutputStream();
+		while (fiso.read(byt) > 0) {
+			boso.write(byt);
+		}
+		fiso.close();
+		NovelEngine.theEngine.queue.offer(new QueueTexture(
+				NovelEngine.theEngine, Button.BUTTON_OM, boso.toByteArray()));
+
+		Button.cl = ImageIO.read(new File("./click.png"));
 		return null;
 	}
 }

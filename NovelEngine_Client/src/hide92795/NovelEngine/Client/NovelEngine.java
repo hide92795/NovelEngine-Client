@@ -5,11 +5,13 @@ import hide92795.NovelEngine.QueueHandler;
 import hide92795.NovelEngine.ImageManager;
 import hide92795.NovelEngine.SoundManager;
 import hide92795.NovelEngine.data.DataBasic;
+import hide92795.NovelEngine.data.DataGui;
 import hide92795.NovelEngine.data.DataMainMenu;
 import hide92795.NovelEngine.data.DataStory;
 import hide92795.NovelEngine.gui.Button;
 import hide92795.NovelEngine.panel.Panel;
 import hide92795.NovelEngine.panel.PanelFadeLogo;
+import hide92795.NovelEngine.panel.PanelStory;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -49,8 +51,12 @@ public class NovelEngine {
 	private NovelEngineFrame frame;
 	public int width;
 	public int height;
+	protected DataStory s;
+	private Panel nextPanel;
+	private boolean changePanel;
 
 	public NovelEngine() {
+		theEngine = this;
 		imageManager = new ImageManager();
 		soundManager = new SoundManager();
 		queue = new QueueHandler();
@@ -58,7 +64,7 @@ public class NovelEngine {
 		width = dataBasic.getWidth();
 		height = dataBasic.getHeight();
 		frame = new NovelEngineFrame(this);
-		theEngine = this;
+		
 	}
 
 	public void start() {
@@ -88,7 +94,7 @@ public class NovelEngine {
 			update(getDelta());
 			render();
 			queue.execute();
-
+			panelChange();
 			Display.update();
 			Display.sync(60);
 		}
@@ -152,12 +158,19 @@ public class NovelEngine {
 	}
 
 	public void setCurrentPanel(Panel panel) {
-
-		this.currentPanel = panel;
-		if (currentPanel != null) {
-			currentPanel.init();
+		nextPanel = panel;
+		changePanel = true;
+	}
+	
+	private void panelChange() {
+		if(changePanel == true){
+			changePanel  =false;
+			this.currentPanel = nextPanel;
+			if (currentPanel != null) {
+				currentPanel.init();
+			}
 		}
-
+			
 	}
 
 	private void initResource() {
@@ -165,6 +178,8 @@ public class NovelEngine {
 		try {
 			dataBasic = (DataBasic) DataLoader.loadData(null, "gameinfo.dat",
 					DataBasic.class);
+			DataLoader.parseGui(null);
+			//DataLoader.loadData(null, "gui.dat", DataGui.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ex = e;
@@ -232,7 +247,7 @@ public class NovelEngine {
 	 */
 	public void updateFPS() {
 		if (getTime() - lastFPS > 1000) {
-			Display.setTitle("FPS: " + fps);
+			frame.setTitle("FPS: " + fps);
 			nowfps = fps;
 			fps = 0;
 			lastFPS += 1000;
@@ -275,13 +290,7 @@ public class NovelEngine {
 	 *            スタート元のチャプターID
 	 */
 	public void startStory(int id) {
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				super.run();
-			}
-		};
-		t.start();
+		setCurrentPanel(new PanelStory(this, s));
 	}
 
 	public void loadStory(final int id) {
@@ -289,7 +298,9 @@ public class NovelEngine {
 			@Override
 			public void run() {
 				try {
-					DataStory s = (DataStory) DataLoader.loadData(null, id + ".dat", DataStory.class);
+					s = (DataStory) DataLoader.loadData(null, id + ".dat", DataStory.class);
+					System.out
+							.println("NovelEngine.loadStory(...).new Thread() {...}.run()");
 				} catch (Exception e) {
 					// TODO 自動生成された catch ブロック
 					e.printStackTrace();

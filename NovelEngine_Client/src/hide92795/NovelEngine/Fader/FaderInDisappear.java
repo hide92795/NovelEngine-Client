@@ -8,17 +8,16 @@ import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
+import hide92795.NovelEngine.client.NovelEngine;
 
 import org.newdawn.slick.Color;
 
-import hide92795.NovelEngine.client.NovelEngine;
-
-public class FaderOutDisappear extends FaderOut {
-	private float alpha = 0.0f;
+public class FaderInDisappear extends FaderIn{
+	private float alpha = 1.0f;
 	private float fadePerSec;
 	private Color color;
 
-	public FaderOutDisappear(NovelEngine engine, FaderListener listener,
+	public FaderInDisappear(NovelEngine engine, FaderListener listener,
 			float sec, String color) {
 		super(engine, listener, color);
 		this.color = Color.decode(color);
@@ -28,9 +27,9 @@ public class FaderOutDisappear extends FaderOut {
 	@Override
 	public void update(int delta) {
 		float a = (fadePerSec / 1000f) * delta;
-		alpha += a;
-		if (alpha > 1.0f) {
-			alpha = 1.0f;
+		alpha -= a;
+		if (alpha < 0.0f) {
+			alpha = 0.0f;
 			finish();
 		}
 	}
@@ -52,5 +51,4 @@ public class FaderOutDisappear extends FaderOut {
 		}
 		glEnd();
 	}
-
 }
