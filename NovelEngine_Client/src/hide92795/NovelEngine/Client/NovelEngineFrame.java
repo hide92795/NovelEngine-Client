@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
+import javax.swing.OverlayLayout;
 
 public class NovelEngineFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -31,8 +32,8 @@ public class NovelEngineFrame extends JFrame {
 		getContentPane().setBackground(Color.black);
 		setResizable(false);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		setLayout(new CardLayout());
-		add(getCanvas(), "GL");
+		getContentPane().setLayout(new OverlayLayout(getContentPane()));
+		getContentPane().add(getCanvas(), "GL");
 		pack();
 		setLocationRelativeTo(null);
 	}

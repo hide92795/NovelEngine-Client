@@ -7,7 +7,7 @@ public class StoryMoveChapter extends Story {
 		this.chapterId = chapterId;
 	}
 
-	public int getChapterId() {
+	public final int getChapterId() {
 		return chapterId;
 	}
 

@@ -19,6 +19,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import javax.swing.JPanel;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -309,5 +312,9 @@ public class NovelEngine {
 			}
 		};
 		t.start();
+	}
+	
+	public void addPanel(JPanel panel){
+		//frame.getContentPane().add(panel, "Words");
 	}
 }

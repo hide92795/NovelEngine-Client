@@ -9,11 +9,11 @@ public class StoryShowCG extends Story {
 		this.show = show;
 	}
 
-	public int getCgid() {
+	public final int getCgid() {
 		return cgid;
 	}
 
-	public boolean isShow() {
+	public final boolean isShow() {
 		return show;
 	}
 }

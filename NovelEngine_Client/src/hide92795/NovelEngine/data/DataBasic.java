@@ -15,107 +15,107 @@ public class DataBasic extends Data {
 	private int minHeight;
 	private int[] aspect;
 
-	public String getGamename() {
+	public final String getGamename() {
 		return gamename;
 	}
 
-	public void setGamename(String gamename) {
+	public final void setGamename(String gamename) {
 		this.gamename = gamename;
 	}
 
-	public byte[][] getIcons() {
+	public final byte[][] getIcons() {
 		return icons;
 	}
 
-	public void setIcons(byte[][] icons) {
+	public final void setIcons(byte[][] icons) {
 		this.icons = icons;
 	}
 
-	public String getVersion() {
+	public final String getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public final void setVersion(String version) {
 		this.version = version;
 	}
 
-	public int getWidth() {
+	public final int getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public final void setWidth(int width) {
 		this.width = width;
 	}
 
-	public int getHeight() {
+	public final int getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public final void setHeight(int height) {
 		this.height = height;
 	}
 
-	public boolean isR18() {
+	public final boolean isR18() {
 		return isR18;
 	}
 
-	public void setR18(boolean isR18) {
+	public final void setR18(boolean isR18) {
 		this.isR18 = isR18;
 	}
 
-	public boolean isArrowResize() {
+	public final boolean isArrowResize() {
 		return arrowResize;
 	}
 
-	public void setArrowResize(boolean arrowResize) {
+	public final void setArrowResize(boolean arrowResize) {
 		this.arrowResize = arrowResize;
 	}
 
-	public boolean isShowMaximizeButton() {
+	public final boolean isShowMaximizeButton() {
 		return isShowMaximizeButton;
 	}
 
-	public void setShowMaximizeButton(boolean isShowMaximizeButton) {
+	public final void setShowMaximizeButton(boolean isShowMaximizeButton) {
 		this.isShowMaximizeButton = isShowMaximizeButton;
 	}
 
-	public byte[] getLogo() {
+	public final byte[] getLogo() {
 		return logo;
 	}
 
-	public void setLogo(byte[] logo) {
+	public final void setLogo(byte[] logo) {
 		this.logo = logo;
 	}
 
-	public byte[][] getLogoSound() {
+	public final byte[][] getLogoSound() {
 		return logoSound;
 	}
 
-	public void setLogoSound(byte[][] logoSound) {
+	public final void setLogoSound(byte[][] logoSound) {
 		this.logoSound = logoSound;
 	}
 
-	public int getMinWidth() {
+	public final int getMinWidth() {
 		return minWidth;
 	}
 
-	public void setMinWidth(int minWidth) {
+	public final void setMinWidth(int minWidth) {
 		this.minWidth = minWidth;
 	}
 
-	public int getMinHeight() {
+	public final int getMinHeight() {
 		return minHeight;
 	}
 
-	public void setMinHeight(int minHeight) {
+	public final void setMinHeight(int minHeight) {
 		this.minHeight = minHeight;
 	}
 
-	public int[] getAspect() {
+	public final int[] getAspect() {
 		return aspect;
 	}
 
-	public void setAspect(int[] aspect) {
+	public final void setAspect(int[] aspect) {
 		this.aspect = aspect;
 	}
 }

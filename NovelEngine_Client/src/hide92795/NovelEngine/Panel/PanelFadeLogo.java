@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
+import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
 
 import java.io.ByteArrayInputStream;
@@ -42,26 +43,12 @@ public class PanelFadeLogo extends Panel {
 	@Override
 	public void render() {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		texture.bind();
-		glBegin(GL_QUADS);
-		{
-			glColor4f(1.0f, 1.0f, 1.0f, alpha);
-			int x1, y1;
-			x1 = engine.width / 2 - texture.getImageWidth() / 2;
-			y1 = engine.height / 2 - texture.getImageHeight() / 2;
-			glTexCoord2f(0, 0);
-			glVertex2f(x1, y1);
-			glTexCoord2f(1, 0);
-			glVertex2f(x1 + texture.getTextureWidth(), y1);
-			glTexCoord2f(1, 1);
-			glVertex2f(x1 + texture.getTextureWidth(),
-					y1 + texture.getTextureHeight());
-			glTexCoord2f(0, 1);
-			glVertex2f(x1, y1 + texture.getTextureHeight());
-		}
-		glEnd();
+		int x1 = engine.width / 2 - texture.getImageWidth() / 2;
+		int y1 = engine.height / 2 - texture.getImageHeight() / 2;
+		Renderer.renderImage(texture, alpha, x1, y1,
+				x1 + texture.getTextureWidth(), y1 + texture.getTextureHeight());
 	}
-	
+
 	@Override
 	public void update(int delta) {
 		if (!player.isPlaying()) {

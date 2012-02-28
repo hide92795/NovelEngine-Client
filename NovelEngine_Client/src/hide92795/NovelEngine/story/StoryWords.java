@@ -1,5 +1,7 @@
 package hide92795.novelengine.story;
 
+import hide92795.novelengine.panel.PanelStory;
+
 import java.text.AttributedString;
 
 public class StoryWords extends Story {
@@ -13,16 +15,30 @@ public class StoryWords extends Story {
 		this.words = words;
 	}
 
-	public int getCharacterId() {
+	public final int getCharacterId() {
 		return characterId;
 	}
 
-	public int getVoiceId() {
+	public final int getVoiceId() {
 		return voiceId;
 	}
 
-	public AttributedString getWords() {
+	public final AttributedString getWords() {
 		return words;
+	}
+	
+	@Override
+	public void init(PanelStory story) {
+		story.engine.addPanel(null);
+	}
+	
+	@Override
+	public void update(PanelStory panelStory, int delta) {
+	}
+	
+	@Override
+	public void render() {
+
 	}
 	
 	@Override

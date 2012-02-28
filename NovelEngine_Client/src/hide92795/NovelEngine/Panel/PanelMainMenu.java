@@ -9,13 +9,14 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
+import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.command.CommandButton;
 import hide92795.novelengine.data.DataMainMenu;
 import hide92795.novelengine.fader.Fader;
 import hide92795.novelengine.fader.FaderListener;
 import hide92795.novelengine.fader.FaderOutBlock;
-import hide92795.novelengine.fader.FaderOutDisappear;
+import hide92795.novelengine.fader.FaderOutAlpha;
 import hide92795.novelengine.fader.FaderOutSlide;
 import hide92795.novelengine.gui.Button;
 
@@ -166,23 +167,12 @@ public class PanelMainMenu extends Panel implements FaderListener {
 	@Override
 	public void render() {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		bgimage.bind();
-		glEnable(GL_TEXTURE_2D);
-		glBegin(GL_QUADS);
-		{
-			glColor4f(1.0f, 1.0f, 1.0f, alpha);
-			renderBgImage(bgimage);
-
+		if(bgimage != null){
+			bgimage.bind();
 		}
-		glEnd();
+		Renderer.renderBgImage(bgimage, alpha);
 		if (changeBG) {
-			nextImage.bind();
-			glBegin(GL_QUADS);
-			{
-				glColor4f(1.0f, 1.0f, 1.0f, 1.0f - alpha);
-				renderBgImage(nextImage);
-			}
-			glEnd();
+			Renderer.renderBgImage(nextImage, 1.0f - alpha);
 		}
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		renderButtons();
@@ -200,17 +190,6 @@ public class PanelMainMenu extends Panel implements FaderListener {
 			}
 
 		}
-	}
-
-	private void renderBgImage(Texture image) {
-		glTexCoord2f(0, 0);
-		glVertex2f(0, 0);
-		glTexCoord2f(1, 0);
-		glVertex2f(image.getTextureWidth(), 0);
-		glTexCoord2f(1, 1);
-		glVertex2f(image.getTextureWidth(), image.getTextureHeight());
-		glTexCoord2f(0, 1);
-		glVertex2f(0, image.getTextureHeight());
 	}
 
 	@Override
@@ -236,8 +215,8 @@ public class PanelMainMenu extends Panel implements FaderListener {
 				b1.setClickable(false);
 			}
 			// f = new FaderOutSlide(engine, 40, 40);
-			//f = new FaderOutBlock(engine, this, 12, 9, "#000000");
-			 f= new FaderOutDisappear(engine, this, 1.7f, "#ffffff");
+			// f = new FaderOutBlock(engine, this, 12, 9, "#000000");
+			f = new FaderOutAlpha(engine, this, 1.7f, "#ffffff");
 			start = true;
 			break;
 		case CommandButton.MENU_COMMAND_LOAD:
@@ -262,6 +241,9 @@ public class PanelMainMenu extends Panel implements FaderListener {
 	@Override
 	public void update(int delta) {
 		super.update(delta);
+		if (bgimage == null) {
+			bgimage = getRandomBGImage(engine.dataMainMenu.getBackImageIds());
+		}
 		if (!bgm.isPlaying() && !start) {
 			bgm.playAsMusic(1.0f, 0.5f, true);
 		}

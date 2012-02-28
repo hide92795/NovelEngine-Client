@@ -1,14 +1,5 @@
 package hide92795.novelengine;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor4f;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glTexCoord2f;
-import static org.lwjgl.opengl.GL11.glVertex2f;
-
 import java.awt.Font;
 import java.awt.font.TextAttribute;
 import java.text.AttributedString;
@@ -16,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.lwjgl.util.Color;
-import org.newdawn.slick.opengl.Texture;
 
 public class Utils {
 	public static Color integerToColor(int color) {
@@ -42,23 +32,5 @@ public class Utils {
 			as.addAttribute(TextAttribute.FONT, f1, begin, end);
 		}
 		return as;
-	}
-
-	public static void renderBgImage(Texture tex) {
-		tex.bind();
-		glEnable(GL_TEXTURE_2D);
-		glBegin(GL_QUADS);
-		{
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			glTexCoord2f(0, 0);
-			glVertex2f(0, 0);
-			glTexCoord2f(1, 0);
-			glVertex2f(tex.getTextureWidth(), 0);
-			glTexCoord2f(1, 1);
-			glVertex2f(tex.getTextureWidth(), tex.getTextureHeight());
-			glTexCoord2f(0, 1);
-			glVertex2f(0, tex.getTextureHeight());
-		}
-		glEnd();
 	}
 }

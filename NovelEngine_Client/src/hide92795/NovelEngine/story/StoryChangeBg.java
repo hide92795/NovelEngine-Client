@@ -1,39 +1,31 @@
 package hide92795.novelengine.story;
 
+import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.fader.Fader;
 import hide92795.novelengine.fader.FaderIn;
 import hide92795.novelengine.fader.FaderListener;
 import hide92795.novelengine.fader.FaderOut;
+import hide92795.novelengine.fader.FaderPair;
+import hide92795.novelengine.fader.FaderPairAlpha;
 import hide92795.novelengine.panel.PanelStory;
 
 public class StoryChangeBg extends Story implements FaderListener {
 	private final int nextBgId;
-	private final FaderOut fadeout;
-	private final FaderIn fadein;
-	private Fader fader;
+	private final FaderPair fader;
 	protected boolean finish = false;
 
-	public StoryChangeBg(int bgId, FaderOut fadeout, FaderIn fadein) {
-		this.nextBgId = bgId;
-		this.fadeout = fadeout;
-		this.fadein = fadein;
+	public StoryChangeBg(int bgId, FaderPair fader) {
+		this.nextBgId = NovelEngine.theEngine.dataMainMenu.getBackImageIds()[0];
+		this.fader = fader;
 	}
 
 	public int getNextBgId() {
 		return nextBgId;
 	}
 
-	public FaderOut getFadeout() {
-		return fadeout;
-	}
-
-	public FaderIn getFadein() {
-		return fadein;
-	}
-
 	@Override
 	public boolean isFinish() {
-		return false;
+		return finish;
 	}
 
 	@Override
@@ -43,16 +35,16 @@ public class StoryChangeBg extends Story implements FaderListener {
 
 	@Override
 	public void init(PanelStory story) {
-		fadeout.setListener(this);
-		fadein.setListener(this);
-		if (story.nowBgTexture == null) {
-			story.nowBgTexture = story.engine.imageManager
-					.getImage(story.engine.dataMainMenu.getBackImageIds()[0]);
-			fader = fadein;
+		if (story.getBgTextureId() == 0) {
+			fader.setCurrentFader(fader.getFadein());
+			if(fader instanceof FaderPairAlpha){
+				((FaderPairAlpha) fader).setVia(true); 
+			}
 		} else {
-			fader = fadeout;
+			fader.setCurrentFader(fader.getFadeout());
 		}
-		story.bgColor = fader.color;
+		fader.init(this, story, nextBgId);
+		story.bgColor = fader.getCurrentFader().color;
 	}
 
 	@Override
@@ -71,10 +63,6 @@ public class StoryChangeBg extends Story implements FaderListener {
 
 	@Override
 	public void onFinish(Fader fader) {
-		if (fader instanceof FaderIn) {
-			fader = fadeout;
-		} else if (fader instanceof FaderOut) {
-			finish = true;
-		}
+		finish = true;
 	}
 }

@@ -7,7 +7,7 @@ public class StoryScene extends Story {
 		this.sceneId = sceneId;
 	}
 
-	public int getSceneId() {
+	public final int getSceneId() {
 		return sceneId;
 	}
 

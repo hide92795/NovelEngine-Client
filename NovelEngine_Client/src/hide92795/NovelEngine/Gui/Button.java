@@ -56,7 +56,7 @@ public class Button extends Gui {
 
 	@Override
 	public void render() {
-		if(image != null && imageOm != null){
+		if (image != null && imageOm != null) {
 			glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 			if (onmouse) {
 				imageOm.bind();
@@ -78,11 +78,11 @@ public class Button extends Gui {
 				glVertex2f(x, y + image.getTextureHeight());
 			}
 			glEnd();
-		}else{
+		} else {
 			image = engine.imageManager.getImage(imageID);
 			imageOm = engine.imageManager.getImage(imageOmID);
 		}
-		
+
 	}
 
 	@Override

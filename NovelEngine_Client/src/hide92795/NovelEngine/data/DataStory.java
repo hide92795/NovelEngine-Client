@@ -18,22 +18,22 @@ public class DataStory extends Data {
 		pos = 0;
 	}
 
-	public int getChapterId() {
+	public final int getChapterId() {
 		return chapterId;
 	}
 
-	public void setChapterId(int chapterId) {
+	public final void setChapterId(int chapterId) {
 		this.chapterId = chapterId;
 	}
 
-	public void addStory(Story story) {
+	public final void addStory(Story story) {
 		if (story instanceof StoryScene) {
 			scenes.put(((StoryScene) story).getSceneId(), commandLine.size());
 		}
 		commandLine.add(story);
 	}
 	
-	public Story next(){
+	public final Story next(){
 		Story s = commandLine.get(pos);
 		pos++;
 		return s;

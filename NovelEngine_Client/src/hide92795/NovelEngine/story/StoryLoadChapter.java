@@ -7,7 +7,7 @@ public class StoryLoadChapter extends Story {
 		this.loadChapterId = chapterId;
 	}
 
-	public int getLoadChapterId() {
+	public final int getLoadChapterId() {
 		return loadChapterId;
 	}
 

@@ -7,11 +7,15 @@ import hide92795.novelengine.data.DataBasic;
 import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataMainMenu;
 import hide92795.novelengine.data.DataStory;
+import hide92795.novelengine.fader.Fader;
 import hide92795.novelengine.fader.FaderIn;
 import hide92795.novelengine.fader.FaderInBlock;
-import hide92795.novelengine.fader.FaderInDisappear;
+import hide92795.novelengine.fader.FaderInAlpha;
+import hide92795.novelengine.fader.FaderOut;
 import hide92795.novelengine.fader.FaderOutBlock;
-import hide92795.novelengine.fader.FaderOutDisappear;
+import hide92795.novelengine.fader.FaderOutAlpha;
+import hide92795.novelengine.fader.FaderPair;
+import hide92795.novelengine.fader.FaderPairAlpha;
 import hide92795.novelengine.gui.Button;
 import hide92795.novelengine.queue.QueueSound;
 import hide92795.novelengine.queue.QueueTexture;
@@ -21,6 +25,7 @@ import hide92795.novelengine.story.StoryChangeCharacter;
 import hide92795.novelengine.story.StoryLoadChapter;
 import hide92795.novelengine.story.StoryMoveChapter;
 import hide92795.novelengine.story.StoryScene;
+import hide92795.novelengine.story.StoryShowBox;
 import hide92795.novelengine.story.StoryShowCG;
 import hide92795.novelengine.story.StoryWords;
 
@@ -96,6 +101,7 @@ public class DataLoader {
 	}
 
 	private static Data parseMainMenu(Unpacker p) throws IOException {
+		System.out.println(Sys.getTime());
 		DataMainMenu data = new DataMainMenu();
 		int size1 = p.readInt();
 		int[] images = new int[size1];
@@ -148,6 +154,7 @@ public class DataLoader {
 		}
 		data.setButtons(button);
 		data.setButtonRenderingSeq(p.read(int[].class));
+		System.out.println(Sys.getTime());
 		return data;
 	}
 
@@ -186,11 +193,45 @@ public class DataLoader {
 			case Story.COMMAND_CHANGE_BG:
 				// 背景変更
 				int changebgId = i.next().asIntegerValue().getInt();
-				boolean isFade = i.next().asBooleanValue().getBoolean();
-				StoryChangeBg bg = new StoryChangeBg(changebgId,
-						new FaderOutDisappear(
-								NovelEngine.theEngine, null, 2.5f, "#000000"), new FaderInDisappear(
-								NovelEngine.theEngine, null, 2.5f, "#ffffff"));
+				boolean skippable = i.next().asBooleanValue().getBoolean();
+				int fadetype = i.next().asIntegerValue().getInt();
+				FaderPair pair = null;
+				switch (fadetype) {
+				case Fader.FADER_NONE:
+					break;
+				case Fader.FADER_ALPHA:
+					float af_time = i.next().asFloatValue().getFloat();
+					boolean af_via = i.next().asBooleanValue().getBoolean();
+					String af_color = i.next().asRawValue().getString();
+					FaderOutAlpha fadeoutalpha = new FaderOutAlpha(
+							NovelEngine.theEngine, null, af_time, af_color);
+					FaderInAlpha fadeinalpha = new FaderInAlpha(
+							NovelEngine.theEngine, null, af_time, af_color);
+					pair = new FaderPairAlpha(fadeoutalpha, fadeinalpha,
+							skippable, af_via);
+					break;
+				case Fader.FADER_BLOCK:
+					int bf_x = i.next().asIntegerValue().getInt();
+					int bf_y = i.next().asIntegerValue().getInt();
+					String bf_color = i.next().asRawValue().getString();
+					FaderOutBlock fadeoutblock = new FaderOutBlock(
+							NovelEngine.theEngine, null, bf_x, bf_y, bf_color);
+					FaderInBlock fadeinblock = new FaderInBlock(
+							NovelEngine.theEngine, null, bf_x, bf_y, bf_color);
+					pair = new FaderPair(fadeoutblock, fadeinblock, skippable);
+					break;
+				case Fader.FADER_SLIDE:
+					int sf_x = i.next().asIntegerValue().getInt();
+					int sf_y = i.next().asIntegerValue().getInt();
+					String sf_color = i.next().asRawValue().getString();
+					FaderOutBlock fadeoutslide = new FaderOutBlock(
+							NovelEngine.theEngine, null, sf_x, sf_y, sf_color);
+					FaderInBlock fadeinslide = new FaderInBlock(
+							NovelEngine.theEngine, null, sf_x, sf_y, sf_color);
+					pair = new FaderPair(fadeoutslide, fadeinslide, skippable);
+					break;
+				}
+				StoryChangeBg bg = new StoryChangeBg(changebgId, pair);
 				data.addStory(bg);
 				break;
 			case Story.COMMAND_CHANGE_CHARACTER:
@@ -257,23 +298,26 @@ public class DataLoader {
 				break;
 			case Story.COMMAND_SHOW_BOX:
 				// ボックス表示
+				StoryShowBox box = new StoryShowBox(true);
+				data.addStory(box);
 				break;
 			case Story.COMMAND_HIDE_BOX:
 				// ボックス閉じる
+				StoryShowBox box1 = new StoryShowBox(false);
+				data.addStory(box1);
 				break;
-
 			default:
 				break;
 			}
 		}
 		System.out.println(Sys.getTime());
-		// TODO 自動生成されたメソッド・スタブ
 		return data;
 	}
 
 	public static Data parseGui(Unpacker unpacker) throws IOException {
 		File b = new File("./button.png");
 		File bo = new File("./buttonom.png");
+		File box = new File("./box.png");
 		FileInputStream fis = new FileInputStream(b);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		byte[] byt = new byte[1];
@@ -292,6 +336,16 @@ public class DataLoader {
 		fiso.close();
 		NovelEngine.theEngine.queue.offer(new QueueTexture(
 				NovelEngine.theEngine, Button.BUTTON_OM, boso.toByteArray()));
+
+		FileInputStream fisb = new FileInputStream(box);
+		ByteArrayOutputStream bosb = new ByteArrayOutputStream();
+		while (fisb.read(byt) > 0) {
+			bosb.write(byt);
+		}
+		fisb.close();
+
+		NovelEngine.theEngine.queue.offer(new QueueTexture(
+				NovelEngine.theEngine, 123456, bosb.toByteArray()));
 
 		Button.cl = ImageIO.read(new File("./click.png"));
 		return null;

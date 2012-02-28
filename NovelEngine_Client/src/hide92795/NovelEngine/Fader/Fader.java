@@ -5,6 +5,10 @@ import org.newdawn.slick.Color;
 import hide92795.novelengine.client.NovelEngine;
 
 public class Fader {
+	public static final int FADER_NONE = 0;
+	public static final int FADER_ALPHA = 1;
+	public static final int FADER_BLOCK = 2;
+	public static final int FADER_SLIDE = 3;
 	public NovelEngine engine;
 	public FaderListener listener;
 	private boolean finish = false;
@@ -25,15 +29,15 @@ public class Fader {
 
 	public void leftClick(int x, int y) {
 	}
-	
-	public void setListener(FaderListener listener){
+
+	public void setListener(FaderListener listener) {
 		this.listener = listener;
 	}
-	
-	public void finish(){
-		if(!finish){
+
+	public void finish() {
+		if (!finish) {
 			finish = true;
-			if(listener != null){
+			if (listener != null) {
 				listener.onFinish(this);
 			}
 		}

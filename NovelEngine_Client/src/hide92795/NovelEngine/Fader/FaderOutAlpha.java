@@ -5,21 +5,24 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
-
-import org.newdawn.slick.Color;
-
 import hide92795.novelengine.client.NovelEngine;
 
-public class FaderOutDisappear extends FaderOut {
+import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.Texture;
+
+public class FaderOutAlpha extends FaderOut {
 	private float alpha = 0.0f;
 	private float fadePerSec;
 	private Color color;
+	private int textureid = 0;
+	private Texture texture;
 
-	public FaderOutDisappear(NovelEngine engine, FaderListener listener,
-			float sec, String color) {
+	public FaderOutAlpha(NovelEngine engine, FaderListener listener, float sec,
+			String color) {
 		super(engine, listener, color);
 		this.color = Color.decode(color);
 		this.fadePerSec = (float) 1.0f / sec;
@@ -33,10 +36,40 @@ public class FaderOutDisappear extends FaderOut {
 			alpha = 1.0f;
 			finish();
 		}
+		if (texture == null && textureid != 0) {
+			texture = engine.imageManager.getImage(textureid);
+		}
 	}
 
 	@Override
 	public void render() {
+		if (texture != null) {
+			renderTexture();
+		} else {
+			renderColor();
+		}
+	}
+
+	private void renderTexture() {
+		glColor4f(1.0f, 1.0f, 1.0f, alpha);
+		System.out.println(texture);
+		texture.bind();
+		glEnable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+		{
+			glTexCoord2f(0, 0);
+			glVertex2f(0, 0);
+			glTexCoord2f(1, 0);
+			glVertex2f(texture.getTextureWidth(), 0);
+			glTexCoord2f(1, 1);
+			glVertex2f(texture.getTextureWidth(), texture.getTextureHeight());
+			glTexCoord2f(0, 1);
+			glVertex2f(0, texture.getTextureHeight());
+		}
+		glEnd();
+	}
+
+	private void renderColor() {
 		glColor4f(color.r, color.g, color.b, alpha);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
@@ -51,6 +84,11 @@ public class FaderOutDisappear extends FaderOut {
 			glVertex2f(0, engine.height);
 		}
 		glEnd();
+	}
+
+	public void setTextureId(int textureid) {
+		this.textureid = textureid;
+		texture = engine.imageManager.getImage(textureid);
 	}
 
 }

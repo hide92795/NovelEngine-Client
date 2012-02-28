@@ -12,15 +12,15 @@ public class StoryChangeCharacter extends Story {
 		this.placeId = placeId;
 	}
 
-	public int getCharacterId() {
+	public final int getCharacterId() {
 		return characterId;
 	}
 
-	public int getFaceId() {
+	public final int getFaceId() {
 		return faceId;
 	}
 
-	public int getPlaceId() {
+	public final int getPlaceId() {
 		return placeId;
 	}
 
