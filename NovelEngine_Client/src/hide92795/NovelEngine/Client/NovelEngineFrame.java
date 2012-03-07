@@ -1,5 +1,6 @@
 package hide92795.novelengine.client;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -11,7 +12,7 @@ import java.awt.event.WindowEvent;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
-import javax.swing.OverlayLayout;
+import javax.swing.JLabel;
 
 public class NovelEngineFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -32,8 +33,8 @@ public class NovelEngineFrame extends JFrame {
 		getContentPane().setBackground(Color.black);
 		setResizable(false);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		getContentPane().setLayout(new OverlayLayout(getContentPane()));
-		getContentPane().add(getCanvas(), "GL");
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(getCanvas(), BorderLayout.CENTER);
 		pack();
 		setLocationRelativeTo(null);
 	}

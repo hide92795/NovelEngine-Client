@@ -19,8 +19,9 @@ public class Utils {
 		textonly = textonly.replaceAll("\\[サイズ\\s\\d+\\]", "");
 		textonly = textonly.replaceAll("\\[\\/サイズ\\]", "");
 		AttributedString as = new AttributedString(textonly);
-		Font f = new Font("メイリオ", Font.PLAIN, 20);
+		Font f = new Font("ＭＳ ゴシック", Font.PLAIN, 30);
 		as.addAttribute(TextAttribute.FONT, f);
+		as.addAttribute(TextAttribute.FOREGROUND, java.awt.Color.BLACK);
 		Pattern p = Pattern.compile("\\[サイズ\\s(\\d+)\\](.+)\\[/サイズ\\]");
 		Matcher m = p.matcher(words);
 		while (m.find()) {

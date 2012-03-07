@@ -11,4 +11,9 @@ public class StoryScene extends Story {
 		return sceneId;
 	}
 
+	@Override
+	public final boolean isFinish() {
+		return true;
+	}
+
 }

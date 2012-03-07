@@ -84,6 +84,15 @@ public class PanelStory extends Panel {
 		}
 	}
 
+	@Override
+	public void leftClick(int x, int y) {
+		Iterator<Story> iterator = processList.iterator();
+		while (iterator.hasNext()) {
+			Story story = iterator.next();
+			story.leftClick(x, y);
+		}
+	}
+
 	private void renderBackGround() {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		if (nowBgTexture != null) {
@@ -108,6 +117,10 @@ public class PanelStory extends Panel {
 
 	public final void setShowBox(boolean showBox) {
 		this.showBox = showBox;
+	}
+
+	public int getChapterId() {
+		return story.getChapterId();
 	}
 
 }

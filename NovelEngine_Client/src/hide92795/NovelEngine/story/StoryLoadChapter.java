@@ -11,4 +11,9 @@ public class StoryLoadChapter extends Story {
 		return loadChapterId;
 	}
 
+	@Override
+	public final boolean isFinish() {
+		return true;
+	}
+
 }

@@ -11,4 +11,9 @@ public class StoryMoveChapter extends Story {
 		return chapterId;
 	}
 
+	@Override
+	public final boolean isFinish() {
+		return false;
+	}
+
 }

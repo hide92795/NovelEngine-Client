@@ -21,5 +21,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="E:/java_library/slick-util/jogg-0.0.7.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/slick-util/jorbis-0.0.15.jar"/>
+	<classpathentry kind="lib" path="E:/java_library/twl/TWL.jar" sourcepath="E:/java_library/twl/TWL/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

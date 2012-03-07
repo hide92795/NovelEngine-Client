@@ -15,7 +15,7 @@ public class QueueSound extends Queue {
 	}
 
 	@Override
-	public void execute() {
+	public final void execute() {
 		engine.soundManager.putSound(id, sound);
 
 	}

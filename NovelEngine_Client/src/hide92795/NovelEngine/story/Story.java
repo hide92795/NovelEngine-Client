@@ -2,7 +2,7 @@ package hide92795.novelengine.story;
 
 import hide92795.novelengine.panel.PanelStory;
 
-public class Story {
+public abstract class Story {
 
 	public static final int IF_EQUAL = 0;
 	public static final int IF_GREATER = 1;
@@ -25,25 +25,27 @@ public class Story {
 	public static final int COMMAND_PLAY_SE = 11;
 	public static final int COMMAND_SHOW_BOX = 12;
 	public static final int COMMAND_HIDE_BOX = 13;
-	
-	public boolean isFinish() {
-		return true;
-	}
-	
-	public boolean isWait(){
+
+	public abstract boolean isFinish();
+
+	public boolean isWait() {
 		return false;
 	}
-	
-	public void init(PanelStory story){
-		
+
+	public void init(PanelStory story) {
+
 	}
-	
-	public void update(PanelStory panelStory, int delta){
-		
+
+	public void update(PanelStory panelStory, int delta) {
+
 	}
-	
-	public void render(){
-		
+
+	public void render() {
+
+	}
+
+	public void leftClick(int x, int y) {
+
 	}
 
 }

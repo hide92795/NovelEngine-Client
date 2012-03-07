@@ -1,11 +1,13 @@
 package hide92795.novelengine;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.BufferedImageUtil;
 
 public class ImageManager {
 	private LinkedHashMap<Integer, Texture> images;
@@ -47,5 +49,14 @@ public class ImageManager {
 		}
 		images.put(id, t);
 	}
-
+	public void putTexture(int id, BufferedImage image) {
+		Texture t = null;
+		try {
+			t = BufferedImageUtil.getTexture(String.valueOf(id), image);
+		} catch (IOException e) {
+			System.err.println("イメージをロードできませんでした。");
+			e.printStackTrace();
+		}
+		images.put(id, t);
+	}
 }

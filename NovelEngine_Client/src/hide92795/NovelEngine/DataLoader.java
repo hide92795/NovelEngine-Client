@@ -11,14 +11,17 @@ import hide92795.novelengine.fader.Fader;
 import hide92795.novelengine.fader.FaderIn;
 import hide92795.novelengine.fader.FaderInBlock;
 import hide92795.novelengine.fader.FaderInAlpha;
+import hide92795.novelengine.fader.FaderInSlide;
 import hide92795.novelengine.fader.FaderOut;
 import hide92795.novelengine.fader.FaderOutBlock;
 import hide92795.novelengine.fader.FaderOutAlpha;
+import hide92795.novelengine.fader.FaderOutSlide;
 import hide92795.novelengine.fader.FaderPair;
 import hide92795.novelengine.fader.FaderPairAlpha;
 import hide92795.novelengine.gui.Button;
 import hide92795.novelengine.queue.QueueSound;
 import hide92795.novelengine.queue.QueueTexture;
+import hide92795.novelengine.queue.QueueWords;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryChangeBg;
 import hide92795.novelengine.story.StoryChangeCharacter;
@@ -162,6 +165,7 @@ public class DataLoader {
 		DataStory data = new DataStory();
 		UnpackerIterator i = p.iterator();
 		System.out.println(Sys.getTime());
+		int wordsCounter = 0;
 		while (i.hasNext()) {
 			int com = i.next().asIntegerValue().getInt();
 			switch (com) {
@@ -224,9 +228,9 @@ public class DataLoader {
 					int sf_x = i.next().asIntegerValue().getInt();
 					int sf_y = i.next().asIntegerValue().getInt();
 					String sf_color = i.next().asRawValue().getString();
-					FaderOutBlock fadeoutslide = new FaderOutBlock(
+					FaderOutSlide fadeoutslide = new FaderOutSlide(
 							NovelEngine.theEngine, null, sf_x, sf_y, sf_color);
-					FaderInBlock fadeinslide = new FaderInBlock(
+					FaderInSlide fadeinslide = new FaderInSlide(
 							NovelEngine.theEngine, null, sf_x, sf_y, sf_color);
 					pair = new FaderPair(fadeoutslide, fadeinslide, skippable);
 					break;
@@ -255,9 +259,12 @@ public class DataLoader {
 				int charId1 = i.next().asIntegerValue().getInt();
 				int voiceId = i.next().asIntegerValue().getInt();
 				String text = i.next().asRawValue().getString();
-				AttributedString as = Utils.parceWords(text);
-				StoryWords w = new StoryWords(charId1, voiceId, as);
+				QueueWords qw = new QueueWords(NovelEngine.theEngine,
+						data.getChapterId(), wordsCounter, text);
+				NovelEngine.theEngine.wordsManager.offer(qw);
+				StoryWords w = new StoryWords(charId1, voiceId, text, wordsCounter);
 				data.addStory(w);
+				wordsCounter++;
 				break;
 			case Story.COMMAND_MAKE_BUTTON:
 				// ボタン作成

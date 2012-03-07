@@ -16,4 +16,9 @@ public class StoryShowCG extends Story {
 	public final boolean isShow() {
 		return show;
 	}
+
+	@Override
+	public boolean isFinish() {
+		return false;
+	}
 }

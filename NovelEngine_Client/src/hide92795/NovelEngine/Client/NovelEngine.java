@@ -4,6 +4,7 @@ import hide92795.novelengine.DataLoader;
 import hide92795.novelengine.ImageManager;
 import hide92795.novelengine.QueueHandler;
 import hide92795.novelengine.SoundManager;
+import hide92795.novelengine.WordsManager;
 import hide92795.novelengine.data.DataBasic;
 import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataMainMenu;
@@ -57,21 +58,25 @@ public class NovelEngine {
 	protected DataStory s;
 	private Panel nextPanel;
 	private boolean changePanel;
+	private boolean hasCrash;
+	public WordsManager wordsManager;
 
 	public NovelEngine() {
 		theEngine = this;
 		imageManager = new ImageManager();
 		soundManager = new SoundManager();
 		queue = new QueueHandler();
+		wordsManager = new WordsManager();
 		initResource();
 		width = dataBasic.getWidth();
 		height = dataBasic.getHeight();
 		frame = new NovelEngineFrame(this);
-		
+
 	}
 
 	public void start() {
 		try {
+			wordsManager.loop(true);
 			Display.setParent(frame.getCanvas());
 			Display.setVSyncEnabled(true);
 			lastFPS = getTime();
@@ -86,22 +91,32 @@ public class NovelEngine {
 		}
 		Dimension newDim;
 		while (!Display.isCloseRequested() && !closeRequested) {
-			newDim = frame.newCanvasSize.getAndSet(null);
-			if (newDim != null) {
-				width = newDim.width;
-				height = newDim.height;
-				GL11.glViewport(0, 0, width, height);
+			try {
+				newDim = frame.newCanvasSize.getAndSet(null);
+				if (newDim != null) {
+					width = newDim.width;
+					height = newDim.height;
+					GL11.glViewport(0, 0, width, height);
+				}
+				updateFPS();
+				if (!hasCrash) {
+					pollInput();
+					update(getDelta());
+					render();
+					queue.execute();
+				} else {
+					setCurrentPanel(null);
+				}
+				panelChange();
+				Display.update();
+				Display.sync(60);
+			} catch (Exception e) {
+				System.out.println("NovelEngine.start()");
+				e.printStackTrace();
+				hasCrash = true;
 			}
-			updateFPS();
-			pollInput();
-			update(getDelta());
-			render();
-			queue.execute();
-			panelChange();
-			Display.update();
-			Display.sync(60);
 		}
-
+		wordsManager.loop(false);
 		Display.destroy();
 		AL.destroy();
 		System.exit(0);
@@ -164,16 +179,16 @@ public class NovelEngine {
 		nextPanel = panel;
 		changePanel = true;
 	}
-	
+
 	private void panelChange() {
-		if(changePanel == true){
-			changePanel  =false;
+		if (changePanel == true) {
+			changePanel = false;
 			this.currentPanel = nextPanel;
 			if (currentPanel != null) {
 				currentPanel.init();
 			}
 		}
-			
+
 	}
 
 	private void initResource() {
@@ -182,7 +197,7 @@ public class NovelEngine {
 			dataBasic = (DataBasic) DataLoader.loadData(null, "gameinfo.dat",
 					DataBasic.class);
 			DataLoader.parseGui(null);
-			//DataLoader.loadData(null, "gui.dat", DataGui.class);
+			// DataLoader.loadData(null, "gui.dat", DataGui.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ex = e;
@@ -192,6 +207,7 @@ public class NovelEngine {
 
 	public void pollInput() {
 		// 左クリック
+		// System.out.println("X:"+Mouse.getX() + " Y:" + Mouse.getY());
 		if (Mouse.isButtonDown(0)) {
 			if (!leftClick) {
 				int x = Mouse.getX();
@@ -301,7 +317,8 @@ public class NovelEngine {
 			@Override
 			public void run() {
 				try {
-					s = (DataStory) DataLoader.loadData(null, id + ".dat", DataStory.class);
+					s = (DataStory) DataLoader.loadData(null, id + ".dat",
+							DataStory.class);
 					System.out
 							.println("NovelEngine.loadStory(...).new Thread() {...}.run()");
 				} catch (Exception e) {
@@ -313,8 +330,8 @@ public class NovelEngine {
 		};
 		t.start();
 	}
-	
-	public void addPanel(JPanel panel){
-		//frame.getContentPane().add(panel, "Words");
+
+	public void addPanel(JPanel panel) {
+		frame.getContentPane().add(panel, "Words");
 	}
 }

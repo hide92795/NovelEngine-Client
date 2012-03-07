@@ -28,4 +28,9 @@ public class StoryChangeCharacter extends Story {
 	public boolean isWait() {
 		return true;
 	}
+
+	@Override
+	public final boolean isFinish() {
+		return false;
+	}
 }
