@@ -31,6 +31,6 @@ public class StoryChangeCharacter extends Story {
 
 	@Override
 	public final boolean isFinish() {
-		return false;
+		return true;
 	}
 }
