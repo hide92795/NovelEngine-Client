@@ -216,7 +216,7 @@ public class PanelMainMenu extends Panel implements FaderListener {
 			}
 			// f = new FaderOutSlide(engine, 40, 40);
 			// f = new FaderOutBlock(engine, this, 12, 9, "#000000");
-			f = new FaderOutAlpha(engine, this, 1.7f, "#ffffff");
+			f = new FaderOutAlpha(engine, this, 1.7f, "#000000");
 			start = true;
 			break;
 		case CommandButton.MENU_COMMAND_LOAD:

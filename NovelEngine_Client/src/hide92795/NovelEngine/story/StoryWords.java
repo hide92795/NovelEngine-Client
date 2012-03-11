@@ -58,7 +58,11 @@ public class StoryWords extends Story {
 
 	@Override
 	public void leftClick(int x, int y) {
-		finish = true;
+		if(!showed){
+			showed = true;
+		}else{
+			finish = true;
+		}
 	}
 
 	@Override
@@ -78,6 +82,7 @@ public class StoryWords extends Story {
 				progression = 0;
 				texturePerMax = (float) wordsTexture.getImageWidth()
 						/ wordsTexture.getTextureWidth();
+				perTexWid = 0.0f;
 			}
 		}
 
@@ -86,41 +91,54 @@ public class StoryWords extends Story {
 	@Override
 	public void render() {
 		int ypos = 0;
-		for (int i = 0; i <= page; i++) {
-			Texture t = NovelEngine.theEngine.imageManager
-					.getImage(wordsImages[i]);
-			if (t != null) {
-				t.bind();
-				glEnable(GL_TEXTURE_2D);
-				glBegin(GL_QUADS);
-				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-				if (i == page) {
-					// 表示途中
-					glTexCoord2f(0, 0);
-					glVertex2f(148, 445 + ypos);
-					glTexCoord2f(perTexWid, 0);
-					glVertex2f(148 + t.getTextureWidth() * perTexWid,
-							445 + ypos);
-					glTexCoord2f(perTexWid, 1);
-					glVertex2f(148 + t.getTextureWidth() * perTexWid,
+		if (showed) {
+			// すべてのセリフ＆カーソル表示
+			for (int wordsId : wordsImages) {
+				Texture t = NovelEngine.theEngine.imageManager
+						.getImage(wordsId);
+				if (t != null) {
+					Renderer.renderImage(t, 148, 445 + ypos,
+							148 + t.getTextureWidth(),
 							445 + t.getTextureHeight() + ypos);
-					glTexCoord2f(0, 1);
-					glVertex2f(148, 445 + t.getTextureHeight() + ypos);
-				} else {
-					glTexCoord2f(0, 0);
-					glVertex2f(148, 445 + ypos);
-					glTexCoord2f(1, 0);
-					glVertex2f(148 + t.getTextureWidth(), 445 + ypos);
-					glTexCoord2f(1, 1);
-					glVertex2f(148 + t.getTextureWidth(),
-							445 + t.getTextureHeight() + ypos);
-					glTexCoord2f(0, 1);
-					glVertex2f(148, 445 + t.getTextureHeight() + ypos);
+					ypos += t.getImageHeight() + 5;
 				}
-				glEnd();
-				ypos += t.getImageHeight() + 5;
+
+			}
+		} else {
+			// 途中のセリフまで表示
+			for (int i = 0; i <= page; i++) {
+				Texture t = NovelEngine.theEngine.imageManager
+						.getImage(wordsImages[i]);
+				if (t != null) {
+					if (i == page) {
+						// 表示途中
+						float x1 = 148 + t.getTextureWidth() * perTexWid;
+						int y1 = 445 + t.getTextureHeight() + ypos;
+						t.bind();
+						glEnable(GL_TEXTURE_2D);
+						glBegin(GL_QUADS);
+						glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+						{
+							glTexCoord2f(0, 0);
+							glVertex2f(148, 445 + ypos);
+							glTexCoord2f(perTexWid, 0);
+							glVertex2f(x1, 445 + ypos);
+							glTexCoord2f(perTexWid, 1);
+							glVertex2f(x1, y1);
+							glTexCoord2f(0, 1);
+							glVertex2f(148, y1);
+						}
+						glEnd();
+					} else {
+						Renderer.renderImage(t, 148, 445 + ypos,
+								148 + t.getTextureWidth(),
+								445 + t.getTextureHeight() + ypos);
+					}
+					ypos += t.getImageHeight() + 5;
+				}
 			}
 		}
+
 	}
 
 	@Override

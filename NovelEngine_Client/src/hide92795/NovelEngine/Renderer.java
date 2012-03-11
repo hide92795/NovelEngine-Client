@@ -28,12 +28,31 @@ import hide92795.novelengine.client.NovelEngine;
 
 import org.newdawn.slick.opengl.Texture;
 
+/**
+ * 描画に関する処理を行います。
+ * 
+ * @author hide92795
+ */
 public class Renderer {
+	/**
+	 * 指定したテクスチャを左上を起点に描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 */
 	public static void renderBgImage(Texture texture) {
 		renderImage(texture, 1.0f, 1.0f, 1.0f, 1.0f, 0, 0,
 				texture.getTextureWidth(), texture.getTextureHeight());
 	}
 
+	/**
+	 * 指定したテクスチャを指定したアルファ値で描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 */
 	public static void renderBgImage(Texture texture, float alpha) {
 		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, 0, 0,
 				texture.getTextureWidth(), texture.getTextureHeight());

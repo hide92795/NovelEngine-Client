@@ -28,7 +28,7 @@ public class PanelStory extends Panel {
 	public PanelStory(NovelEngine engine, DataStory story) {
 		super(engine);
 		this.story = story;
-		this.bgColor = Color.white;
+		this.bgColor = Color.black;
 		this.processList = new LinkedList<Story>();
 	}
 
