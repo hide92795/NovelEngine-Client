@@ -8,6 +8,7 @@ import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.panel.PanelStory;
 
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
 
 public class StoryWords extends Story {
@@ -53,25 +54,46 @@ public class StoryWords extends Story {
 		page = 0;
 		texturePerMax = (float) wordsTexture.getImageWidth()
 				/ wordsTexture.getTextureWidth();
-		System.out.println(texturePerMax);
 	}
 
 	@Override
 	public void leftClick(int x, int y) {
-		if(!showed){
+		if (!showed) {
 			showed = true;
-		}else{
+		} else {
 			finish = true;
+		}
+	}
+	
+	@Override
+	public void keyPressed(int eventKey) {
+		if(eventKey == Keyboard.KEY_RETURN){
+			if (!showed) {
+				showed = true;
+			} else {
+				finish = true;
+			}
 		}
 	}
 
 	@Override
 	public void update(PanelStory story, int delta) {
+		while (Keyboard.next()) {
+			if (Keyboard.getEventKeyState()) {
+				if (Keyboard.getEventKey() == Keyboard.KEY_GRAVE) {
+					System.out.println(Keyboard.getEventKey());
+					System.out.println(Keyboard.getEventCharacter());
+					System.out.println("A Key Pressed");
+				}
+			}
+		}
+		while (Keyboard.next()) {
+			System.out.println("StoryWords.update()");
+		}
 		if (!showed) {
 			progression += 10;
 			perTexWid = (float) progression / wordsTexture.getTextureWidth();
 			if (perTexWid >= texturePerMax) {
-				System.out.println("StoryWords.update()");
 				if (page >= wordsImages.length - 1) {
 					showed = true;
 					return;

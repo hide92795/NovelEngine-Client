@@ -9,7 +9,6 @@ public class Panel {
 
 	public NovelEngine engine;
 	public HashMap<Integer, Button> buttons;
-	
 
 	public Panel(NovelEngine engine) {
 		this.engine = engine;
@@ -25,13 +24,13 @@ public class Panel {
 			b.update();
 		}
 	}
-	
-	public void actionPerformed(Button b, boolean isLeft){
-		
+
+	public void actionPerformed(Button b, boolean isLeft) {
+
 	}
-	
-	public void onMouse(Button b){
-		
+
+	public void onMouse(Button b) {
+
 	}
 
 	public void init() {
@@ -42,5 +41,11 @@ public class Panel {
 	}
 
 	public void rightClick(int x, int y) {
+	}
+
+	public void keyPressed(int eventKey) {
+	}
+
+	public void keyReleased(int eventKey) {
 	}
 }

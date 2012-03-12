@@ -241,12 +241,12 @@ public class NovelEngine {
 
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {
-				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-					System.out.println("A Key Pressed");
+				if (currentPanel != null) {
+					currentPanel.keyPressed(Keyboard.getEventKey());
 				}
 			} else {
-				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-					System.out.println("A Key Released");
+				if (currentPanel != null) {
+					currentPanel.keyReleased(Keyboard.getEventKey());
 				}
 			}
 		}

@@ -20,7 +20,9 @@ import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.text.AttributedString;
+import java.text.BreakIterator;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -139,10 +141,12 @@ public class Renderer {
 			as_edge.addAttribute(TextAttribute.FONT, f1, begin, end);
 		}
 
+		
+		
 		LineBreakMeasurer lbm_inner = new LineBreakMeasurer(
-				as_inner.getIterator(), new FontRenderContext(null, true, true));
+				as_inner.getIterator(),BreakIterator.getLineInstance(Locale.CANADA) , new FontRenderContext(null, true, true));
 		LineBreakMeasurer lbm_edge = new LineBreakMeasurer(
-				as_edge.getIterator(), new FontRenderContext(null, true, true));
+				as_edge.getIterator(),BreakIterator.getLineInstance(Locale.CANADA) , new FontRenderContext(null, true, true));
 
 		while (lbm_inner.getPosition() < textonly.length()) {
 			TextLayout tl_inner = lbm_inner.nextLayout(610);

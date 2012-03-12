@@ -86,10 +86,17 @@ public class PanelStory extends Panel {
 
 	@Override
 	public void leftClick(int x, int y) {
-		Iterator<Story> iterator = processList.iterator();
-		while (iterator.hasNext()) {
-			Story story = iterator.next();
-			story.leftClick(x, y);
+		int size = processList.size();
+		for (int i = 0; i < size; i++) {
+			processList.get(i).leftClick(x, y);
+		}
+	}
+	
+	@Override
+	public void keyPressed(int eventKey) {
+		int size = processList.size();
+		for (int i = 0; i < size; i++) {
+			processList.get(i).keyPressed(eventKey);
 		}
 	}
 

@@ -48,4 +48,7 @@ public abstract class Story {
 
 	}
 
+	public void keyPressed(int eventKey) {
+	}
+
 }
