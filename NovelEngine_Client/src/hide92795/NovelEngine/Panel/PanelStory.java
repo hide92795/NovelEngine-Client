@@ -11,6 +11,7 @@ import org.newdawn.slick.opengl.Texture;
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.Utils;
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataStory;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryChangeBg;
@@ -66,19 +67,19 @@ public class PanelStory extends Panel {
 	public void render() {
 		renderBackGround();
 		renderBox();
-
 		Iterator<Story> iterator = processList.iterator();
 		while (iterator.hasNext()) {
 			Story story = iterator.next();
-			story.render();
+			story.render(engine);
 		}
 	}
 
 	private void renderBox() {
 		if (showBox) {
-			float x = NovelEngine.theEngine.width - 700;
-			float y = NovelEngine.theEngine.height - 241;
-			Texture t = NovelEngine.theEngine.imageManager.getImage(123456);
+			DataGui data = engine.dataGui;
+			Texture t = engine.imageManager.getImage(data.getBoxImageId());
+			int x = data.getBoxXpos();
+			int y = data.getBoxYpos();
 			Renderer.renderImage(t, x, y, x + t.getTextureWidth(),
 					y + t.getTextureHeight());
 		}
@@ -91,7 +92,7 @@ public class PanelStory extends Panel {
 			processList.get(i).leftClick(x, y);
 		}
 	}
-	
+
 	@Override
 	public void keyPressed(int eventKey) {
 		int size = processList.size();

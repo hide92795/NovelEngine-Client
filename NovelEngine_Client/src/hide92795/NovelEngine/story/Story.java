@@ -1,5 +1,6 @@
 package hide92795.novelengine.story;
 
+import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.panel.PanelStory;
 
 public abstract class Story {
@@ -40,7 +41,7 @@ public abstract class Story {
 
 	}
 
-	public void render() {
+	public void render(NovelEngine engine) {
 
 	}
 

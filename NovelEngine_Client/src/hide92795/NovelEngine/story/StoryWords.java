@@ -3,19 +3,47 @@ package hide92795.novelengine.story;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glVertex2f;
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.panel.PanelStory;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
 
+/**
+ * セリフ及びメッセージの表示を行います。
+ * 
+ * @author hide92795
+ */
 public class StoryWords extends Story {
+	/**
+	 * セリフの話し主のキャラクターID
+	 */
 	private final int characterId;
+
+	/**
+	 * セリフに音声がある場合、音声ID<br>
+	 * 音声がない場合は0
+	 */
 	private final int voiceId;
+
+	/**
+	 * 表示させる文字列
+	 */
 	private final String words;
-	private boolean finish = false;
+
+	/**
+	 * すべての処理が終わっているかどうか
+	 * 
+	 * @see #isFinish()
+	 */
+	private boolean finish;
 	private int id;
 	private int[] wordsImages;
 
@@ -25,6 +53,7 @@ public class StoryWords extends Story {
 	private float texturePerMax;
 	private boolean showed = false;
 	private float perTexWid;
+	private int c;
 
 	public StoryWords(int charId, int voiceId, String words, int id) {
 		this.characterId = charId;
@@ -56,39 +85,32 @@ public class StoryWords extends Story {
 				/ wordsTexture.getTextureWidth();
 	}
 
-	@Override
-	public void leftClick(int x, int y) {
+	public void next() {
 		if (!showed) {
 			showed = true;
 		} else {
 			finish = true;
 		}
 	}
-	
+
+	@Override
+	public void leftClick(int x, int y) {
+		next();
+	}
+
 	@Override
 	public void keyPressed(int eventKey) {
-		if(eventKey == Keyboard.KEY_RETURN){
-			if (!showed) {
-				showed = true;
-			} else {
-				finish = true;
-			}
+		System.out.println(Keyboard.getKeyName(eventKey));
+		if (eventKey == Keyboard.KEY_RETURN) {
+			next();
 		}
 	}
 
 	@Override
 	public void update(PanelStory story, int delta) {
-		while (Keyboard.next()) {
-			if (Keyboard.getEventKeyState()) {
-				if (Keyboard.getEventKey() == Keyboard.KEY_GRAVE) {
-					System.out.println(Keyboard.getEventKey());
-					System.out.println(Keyboard.getEventCharacter());
-					System.out.println("A Key Pressed");
-				}
-			}
-		}
-		while (Keyboard.next()) {
-			System.out.println("StoryWords.update()");
+		if (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)
+				|| Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+			next();
 		}
 		if (!showed) {
 			progression += 10;
@@ -111,26 +133,56 @@ public class StoryWords extends Story {
 	}
 
 	@Override
-	public void render() {
+	public void render(NovelEngine engine) {
 		int ypos = 0;
 		if (showed) {
+			int cursorYpos = 0;
+			int cursorXpos = 0;
 			// すべてのセリフ＆カーソル表示
 			for (int wordsId : wordsImages) {
-				Texture t = NovelEngine.theEngine.imageManager
-						.getImage(wordsId);
+				Texture t = engine.imageManager.getImage(wordsId);
 				if (t != null) {
 					Renderer.renderImage(t, 148, 445 + ypos,
 							148 + t.getTextureWidth(),
 							445 + t.getTextureHeight() + ypos);
+					cursorXpos = t.getImageWidth();
+					cursorYpos = ypos + t.getImageHeight();
 					ypos += t.getImageHeight() + 5;
 				}
+			}
+			// カーソル
+			DataGui data = engine.dataGui;
+			engine.imageManager.getImage(data.getWaitCursorImageId()).bind();
+			float[] a = data.getWaitCursorList()[c];
+			int size = data.getWaitCursorSize();
+			cursorYpos -= size;
+			int x = data.getBoxXpos() + data.getBoxWordsXpos() + cursorXpos;
+			int y = data.getBoxYpos() + data.getBoxWordsYpos() + cursorYpos;
+			glEnable(GL_TEXTURE_2D);
+			glBegin(GL_QUADS);
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			{
+				glTexCoord2f(a[0], a[1]);
+				glVertex2f(x, y);
 
+				glTexCoord2f(a[2], a[1]);
+				glVertex2f(x + size, y);
+
+				glTexCoord2f(a[2], a[3]);
+				glVertex2f(x + size, y + size);
+
+				glTexCoord2f(a[0], a[3]);
+				glVertex2f(x, y + size);
+			}
+			glEnd();
+			c++;
+			if (c == data.getWaitCursorCount()) {
+				c = 0;
 			}
 		} else {
 			// 途中のセリフまで表示
 			for (int i = 0; i <= page; i++) {
-				Texture t = NovelEngine.theEngine.imageManager
-						.getImage(wordsImages[i]);
+				Texture t = engine.imageManager.getImage(wordsImages[i]);
 				if (t != null) {
 					if (i == page) {
 						// 表示途中

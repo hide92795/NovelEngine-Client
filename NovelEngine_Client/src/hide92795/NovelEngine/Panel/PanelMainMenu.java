@@ -168,10 +168,9 @@ public class PanelMainMenu extends Panel implements FaderListener {
 	public void render() {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		if(bgimage != null){
-			bgimage.bind();
+			Renderer.renderBgImage(bgimage, alpha);
 		}
-		Renderer.renderBgImage(bgimage, alpha);
-		if (changeBG) {
+		if (changeBG && nextImage != null) {
 			Renderer.renderBgImage(nextImage, 1.0f - alpha);
 		}
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

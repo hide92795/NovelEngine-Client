@@ -37,8 +37,8 @@ public class StoryChangeBg extends Story implements FaderListener {
 	public void init(PanelStory story) {
 		if (story.getBgTextureId() == 0) {
 			fader.setCurrentFader(fader.getFadein());
-			if(fader instanceof FaderPairAlpha){
-				((FaderPairAlpha) fader).setVia(true); 
+			if (fader instanceof FaderPairAlpha) {
+				((FaderPairAlpha) fader).setVia(true);
 			}
 		} else {
 			fader.setCurrentFader(fader.getFadeout());
@@ -55,7 +55,7 @@ public class StoryChangeBg extends Story implements FaderListener {
 	}
 
 	@Override
-	public void render() {
+	public void render(NovelEngine engine) {
 		if (fader != null) {
 			fader.render();
 		}

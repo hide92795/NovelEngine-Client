@@ -33,11 +33,14 @@ import hide92795.novelengine.story.StoryShowCG;
 import hide92795.novelengine.story.StoryWords;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.AttributedString;
 
@@ -50,8 +53,8 @@ import org.msgpack.unpacker.Unpacker;
 import org.msgpack.unpacker.UnpackerIterator;
 
 public class DataLoader {
-	public static Data loadData(String path, String name, Class<?> targetClass)
-			throws FileNotFoundException, IOException {
+	public static Data loadData(NovelEngine engine, String path, String name,
+			Class<?> targetClass) throws FileNotFoundException, IOException {
 
 		Data returnData = null;
 		File file = NovelEngine.getCurrentDir();
@@ -62,19 +65,20 @@ public class DataLoader {
 		MessagePack msgpack = new MessagePack();
 		Unpacker unpacker = msgpack.createUnpacker(fis);
 		if (targetClass.equals(DataBasic.class)) {
-			returnData = parseBasic(unpacker);
+			returnData = parseBasic(engine, unpacker);
 		} else if (targetClass.equals(DataMainMenu.class)) {
-			returnData = parseMainMenu(unpacker);
+			returnData = parseMainMenu(engine, unpacker);
 		} else if (targetClass.equals(DataStory.class)) {
-			returnData = parseStory(unpacker);
+			returnData = parseStory(engine, unpacker);
 		} else if (targetClass.equals(DataGui.class)) {
-			returnData = parseGui(unpacker);
+			returnData = parseGui(engine, unpacker);
 		}
 		fis.close();
 		return returnData;
 	}
 
-	private static Data parseBasic(Unpacker p) throws IOException {
+	private static Data parseBasic(NovelEngine engine, Unpacker p)
+			throws IOException {
 		DataBasic data = new DataBasic();
 		data.setGamename(p.readString());
 		int size = p.readInt();
@@ -103,7 +107,8 @@ public class DataLoader {
 		return data;
 	}
 
-	private static Data parseMainMenu(Unpacker p) throws IOException {
+	private static Data parseMainMenu(NovelEngine engine, Unpacker p)
+			throws IOException {
 		System.out.println(Sys.getTime());
 		DataMainMenu data = new DataMainMenu();
 		int size1 = p.readInt();
@@ -111,16 +116,14 @@ public class DataLoader {
 		for (int i = 0; i < size1; i++) {
 			byte[] b = p.readByteArray();
 			String ids = "_MainMenu_Bg_" + i;
-			QueueTexture q = new QueueTexture(NovelEngine.theEngine,
-					ids.hashCode(), b);
-			NovelEngine.theEngine.queue.offer(q);
+			QueueTexture q = new QueueTexture(engine, ids.hashCode(), b);
+			engine.queue.offer(q);
 			images[i] = ids.hashCode();
 		}
 		data.setBackImageIds(images);
 		int idBGM = "_MainMenu_BGM".hashCode();
-		QueueSound qs = new QueueSound(NovelEngine.theEngine, idBGM,
-				p.readByteArray());
-		NovelEngine.theEngine.queue.offer(qs);
+		QueueSound qs = new QueueSound(engine, idBGM, p.readByteArray());
+		engine.queue.offer(qs);
 		data.setBackMusic(idBGM);
 		int size = p.readInt();
 		Button[] button = new Button[size];
@@ -136,14 +139,12 @@ public class DataLoader {
 			int idom = p.readInt();
 			String idstr = "_MM_Button_" + name;
 			int texid = idstr.hashCode();
-			QueueTexture q = new QueueTexture(NovelEngine.theEngine, texid,
-					_image);
-			NovelEngine.theEngine.queue.offer(q);
+			QueueTexture q = new QueueTexture(engine, texid, _image);
+			engine.queue.offer(q);
 			idstr = idstr + "_Om";
 			int texidOm = idstr.hashCode();
-			QueueTexture q1 = new QueueTexture(NovelEngine.theEngine, texidOm,
-					_imageom);
-			NovelEngine.theEngine.queue.offer(q1);
+			QueueTexture q1 = new QueueTexture(engine, texidOm, _imageom);
+			engine.queue.offer(q1);
 
 			BufferedImage image = ImageIO.read(new ByteArrayInputStream(
 					_clickable));
@@ -151,8 +152,8 @@ public class DataLoader {
 			CommandButton com = new CommandButton(command, id);
 			CommandButton comOm = new CommandButton(commandom, idom);
 
-			Button b = new Button(NovelEngine.theEngine, name, position, texid,
-					texidOm, image, com, comOm);
+			Button b = new Button(engine, name, position, texid, texidOm,
+					image, com, comOm);
 			button[i] = b;
 		}
 		data.setButtons(button);
@@ -161,7 +162,8 @@ public class DataLoader {
 		return data;
 	}
 
-	private static Data parseStory(Unpacker p) throws IOException {
+	private static Data parseStory(NovelEngine engine, Unpacker p)
+			throws IOException {
 		DataStory data = new DataStory();
 		UnpackerIterator i = p.iterator();
 		System.out.println(Sys.getTime());
@@ -207,10 +209,10 @@ public class DataLoader {
 					float af_time = i.next().asFloatValue().getFloat();
 					boolean af_via = i.next().asBooleanValue().getBoolean();
 					String af_color = i.next().asRawValue().getString();
-					FaderOutAlpha fadeoutalpha = new FaderOutAlpha(
-							NovelEngine.theEngine, null, af_time, af_color);
-					FaderInAlpha fadeinalpha = new FaderInAlpha(
-							NovelEngine.theEngine, null, af_time, af_color);
+					FaderOutAlpha fadeoutalpha = new FaderOutAlpha(engine,
+							null, af_time, af_color);
+					FaderInAlpha fadeinalpha = new FaderInAlpha(engine, null,
+							af_time, af_color);
 					pair = new FaderPairAlpha(fadeoutalpha, fadeinalpha,
 							skippable, af_via);
 					break;
@@ -218,20 +220,20 @@ public class DataLoader {
 					int bf_x = i.next().asIntegerValue().getInt();
 					int bf_y = i.next().asIntegerValue().getInt();
 					String bf_color = i.next().asRawValue().getString();
-					FaderOutBlock fadeoutblock = new FaderOutBlock(
-							NovelEngine.theEngine, null, bf_x, bf_y, bf_color);
-					FaderInBlock fadeinblock = new FaderInBlock(
-							NovelEngine.theEngine, null, bf_x, bf_y, bf_color);
+					FaderOutBlock fadeoutblock = new FaderOutBlock(engine,
+							null, bf_x, bf_y, bf_color);
+					FaderInBlock fadeinblock = new FaderInBlock(engine, null,
+							bf_x, bf_y, bf_color);
 					pair = new FaderPair(fadeoutblock, fadeinblock, skippable);
 					break;
 				case Fader.FADER_SLIDE:
 					int sf_x = i.next().asIntegerValue().getInt();
 					int sf_y = i.next().asIntegerValue().getInt();
 					String sf_color = i.next().asRawValue().getString();
-					FaderOutSlide fadeoutslide = new FaderOutSlide(
-							NovelEngine.theEngine, null, sf_x, sf_y, sf_color);
-					FaderInSlide fadeinslide = new FaderInSlide(
-							NovelEngine.theEngine, null, sf_x, sf_y, sf_color);
+					FaderOutSlide fadeoutslide = new FaderOutSlide(engine,
+							null, sf_x, sf_y, sf_color);
+					FaderInSlide fadeinslide = new FaderInSlide(engine, null,
+							sf_x, sf_y, sf_color);
 					pair = new FaderPair(fadeoutslide, fadeinslide, skippable);
 					break;
 				}
@@ -259,10 +261,11 @@ public class DataLoader {
 				int charId1 = i.next().asIntegerValue().getInt();
 				int voiceId = i.next().asIntegerValue().getInt();
 				String text = i.next().asRawValue().getString();
-				QueueWords qw = new QueueWords(NovelEngine.theEngine,
-						data.getChapterId(), wordsCounter, text);
-				NovelEngine.theEngine.wordsManager.offer(qw);
-				StoryWords w = new StoryWords(charId1, voiceId, text, wordsCounter);
+				QueueWords qw = new QueueWords(engine, data.getChapterId(),
+						wordsCounter, text);
+				engine.wordsManager.offer(qw);
+				StoryWords w = new StoryWords(charId1, voiceId, text,
+						wordsCounter);
 				data.addStory(w);
 				wordsCounter++;
 				break;
@@ -274,9 +277,8 @@ public class DataLoader {
 					int nextSceneId = i.next().asIntegerValue().getInt();
 					String name = "_Story_Button_Chapter_"
 							+ data.getChapterId() + "_" + i1;
-					Button button = new Button(NovelEngine.theEngine,
-							name.hashCode(), null, Button.BUTTON,
-							Button.BUTTON_OM, Button.cl,
+					Button button = new Button(engine, name.hashCode(), null,
+							Button.BUTTON, Button.BUTTON_OM, Button.cl,
 							new CommandButton(4, 0), new CommandButton(4));
 
 				}
@@ -321,10 +323,67 @@ public class DataLoader {
 		return data;
 	}
 
-	public static Data parseGui(Unpacker unpacker) throws IOException {
+	private static Data parseGui(NovelEngine engine, Unpacker p)
+			throws IOException {
+		DataGui data = new DataGui();
+		boolean end = false;
+		while (!end) {
+			try {
+				int type = p.readInt();
+				switch (type) {
+				case DataGui.GUI_MESSAGEBOX:
+					byte[] boximg = p.readByteArray();
+					QueueTexture qt = new QueueTexture(engine,
+							data.getBoxImageId(), boximg);
+					engine.queue.offer(qt);
+					int imgXpos = p.readInt();
+					int imgYpos = p.readInt();
+					int nameXpos = p.readInt();
+					int nameYpos = p.readInt();
+					int messageXpos = p.readInt();
+					int messageYpos = p.readInt();
+					int messageX1pos = p.readInt();
+					int messageY1pos = p.readInt();
+					data.setBoxXpos(imgXpos);
+					data.setBoxYpos(imgYpos);
+					data.setBoxNameXpos(nameXpos);
+					data.setBoxNameYpos(nameYpos);
+					data.setBoxWordsXpos(messageXpos);
+					data.setBoxWordsYpos(messageYpos);
+					data.setBoxWordsX1pos(messageX1pos);
+					data.setBoxWordsY1pos(messageY1pos);
+					break;
+				case DataGui.GUI_WAITCURSOR:
+					byte[] cursorimg = p.readByteArray();
+					QueueTexture qt1 = new QueueTexture(engine,
+							data.getWaitCursorImageId(), cursorimg);
+					engine.queue.offer(qt1);
+					int size = p.readInt();
+					data.setWaitCursorSize(size);
+					int count = p.readInt();
+					data.setWaitCursorCount(count);
+					float[][] list = new float[count][];
+					for (int j = 0; j < count; j++) {
+						float cursorXpos = p.readFloat();
+						float cursorYpos = p.readFloat();
+						float cursorX1pos = p.readFloat();
+						float cursorY1pos = p.readFloat();
+						list[j] = new float[] { cursorXpos, cursorYpos,
+								cursorX1pos, cursorY1pos };
+					}
+					data.setWaitCursorList(list);
+				default:
+					break;
+				}
+			} catch (EOFException e) {
+				end = true;
+			}
+		}
+
 		File b = new File("./button.png");
 		File bo = new File("./buttonom.png");
 		File box = new File("./box.png");
+
 		FileInputStream fis = new FileInputStream(b);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		byte[] byt = new byte[1];
@@ -332,8 +391,8 @@ public class DataLoader {
 			bos.write(byt);
 		}
 		fis.close();
-		NovelEngine.theEngine.queue.offer(new QueueTexture(
-				NovelEngine.theEngine, Button.BUTTON, bos.toByteArray()));
+		engine.queue.offer(new QueueTexture(engine, Button.BUTTON, bos
+				.toByteArray()));
 
 		FileInputStream fiso = new FileInputStream(bo);
 		ByteArrayOutputStream boso = new ByteArrayOutputStream();
@@ -341,8 +400,8 @@ public class DataLoader {
 			boso.write(byt);
 		}
 		fiso.close();
-		NovelEngine.theEngine.queue.offer(new QueueTexture(
-				NovelEngine.theEngine, Button.BUTTON_OM, boso.toByteArray()));
+		engine.queue.offer(new QueueTexture(engine, Button.BUTTON_OM, boso
+				.toByteArray()));
 
 		FileInputStream fisb = new FileInputStream(box);
 		ByteArrayOutputStream bosb = new ByteArrayOutputStream();
@@ -351,10 +410,10 @@ public class DataLoader {
 		}
 		fisb.close();
 
-		NovelEngine.theEngine.queue.offer(new QueueTexture(
-				NovelEngine.theEngine, 123456, bosb.toByteArray()));
+		engine.queue
+				.offer(new QueueTexture(engine, 123456, bosb.toByteArray()));
 
 		Button.cl = ImageIO.read(new File("./click.png"));
-		return null;
+		return data;
 	}
 }

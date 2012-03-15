@@ -60,6 +60,7 @@ public class NovelEngine {
 	private boolean changePanel;
 	private boolean hasCrash;
 	public WordsManager wordsManager;
+	public DataGui dataGui;
 
 	public NovelEngine() {
 		theEngine = this;
@@ -150,8 +151,9 @@ public class NovelEngine {
 			@Override
 			public void run() {
 				try {
-					dataMainMenu = (DataMainMenu) DataLoader.loadData(null,
-							"menu.dat", DataMainMenu.class);
+					dataMainMenu = (DataMainMenu) DataLoader.loadData(
+							NovelEngine.this, null, "menu.dat",
+							DataMainMenu.class);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -194,10 +196,10 @@ public class NovelEngine {
 	private void initResource() {
 		Exception ex = null;
 		try {
-			dataBasic = (DataBasic) DataLoader.loadData(null, "gameinfo.dat",
-					DataBasic.class);
-			DataLoader.parseGui(null);
-			// DataLoader.loadData(null, "gui.dat", DataGui.class);
+			dataBasic = (DataBasic) DataLoader.loadData(this, null,
+					"gameinfo.dat", DataBasic.class);
+			dataGui = (DataGui) DataLoader.loadData(this, null, "gui.dat",
+					DataGui.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ex = e;
@@ -317,8 +319,8 @@ public class NovelEngine {
 			@Override
 			public void run() {
 				try {
-					s = (DataStory) DataLoader.loadData(null, id + ".dat",
-							DataStory.class);
+					s = (DataStory) DataLoader.loadData(NovelEngine.this, null,
+							id + ".dat", DataStory.class);
 					System.out
 							.println("NovelEngine.loadStory(...).new Thread() {...}.run()");
 				} catch (Exception e) {
