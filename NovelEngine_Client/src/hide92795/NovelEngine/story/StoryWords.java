@@ -44,10 +44,22 @@ public class StoryWords extends Story {
 	 * @see #isFinish()
 	 */
 	private boolean finish;
+
+	/**
+	 * ストーリー内でのID
+	 */
 	private int id;
+
+	/**
+	 * 文字列の画像IDの配列
+	 */
 	private int[] wordsImages;
 
-	private int page;
+	/**
+	 * 現在流して表示している文字列の行
+	 */
+	private int line;
+
 	private int progression;
 	private Texture wordsTexture;
 	private float texturePerMax;
@@ -55,8 +67,8 @@ public class StoryWords extends Story {
 	private float perTexWid;
 	private int c;
 
-	public StoryWords(int charId, int voiceId, String words, int id) {
-		this.characterId = charId;
+	public StoryWords(int characterId, int voiceId, String words, int id) {
+		this.characterId = characterId;
 		this.voiceId = voiceId;
 		this.words = words;
 		this.id = id;
@@ -80,12 +92,12 @@ public class StoryWords extends Story {
 				story.getChapterId(), id);
 		wordsTexture = story.engine.imageManager.getImage(wordsImages[0]);
 		progression = 0;
-		page = 0;
+		line = 0;
 		texturePerMax = (float) wordsTexture.getImageWidth()
 				/ wordsTexture.getTextureWidth();
 	}
 
-	public void next() {
+	public void skip() {
 		if (!showed) {
 			showed = true;
 		} else {
@@ -95,14 +107,14 @@ public class StoryWords extends Story {
 
 	@Override
 	public void leftClick(int x, int y) {
-		next();
+		skip();
 	}
 
 	@Override
 	public void keyPressed(int eventKey) {
 		System.out.println(Keyboard.getKeyName(eventKey));
 		if (eventKey == Keyboard.KEY_RETURN) {
-			next();
+			skip();
 		}
 	}
 
@@ -110,19 +122,19 @@ public class StoryWords extends Story {
 	public void update(PanelStory story, int delta) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)
 				|| Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-			next();
+			skip();
 		}
 		if (!showed) {
 			progression += 10;
 			perTexWid = (float) progression / wordsTexture.getTextureWidth();
 			if (perTexWid >= texturePerMax) {
-				if (page >= wordsImages.length - 1) {
+				if (line >= wordsImages.length - 1) {
 					showed = true;
 					return;
 				}
-				page++;
+				line++;
 				wordsTexture = story.engine.imageManager
-						.getImage(wordsImages[page]);
+						.getImage(wordsImages[line]);
 				progression = 0;
 				texturePerMax = (float) wordsTexture.getImageWidth()
 						/ wordsTexture.getTextureWidth();
@@ -181,10 +193,10 @@ public class StoryWords extends Story {
 			}
 		} else {
 			// 途中のセリフまで表示
-			for (int i = 0; i <= page; i++) {
+			for (int i = 0; i <= line; i++) {
 				Texture t = engine.imageManager.getImage(wordsImages[i]);
 				if (t != null) {
-					if (i == page) {
+					if (i == line) {
 						// 表示途中
 						float x1 = 148 + t.getTextureWidth() * perTexWid;
 						int y1 = 445 + t.getTextureHeight() + ypos;

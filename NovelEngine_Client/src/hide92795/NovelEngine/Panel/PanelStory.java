@@ -2,13 +2,16 @@ package hide92795.novelengine.panel;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
 import hide92795.novelengine.Renderer;
+import hide92795.novelengine.Character;
 import hide92795.novelengine.Utils;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.data.DataGui;
@@ -26,11 +29,17 @@ public class PanelStory extends Panel {
 	private boolean showBox = false;
 	public Color bgColor;
 
+	/**
+	 * Key:位置ID Val:キャラ
+	 */
+	public HashMap<Integer, Character> characters;
+
 	public PanelStory(NovelEngine engine, DataStory story) {
 		super(engine);
 		this.story = story;
 		this.bgColor = Color.black;
 		this.processList = new LinkedList<Story>();
+		this.characters = new HashMap<Integer, Character>();
 	}
 
 	@Override
@@ -66,11 +75,23 @@ public class PanelStory extends Panel {
 	@Override
 	public void render() {
 		renderBackGround();
+		renderCharacter();
 		renderBox();
 		Iterator<Story> iterator = processList.iterator();
 		while (iterator.hasNext()) {
 			Story story = iterator.next();
 			story.render(engine);
+		}
+	}
+
+	private void renderCharacter() {
+		Set<Integer> positions = characters.keySet();
+		for (int position : positions) {
+			Character c = characters.get(position);
+			if (c != null) {
+				int[] pos = engine.dataGui.getPortraitPosition(position);
+				c.render(engine, pos[0], pos[1]);
+			}
 		}
 	}
 

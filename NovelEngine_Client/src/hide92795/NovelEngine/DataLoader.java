@@ -4,6 +4,7 @@ import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.command.CommandButton;
 import hide92795.novelengine.data.Data;
 import hide92795.novelengine.data.DataBasic;
+import hide92795.novelengine.data.DataCharacter;
 import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataMainMenu;
 import hide92795.novelengine.data.DataStory;
@@ -72,6 +73,8 @@ public class DataLoader {
 			returnData = parseStory(engine, unpacker);
 		} else if (targetClass.equals(DataGui.class)) {
 			returnData = parseGui(engine, unpacker);
+		} else if (targetClass.equals(DataCharacter.class)) {
+			returnData = parseCharacter(engine, unpacker);
 		}
 		fis.close();
 		return returnData;
@@ -372,6 +375,17 @@ public class DataLoader {
 								cursorX1pos, cursorY1pos };
 					}
 					data.setWaitCursorList(list);
+					break;
+				case DataGui.GUI_PORTRAIT:
+					int count1 = p.readInt();
+					for (int i = 0; i < count1; i++) {
+						int id = p.readInt();
+						int x = p.readInt();
+						int y = p.readInt();
+						int[] pos = { x, y };
+						data.addPortraitPosition(id, pos);
+					}
+					break;
 				default:
 					break;
 				}
@@ -414,6 +428,58 @@ public class DataLoader {
 				.offer(new QueueTexture(engine, 123456, bosb.toByteArray()));
 
 		Button.cl = ImageIO.read(new File("./click.png"));
+		return data;
+	}
+
+	private static Data parseCharacter(NovelEngine engine, Unpacker p)
+			throws IOException {
+		System.out.println("DataLoader.parseCharacter()");
+		DataCharacter data = new DataCharacter();
+		boolean end = false;
+		while (!end) {
+			try {
+				int charaImgId = p.readInt();
+				System.out.println(charaImgId);
+				byte[] charaImg = p.readByteArray();
+				QueueTexture q = new QueueTexture(engine, charaImgId, charaImg);
+				engine.queue.offer(q);
+			} catch (EOFException e) {
+				end = true;
+			}
+		}
+		File dir = NovelEngine.getCurrentDir();
+		dir = new File(dir, "ch");
+		File[] files = dir.listFiles();
+		for (int i = 0; i < files.length; i++) {
+			File file = files[i];
+			if (!file.isDirectory() && file.getName().endsWith(".dat")) {
+				FileInputStream fis = null;
+				try {
+					fis = new FileInputStream(file);
+					MessagePack msgpack = new MessagePack();
+					Unpacker unpacker = msgpack.createUnpacker(fis);
+					int charaId = unpacker.readInt();
+					String name = unpacker.readString();
+					Character c = new Character(charaId, name);
+					end = false;
+					while (!end) {
+						System.out.println("DataLoader.parseCharacter()");
+						try {
+							int faceid = unpacker.readInt();
+							int imageid = unpacker.readInt();
+							c.addFace(faceid, imageid);
+							System.out.println("DataLoader.parseCharacter()");
+						} catch (EOFException e) {
+							end = true;
+						}
+					}
+					data.addCharacter(c);
+
+				} finally {
+					fis.close();
+				}
+			}
+		}
 		return data;
 	}
 }

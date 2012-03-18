@@ -6,6 +6,7 @@ import hide92795.novelengine.QueueHandler;
 import hide92795.novelengine.SoundManager;
 import hide92795.novelengine.WordsManager;
 import hide92795.novelengine.data.DataBasic;
+import hide92795.novelengine.data.DataCharacter;
 import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataMainMenu;
 import hide92795.novelengine.data.DataStory;
@@ -61,6 +62,7 @@ public class NovelEngine {
 	private boolean hasCrash;
 	public WordsManager wordsManager;
 	public DataGui dataGui;
+	public DataCharacter dataCharacter;
 
 	public NovelEngine() {
 		theEngine = this;
@@ -200,6 +202,8 @@ public class NovelEngine {
 					"gameinfo.dat", DataBasic.class);
 			dataGui = (DataGui) DataLoader.loadData(this, null, "gui.dat",
 					DataGui.class);
+			dataCharacter = (DataCharacter)DataLoader.loadData(this, null, "chara.dat",
+					DataCharacter.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ex = e;
@@ -331,9 +335,5 @@ public class NovelEngine {
 			}
 		};
 		t.start();
-	}
-
-	public void addPanel(JPanel panel) {
-		frame.getContentPane().add(panel, "Words");
 	}
 }

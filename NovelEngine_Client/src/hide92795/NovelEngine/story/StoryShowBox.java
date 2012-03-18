@@ -1,5 +1,6 @@
 package hide92795.novelengine.story;
 
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
 
 import hide92795.novelengine.Renderer;
@@ -14,6 +15,7 @@ public class StoryShowBox extends Story {
 	private float now;
 	private int frequency = -1;
 	private float diff;
+	private PanelStory panel;
 
 	public StoryShowBox(boolean show) {
 		this.show = show;
@@ -31,6 +33,7 @@ public class StoryShowBox extends Story {
 
 	@Override
 	public void init(PanelStory story) {
+		panel = story;
 		if (show) {
 			now = height;
 		} else {
@@ -40,9 +43,32 @@ public class StoryShowBox extends Story {
 
 		frequency = -1;
 	}
+	
+	private void skip(PanelStory panel){
+		if(show){
+			now = 0;
+			panel.setShowBox(true);
+			finish = true;
+		}else{
+			now = height;
+			finish = true;
+		}
+	}
+	
+	@Override
+	public void keyPressed(int eventKey) {
+		System.out.println(Keyboard.getKeyName(eventKey));
+		if (eventKey == Keyboard.KEY_RETURN) {
+			skip(panel);
+		}
+	}
 
 	@Override
 	public void update(PanelStory panelStory, int delta) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)
+				|| Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+			skip(panelStory);
+		}
 		setFrequency(400 / delta);
 		if (show) {
 			now -= diff;

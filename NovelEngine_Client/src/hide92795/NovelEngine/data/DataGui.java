@@ -1,8 +1,11 @@
 package hide92795.novelengine.data;
 
+import java.util.HashMap;
+
 public class DataGui extends Data {
 	public static final int GUI_MESSAGEBOX = 0;
 	public static final int GUI_WAITCURSOR = 1;
+	public static final int GUI_PORTRAIT = 2;
 
 	private final int boxImageId;
 	private int boxXpos;
@@ -18,10 +21,13 @@ public class DataGui extends Data {
 	private int waitCursorSize;
 	private int waitCursorCount;
 	private float[][] waitCursorList;
+	
+	private HashMap<Integer, int[]> portraitPosition;
 
 	public DataGui() {
 		this.boxImageId = "_MessageBox".hashCode();
 		this.waitCursorImageId = "_WaitCursor".hashCode();
+		portraitPosition = new HashMap<Integer, int[]>();
 	}
 
 	public final int getBoxImageId() {
@@ -118,6 +124,14 @@ public class DataGui extends Data {
 
 	public final void setWaitCursorList(float[][] waitCursorList) {
 		this.waitCursorList = waitCursorList;
+	}
+	
+	public void addPortraitPosition(int posId, int[] pos){
+		this.portraitPosition.put(posId, pos);
+	}
+	
+	public int[] getPortraitPosition(int posId){
+		return this.portraitPosition.get(posId);
 	}
 
 }
