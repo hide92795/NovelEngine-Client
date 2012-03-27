@@ -3,7 +3,7 @@ package hide92795.novelengine;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
@@ -55,61 +55,61 @@ public class Renderer {
 	 * @param alpha
 	 *            アルファ値
 	 */
-	public static void renderBgImage(Texture texture, float alpha) {
+	public static void renderBgImage(Texture texture, double alpha) {
 		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, 0, 0,
 				texture.getTextureWidth(), texture.getTextureHeight());
 	}
 
-	public static void renderImage(Texture texture, float x, float y, float x1,
-			float y1) {
+	public static void renderImage(Texture texture, double x, double y,
+			double x1, double y1) {
 		renderImage(texture, 1.0f, 1.0f, 1.0f, 1.0f, x, y, x1, y1);
 	}
 
-	public static void renderImage(Texture texture, float alpha, float x,
-			float y, float x1, float y1) {
+	public static void renderImage(Texture texture, double alpha, double x,
+			double y, double x1, double y1) {
 		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, x, y, x1, y1);
 	}
 
-	public static void renderImage(Texture texture, float red, float green,
-			float blue, float a, float x, float y, float x1, float y1) {
+	public static void renderImage(Texture texture, double red, double green,
+			double blue, double a, double x, double y, double x1, double y1) {
 		texture.bind();
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		{
-			glColor4f(red, green, blue, a);
+			glColor4d(red, green, blue, a);
 			glTexCoord2f(0, 0);
-			glVertex2f(x, y);
+			glVertex2d(x, y);
 			glTexCoord2f(1, 0);
-			glVertex2f(x1, y);
+			glVertex2d(x1, y);
 			glTexCoord2f(1, 1);
-			glVertex2f(x1, y1);
+			glVertex2d(x1, y1);
 			glTexCoord2f(0, 1);
-			glVertex2f(x, y1);
+			glVertex2d(x, y1);
 		}
 		glEnd();
 	}
 
-	public static void renderColor(float red, float green, float blue) {
+	public static void renderColor(double red, double green, double blue) {
 		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.width,
 				NovelEngine.theEngine.height);
 	}
 
-	public static void renderColor(float red, float green, float blue,
-			float alpha) {
+	public static void renderColor(double red, double green, double blue,
+			double alpha) {
 		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.width,
 				NovelEngine.theEngine.height);
 	}
 
-	public static void renderColor(float red, float green, float blue,
-			float alpha, float x, float y, float x1, float y1) {
+	public static void renderColor(double red, double green, double blue,
+			double alpha, double x, double y, double x1, double y1) {
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		{
-			glColor4f(red, green, blue, alpha);
-			glVertex2f(x, y);
-			glVertex2f(x1, y);
-			glVertex2f(x1, y1);
-			glVertex2f(x, y1);
+			glColor4d(red, green, blue, alpha);
+			glVertex2d(x, y);
+			glVertex2d(x1, y);
+			glVertex2d(x1, y1);
+			glVertex2d(x, y1);
 		}
 		glEnd();
 	}
@@ -141,12 +141,14 @@ public class Renderer {
 			as_edge.addAttribute(TextAttribute.FONT, f1, begin, end);
 		}
 
-		
-		
 		LineBreakMeasurer lbm_inner = new LineBreakMeasurer(
-				as_inner.getIterator(),BreakIterator.getLineInstance(Locale.CANADA) , new FontRenderContext(null, true, true));
+				as_inner.getIterator(),
+				BreakIterator.getLineInstance(Locale.CANADA),
+				new FontRenderContext(null, true, true));
 		LineBreakMeasurer lbm_edge = new LineBreakMeasurer(
-				as_edge.getIterator(),BreakIterator.getLineInstance(Locale.CANADA) , new FontRenderContext(null, true, true));
+				as_edge.getIterator(),
+				BreakIterator.getLineInstance(Locale.CANADA),
+				new FontRenderContext(null, true, true));
 
 		while (lbm_inner.getPosition() < textonly.length()) {
 			TextLayout tl_inner = lbm_inner.nextLayout(610);

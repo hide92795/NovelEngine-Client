@@ -2,31 +2,16 @@ package hide92795.novelengine.story;
 
 import hide92795.novelengine.Character;
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.data.DataCharacter;
 import hide92795.novelengine.panel.PanelStory;
 
 public class StoryChangeCharacter extends Story {
+	private final CharacterChanger[] characters;
 
-	private final int characterId;
-	private final int faceId;
-	private final int placeId;
 	private boolean finish;
 
-	public StoryChangeCharacter(int charId, int faceId, int placeId) {
-		this.characterId = charId;
-		this.faceId = faceId;
-		this.placeId = placeId;
-	}
-
-	public final int getCharacterId() {
-		return characterId;
-	}
-
-	public final int getFaceId() {
-		return faceId;
-	}
-
-	public final int getPlaceId() {
-		return placeId;
+	public StoryChangeCharacter(int number) {
+		this.characters = new CharacterChanger[number];
 	}
 
 	@Override
@@ -41,11 +26,17 @@ public class StoryChangeCharacter extends Story {
 
 	@Override
 	public void init(PanelStory story) {
-		Character c = story.engine.dataCharacter.getCharacter(characterId);
-		if (c != null) {
-			c.setCurrentFace(faceId);
+		int size = characters.length;
+		DataCharacter data = story.engine.dataCharacter;
+		for (int i = 0; i < size; i++) {
+			CharacterChanger cc = characters[i];
+			Character c = data.getCharacter(cc.characterId);
+			if (c != null) {
+				c.setCurrentFace(cc.faceId);
+			}
+			story.characters.put(cc.placeId, c);
 		}
-		story.characters.put(placeId, c);
+
 	}
 
 	@Override
@@ -58,5 +49,27 @@ public class StoryChangeCharacter extends Story {
 	public void render(NovelEngine engine) {
 		// TODO 自動生成されたメソッド・スタブ
 		super.render(engine);
+	}
+
+	public void addChange(int num, int characterId, int faceId, int placeId,
+			boolean fade) {
+		CharacterChanger cc = new CharacterChanger(characterId, faceId,
+				placeId, fade);
+		characters[num] = cc;
+	}
+
+	class CharacterChanger {
+		private final int characterId;
+		private final int faceId;
+		private final int placeId;
+		private final boolean fade;
+
+		public CharacterChanger(int characterId, int faceId, int placeId,
+				boolean fade) {
+			this.characterId = characterId;
+			this.faceId = faceId;
+			this.placeId = placeId;
+			this.fade = fade;
+		}
 	}
 }

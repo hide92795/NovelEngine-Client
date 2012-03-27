@@ -32,6 +32,8 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -63,6 +65,7 @@ public class NovelEngine {
 	public WordsManager wordsManager;
 	public DataGui dataGui;
 	public DataCharacter dataCharacter;
+	public Logger logger;
 
 	public NovelEngine() {
 		theEngine = this;
@@ -74,7 +77,7 @@ public class NovelEngine {
 		width = dataBasic.getWidth();
 		height = dataBasic.getHeight();
 		frame = new NovelEngineFrame(this);
-
+		logger = LoggerFactory.getLogger("NovelEngine");
 	}
 
 	public void start() {

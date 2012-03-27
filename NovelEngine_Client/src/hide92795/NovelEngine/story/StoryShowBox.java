@@ -2,6 +2,8 @@ package hide92795.novelengine.story;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
+import org.slf4j.Logger;
+import org.slf4j.Marker;
 
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
@@ -12,10 +14,13 @@ public class StoryShowBox extends Story {
 	protected boolean finish = false;
 	private int height = 241;
 	private int width = 700;
-	private float now;
-	private int frequency = -1;
-	private float diff;
+	private double now;
 	private PanelStory panel;
+	private double speed = 0.05d;
+	// 経過時間
+	private long elapsedTime;
+	private int totalTime = 400;
+	private double alpha;
 
 	public StoryShowBox(boolean show) {
 		this.show = show;
@@ -37,24 +42,22 @@ public class StoryShowBox extends Story {
 		if (show) {
 			now = height;
 		} else {
-			now = 0.0f;
+			now = 0.0d;
 			story.setShowBox(false);
 		}
-
-		frequency = -1;
 	}
-	
-	private void skip(PanelStory panel){
-		if(show){
-			now = 0;
+
+	private void skip(PanelStory panel) {
+		if (show) {
+			now = 0.0d;
 			panel.setShowBox(true);
 			finish = true;
-		}else{
+		} else {
 			now = height;
 			finish = true;
 		}
 	}
-	
+
 	@Override
 	public void keyPressed(int eventKey) {
 		System.out.println(Keyboard.getKeyName(eventKey));
@@ -69,43 +72,38 @@ public class StoryShowBox extends Story {
 				|| Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 			skip(panelStory);
 		}
-		setFrequency(400 / delta);
+
+		elapsedTime += delta;
 		if (show) {
-			now -= diff;
-			if (now <= height / 2) {
-				diff *= 0.95f;
-			}
-			if (now <= 0) {
+			double d = Math.pow(speed, (double) elapsedTime / totalTime);
+			alpha = 1.0d - d;
+
+			now = (double) height * (d - speed);
+			if (now <= 0d) {
 				now = 0;
 				panelStory.setShowBox(true);
 				finish = true;
 			}
 		} else {
-			now += diff;
-			if (now >= height) {
+			double d = (double) elapsedTime / totalTime;
+			alpha = 1.0d - d;
+			if (d >= 1.0d) {
 				now = height;
 				finish = true;
+				return;
 			}
+			now = (double) height * d;
+
 		}
 
-	}
-
-	private void setFrequency(int i) {
-		if (frequency == -1) {
-			frequency = i;
-			diff = (float) height / i;
-		}
 	}
 
 	@Override
 	public void render(NovelEngine engine) {
-		float alpha = (height - now) / height;
-
 		float x = engine.width - width;
-		float y = engine.height - height + now;
+		float y = (float) (engine.height - height + now);
 
 		Texture t = engine.imageManager.getImage(123456);
-
 		Renderer.renderImage(t, alpha, x, y, x + t.getTextureWidth(),
 				y + t.getTextureHeight());
 		// System.out.println("X:" + x + ", Y:" + y);

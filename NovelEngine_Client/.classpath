@@ -5,8 +5,7 @@
 	<classpathentry kind="lib" path="E:/Git/msgpack-java/build/msgpack-0.0.1.jar"/>
 	<classpathentry kind="lib" path="E:/Git/msgpack-java/build/lib/javassist-3.15.0-GA.jar"/>
 	<classpathentry kind="lib" path="E:/Git/msgpack-java/build/lib/json-simple-1.1.jar"/>
-	<classpathentry kind="lib" path="E:/Git/msgpack-java/build/lib/slf4j-api-1.6.1.jar"/>
-	<classpathentry kind="lib" path="E:/Git/msgpack-java/build/lib/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="E:/java_library/slf4j-1.6.4/slf4j-api-1.6.4.jar" sourcepath="E:/java_library/slf4j-1.6.4/slf4j-api-1.6.4-sources.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/lwjgl-2.8.2/jar/lwjgl.jar" sourcepath="E:/java_library/lwjgl-2.8.2/lwjgl-source-2.8.2/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/E:/java_library/lwjgl-2.8.2/javadoc/"/>
@@ -21,6 +20,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="E:/java_library/slick-util/jogg-0.0.7.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/slick-util/jorbis-0.0.15.jar"/>
-	<classpathentry kind="lib" path="E:/java_library/twl/TWL.jar" sourcepath="E:/java_library/twl/TWL/src"/>
+	<classpathentry kind="lib" path="E:/java_library/logback-1.0.1/logback-classic-1.0.1.jar"/>
+	<classpathentry kind="lib" path="E:/java_library/logback-1.0.1/logback-core-1.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

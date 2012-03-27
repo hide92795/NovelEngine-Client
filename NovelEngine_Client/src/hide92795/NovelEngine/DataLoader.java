@@ -44,6 +44,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.AttributedString;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
@@ -245,11 +246,15 @@ public class DataLoader {
 				break;
 			case Story.COMMAND_CHANGE_CHARACTER:
 				// キャラ変更
-				int charId = i.next().asIntegerValue().getInt();
-				int faceId = i.next().asIntegerValue().getInt();
-				int placeId = i.next().asIntegerValue().getInt();
-				StoryChangeCharacter c = new StoryChangeCharacter(charId,
-						faceId, placeId);
+				int cc_count = i.next().asIntegerValue().getInt();
+				StoryChangeCharacter c = new StoryChangeCharacter(cc_count);
+				for (int j = 0; j < cc_count; j++) {
+					int characterId = i.next().asIntegerValue().getInt();
+					int faceId = i.next().asIntegerValue().getInt();
+					int placeId = i.next().asIntegerValue().getInt();
+					boolean fade = i.next().asBooleanValue().getBoolean();
+					c.addChange(j, characterId, faceId, placeId, fade);
+				}
 				data.addStory(c);
 				break;
 			case Story.COMMAND_SHOW_CG:

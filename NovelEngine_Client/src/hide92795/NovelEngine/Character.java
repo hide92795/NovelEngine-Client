@@ -35,12 +35,8 @@ public class Character {
 	}
 
 	public void render(NovelEngine engine, int xpos, int ypos) {
-		System.out.println("Character.render()");
-		System.out.println(faces.containsKey(currentFace));
 		int imgId = faces.get(currentFace);
-		System.out.println(imgId);
 		Texture tex = engine.imageManager.getImage(imgId);
-		System.out.println(tex);
 		Renderer.renderImage(tex, xpos, ypos, xpos + tex.getTextureWidth(),
 				ypos + tex.getTextureHeight());
 	}
