@@ -11,7 +11,6 @@ import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import hide92795.novelengine.client.NovelEngine;
 
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
@@ -33,9 +32,6 @@ public class FaderInAlpha extends FaderIn{
 	public void update(int delta) {
 		float a = (fadePerSec / 1000f) * delta;
 		alpha -= a;
-		if(Mouse.isButtonDown(0)){
-			alpha = 0.0f;
-		}
 		if (alpha < 0.0f) {
 			alpha = 0.0f;
 			finish();

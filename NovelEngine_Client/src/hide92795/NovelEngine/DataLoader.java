@@ -465,15 +465,15 @@ public class DataLoader {
 					Unpacker unpacker = msgpack.createUnpacker(fis);
 					int charaId = unpacker.readInt();
 					String name = unpacker.readString();
+					QueueWords qw = new QueueWords(engine, 0, charaId, name);
+					engine.wordsManager.offer(qw);
 					Character c = new Character(charaId, name);
 					end = false;
 					while (!end) {
-						System.out.println("DataLoader.parseCharacter()");
 						try {
 							int faceid = unpacker.readInt();
 							int imageid = unpacker.readInt();
 							c.addFace(faceid, imageid);
-							System.out.println("DataLoader.parseCharacter()");
 						} catch (EOFException e) {
 							end = true;
 						}

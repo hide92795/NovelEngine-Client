@@ -45,11 +45,11 @@ public abstract class Story {
 
 	}
 
-	public void leftClick(int x, int y) {
+	public void leftClick(PanelStory story, int x, int y) {
 
 	}
 
-	public void keyPressed(int eventKey) {
+	public void keyPressed(PanelStory story, int eventKey) {
 	}
 
 }

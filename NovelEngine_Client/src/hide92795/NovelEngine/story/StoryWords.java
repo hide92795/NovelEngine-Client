@@ -8,7 +8,9 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
+import hide92795.novelengine.ImageManager;
 import hide92795.novelengine.Renderer;
+import hide92795.novelengine.WordsManager;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.panel.PanelStory;
@@ -67,6 +69,8 @@ public class StoryWords extends Story {
 	private float perTexWid;
 	private int c;
 
+	private Texture nameTexture;
+
 	public StoryWords(int characterId, int voiceId, String words, int id) {
 		this.characterId = characterId;
 		this.voiceId = voiceId;
@@ -88,9 +92,19 @@ public class StoryWords extends Story {
 
 	@Override
 	public void init(PanelStory story) {
-		wordsImages = story.engine.wordsManager.getWordsTextureIds(
-				story.getChapterId(), id);
-		wordsTexture = story.engine.imageManager.getImage(wordsImages[0]);
+		WordsManager wordsManager = story.engine.wordsManager;
+		ImageManager imageManager = story.engine.imageManager;
+
+		// セリフイメージ取得
+		wordsImages = wordsManager.getWordsTextureIds(story.getChapterId(), id);
+		wordsTexture = imageManager.getImage(wordsImages[0]);
+
+		// 表示名イメージ取得
+		int[] ids = wordsManager.getWordsTextureIds(0, characterId);
+		if (ids != null) {
+			nameTexture = imageManager.getImage(ids[0]);
+		}
+
 		progression = 0;
 		line = 0;
 		texturePerMax = (float) wordsTexture.getImageWidth()
@@ -106,13 +120,12 @@ public class StoryWords extends Story {
 	}
 
 	@Override
-	public void leftClick(int x, int y) {
+	public void leftClick(PanelStory story, int x, int y) {
 		skip();
 	}
 
 	@Override
-	public void keyPressed(int eventKey) {
-		System.out.println(Keyboard.getKeyName(eventKey));
+	public void keyPressed(PanelStory story, int eventKey) {
 		if (eventKey == Keyboard.KEY_RETURN) {
 			skip();
 		}
@@ -147,6 +160,16 @@ public class StoryWords extends Story {
 	@Override
 	public void render(NovelEngine engine) {
 		int ypos = 0;
+		DataGui data = engine.dataGui;
+		// 名前表示
+		if (nameTexture != null) {
+			int x = data.getBoxXpos() + data.getBoxNameXpos();
+			int y = data.getBoxYpos() + data.getBoxNameYpos();
+			int x1 = x + nameTexture.getTextureWidth();
+			int y1 = y + nameTexture.getTextureHeight();
+			Renderer.renderImage(nameTexture, x, y, x1, y1);
+		}
+
 		if (showed) {
 			int cursorYpos = 0;
 			int cursorXpos = 0;
@@ -154,16 +177,18 @@ public class StoryWords extends Story {
 			for (int wordsId : wordsImages) {
 				Texture t = engine.imageManager.getImage(wordsId);
 				if (t != null) {
-					Renderer.renderImage(t, 148, 445 + ypos,
-							148 + t.getTextureWidth(),
-							445 + t.getTextureHeight() + ypos);
+					int x = data.getBoxXpos() + data.getBoxWordsXpos();
+					int y = data.getBoxYpos() + data.getBoxWordsYpos() + ypos;
+					int x1 = x + t.getTextureWidth();
+					int y1 = y + t.getTextureHeight();
+					Renderer.renderImage(t, x, y, x1, y1);
 					cursorXpos = t.getImageWidth();
 					cursorYpos = ypos + t.getImageHeight();
 					ypos += t.getImageHeight() + 5;
 				}
 			}
+
 			// カーソル
-			DataGui data = engine.dataGui;
 			engine.imageManager.getImage(data.getWaitCursorImageId()).bind();
 			float[] a = data.getWaitCursorList()[c];
 			int size = data.getWaitCursorSize();
@@ -196,29 +221,30 @@ public class StoryWords extends Story {
 			for (int i = 0; i <= line; i++) {
 				Texture t = engine.imageManager.getImage(wordsImages[i]);
 				if (t != null) {
+					int x = data.getBoxXpos() + data.getBoxWordsXpos();
+					int y = data.getBoxYpos() + data.getBoxWordsYpos() + ypos;
+					int y1 = y + t.getTextureHeight();
 					if (i == line) {
 						// 表示途中
-						float x1 = 148 + t.getTextureWidth() * perTexWid;
-						int y1 = 445 + t.getTextureHeight() + ypos;
+						float x1 = x + t.getTextureWidth() * perTexWid;
 						t.bind();
 						glEnable(GL_TEXTURE_2D);
 						glBegin(GL_QUADS);
 						glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 						{
 							glTexCoord2f(0, 0);
-							glVertex2f(148, 445 + ypos);
+							glVertex2f(x, y);
 							glTexCoord2f(perTexWid, 0);
-							glVertex2f(x1, 445 + ypos);
+							glVertex2f(x1, y);
 							glTexCoord2f(perTexWid, 1);
 							glVertex2f(x1, y1);
 							glTexCoord2f(0, 1);
-							glVertex2f(148, y1);
+							glVertex2f(x, y1);
 						}
 						glEnd();
 					} else {
-						Renderer.renderImage(t, 148, 445 + ypos,
-								148 + t.getTextureWidth(),
-								445 + t.getTextureHeight() + ypos);
+						int x1 = x + t.getTextureWidth();
+						Renderer.renderImage(t, x, y, x1, y1);
 					}
 					ypos += t.getImageHeight() + 5;
 				}

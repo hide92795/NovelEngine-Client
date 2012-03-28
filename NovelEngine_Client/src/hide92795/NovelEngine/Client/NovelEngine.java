@@ -65,7 +65,7 @@ public class NovelEngine {
 	public WordsManager wordsManager;
 	public DataGui dataGui;
 	public DataCharacter dataCharacter;
-	public Logger logger;
+	public static Logger logger = LoggerFactory.getLogger("NovelEngine");
 
 	public NovelEngine() {
 		theEngine = this;
@@ -77,7 +77,6 @@ public class NovelEngine {
 		width = dataBasic.getWidth();
 		height = dataBasic.getHeight();
 		frame = new NovelEngineFrame(this);
-		logger = LoggerFactory.getLogger("NovelEngine");
 	}
 
 	public void start() {
@@ -205,8 +204,8 @@ public class NovelEngine {
 					"gameinfo.dat", DataBasic.class);
 			dataGui = (DataGui) DataLoader.loadData(this, null, "gui.dat",
 					DataGui.class);
-			dataCharacter = (DataCharacter)DataLoader.loadData(this, null, "chara.dat",
-					DataCharacter.class);
+			dataCharacter = (DataCharacter) DataLoader.loadData(this, null,
+					"chara.dat", DataCharacter.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ex = e;

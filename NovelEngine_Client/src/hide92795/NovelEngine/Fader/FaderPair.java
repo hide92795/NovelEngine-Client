@@ -67,4 +67,10 @@ public class FaderPair implements FaderListener {
 		this.listener = listener;
 	}
 
+	public void skip() {
+		if(skippable){
+			currentFader.finish();
+		}
+	}
+
 }

@@ -54,7 +54,7 @@ public class WordsManager implements Runnable {
 		}
 	}
 
-	public Words getWords(int chapterId) {
+	private Words getWords(int chapterId) {
 		synchronized (chapters) {
 			Words w = chapters.get(chapterId);
 			if (w == null) {

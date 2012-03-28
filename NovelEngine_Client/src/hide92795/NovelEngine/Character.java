@@ -35,13 +35,21 @@ public class Character {
 	}
 
 	public void render(NovelEngine engine, int xpos, int ypos) {
+		render(engine, xpos, ypos, 1.0d);
+	}
+
+	public void render(NovelEngine engine, int xpos, int ypos, double alpha) {
 		int imgId = faces.get(currentFace);
 		Texture tex = engine.imageManager.getImage(imgId);
-		Renderer.renderImage(tex, xpos, ypos, xpos + tex.getTextureWidth(),
-				ypos + tex.getTextureHeight());
+		Renderer.renderImage(tex, alpha, xpos, ypos,
+				xpos + tex.getTextureWidth(), ypos + tex.getTextureHeight());
 	}
 
 	public void setCurrentFace(int faceId) {
 		this.currentFace = faceId;
+	}
+
+	public int getCurrentFace() {
+		return currentFace;
 	}
 }

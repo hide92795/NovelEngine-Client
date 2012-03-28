@@ -1,30 +1,20 @@
 package hide92795.novelengine.panel;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glColor4f;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glTexCoord2f;
-import static org.lwjgl.opengl.GL11.glVertex2f;
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.command.CommandButton;
 import hide92795.novelengine.data.DataMainMenu;
 import hide92795.novelengine.fader.Fader;
 import hide92795.novelengine.fader.FaderListener;
-import hide92795.novelengine.fader.FaderOutBlock;
 import hide92795.novelengine.fader.FaderOutAlpha;
-import hide92795.novelengine.fader.FaderOutSlide;
 import hide92795.novelengine.gui.Button;
 
 import java.util.Random;
 
 import org.lwjgl.Sys;
 import org.lwjgl.util.Rectangle;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.opengl.Texture;
 

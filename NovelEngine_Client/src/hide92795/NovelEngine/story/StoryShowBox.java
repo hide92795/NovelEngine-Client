@@ -2,9 +2,6 @@ package hide92795.novelengine.story;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.Texture;
-import org.slf4j.Logger;
-import org.slf4j.Marker;
-
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.panel.PanelStory;
@@ -15,10 +12,9 @@ public class StoryShowBox extends Story {
 	private int height = 241;
 	private int width = 700;
 	private double now;
-	private PanelStory panel;
 	private double speed = 0.05d;
 	// 経過時間
-	private long elapsedTime;
+	private int elapsedTime;
 	private int totalTime = 400;
 	private double alpha;
 
@@ -38,7 +34,6 @@ public class StoryShowBox extends Story {
 
 	@Override
 	public void init(PanelStory story) {
-		panel = story;
 		if (show) {
 			now = height;
 		} else {
@@ -47,10 +42,10 @@ public class StoryShowBox extends Story {
 		}
 	}
 
-	private void skip(PanelStory panel) {
+	private void skip(PanelStory story) {
 		if (show) {
 			now = 0.0d;
-			panel.setShowBox(true);
+			story.setShowBox(true);
 			finish = true;
 		} else {
 			now = height;
@@ -59,10 +54,14 @@ public class StoryShowBox extends Story {
 	}
 
 	@Override
-	public void keyPressed(int eventKey) {
-		System.out.println(Keyboard.getKeyName(eventKey));
+	public void leftClick(PanelStory story, int x, int y) {
+		skip(story);
+	}
+
+	@Override
+	public void keyPressed(PanelStory story, int eventKey) {
 		if (eventKey == Keyboard.KEY_RETURN) {
-			skip(panel);
+			skip(story);
 		}
 	}
 
@@ -93,7 +92,6 @@ public class StoryShowBox extends Story {
 				return;
 			}
 			now = (double) height * d;
-
 		}
 
 	}

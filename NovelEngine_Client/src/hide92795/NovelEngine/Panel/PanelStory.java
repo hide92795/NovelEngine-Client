@@ -12,12 +12,10 @@ import org.newdawn.slick.opengl.Texture;
 
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.Character;
-import hide92795.novelengine.Utils;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataStory;
 import hide92795.novelengine.story.Story;
-import hide92795.novelengine.story.StoryChangeBg;
 
 public class PanelStory extends Panel {
 
@@ -59,7 +57,6 @@ public class PanelStory extends Panel {
 			do {
 				s = story.next();
 				System.out.println(s.getClass());
-				System.out.println(s.isWait());
 				s.init(this);
 				processList.add(s);
 			} while (!s.isWait());
@@ -86,10 +83,11 @@ public class PanelStory extends Panel {
 
 	private void renderCharacter() {
 		Set<Integer> positions = characters.keySet();
+		DataGui data = engine.dataGui;
 		for (int position : positions) {
 			Character c = characters.get(position);
 			if (c != null) {
-				int[] pos = engine.dataGui.getPortraitPosition(position);
+				int[] pos = data.getPortraitPosition(position);
 				c.render(engine, pos[0], pos[1]);
 			}
 		}
@@ -110,7 +108,7 @@ public class PanelStory extends Panel {
 	public void leftClick(int x, int y) {
 		int size = processList.size();
 		for (int i = 0; i < size; i++) {
-			processList.get(i).leftClick(x, y);
+			processList.get(i).leftClick(this, x, y);
 		}
 	}
 
@@ -118,7 +116,7 @@ public class PanelStory extends Panel {
 	public void keyPressed(int eventKey) {
 		int size = processList.size();
 		for (int i = 0; i < size; i++) {
-			processList.get(i).keyPressed(eventKey);
+			processList.get(i).keyPressed(this, eventKey);
 		}
 	}
 
@@ -148,8 +146,7 @@ public class PanelStory extends Panel {
 		this.showBox = showBox;
 	}
 
-	public int getChapterId() {
+	public final int getChapterId() {
 		return story.getChapterId();
 	}
-
 }
