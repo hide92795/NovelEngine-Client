@@ -1,7 +1,8 @@
 package hide92795.novelengine.data;
 
 import java.util.HashMap;
-import hide92795.novelengine.Character;
+
+import hide92795.novelengine.character.Character;
 
 public class DataCharacter extends Data {
 	private HashMap<Integer, Character> characters;

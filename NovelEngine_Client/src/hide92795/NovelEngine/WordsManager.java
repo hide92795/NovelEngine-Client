@@ -50,7 +50,7 @@ public class WordsManager implements Runnable {
 				chapters.put(chapterId, w);
 			}
 
-			System.out.println("Make words!");
+			Logger.info("Words was maked!");
 		}
 	}
 

@@ -29,9 +29,7 @@ public abstract class Story {
 
 	public abstract boolean isFinish();
 
-	public boolean isWait() {
-		return false;
-	}
+	public abstract boolean isWait();
 
 	public void init(PanelStory story) {
 

@@ -10,6 +10,8 @@ import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import hide92795.novelengine.client.NovelEngine;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -29,18 +31,18 @@ public class FaderOutBlock extends FaderOut {
 	private LinkedList<float[]> renderList;
 	private Color color;
 
-	public FaderOutBlock(NovelEngine engine, FaderListener listener, int x, int y, String color) {
+	public FaderOutBlock(NovelEngine engine, FaderListener listener, int x,
+			int y, String color) {
 		super(engine, listener, color);
 		this.color = Color.decode(color);
 		this.x = x;
 		this.w = (float) engine.width / x;
 		this.h = (float) engine.height / y;
 		int count = x * y;
-		Integer[] arr = new Integer[count];
+		ArrayList<Integer> l = new ArrayList<Integer>();
 		for (int i = 0; i < count; i++) {
-			arr[i] = i;
+			l.add(i);
 		}
-		List<Integer> l = Arrays.asList(arr);
 		Collections.shuffle(l);
 		list = l.iterator();
 		renderList = new LinkedList<float[]>();
@@ -55,7 +57,7 @@ public class FaderOutBlock extends FaderOut {
 			float renderX = xpos * w;
 			float renderY = ypos * h;
 			renderList.add(new float[] { renderX, renderY });
-		}else{
+		} else {
 			finish();
 		}
 	}

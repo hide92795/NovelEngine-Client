@@ -49,6 +49,7 @@ public class ImageManager {
 		}
 		images.put(id, t);
 	}
+
 	public void putTexture(int id, BufferedImage image) {
 		Texture t = null;
 		try {

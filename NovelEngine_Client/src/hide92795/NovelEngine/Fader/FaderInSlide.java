@@ -11,7 +11,6 @@ public class FaderInSlide extends FaderIn {
 	private int x;
 	private float w;
 	private float decrease;
-	private int displayHeight;
 	private LinkedList<Float> renderList;
 
 	public FaderInSlide(NovelEngine engine, FaderListener listener, int x,
@@ -20,8 +19,13 @@ public class FaderInSlide extends FaderIn {
 		this.x = x;
 		this.w = (float) engine.width / x;
 		this.decrease = (float) w / x1;
-		this.displayHeight = engine.height;
 		renderList = new LinkedList<Float>();
+	}
+
+	@Override
+	public void reset() {
+		super.reset();
+		renderList.clear();
 	}
 
 	@Override
@@ -40,7 +44,7 @@ public class FaderInSlide extends FaderIn {
 			}
 			newRenderList.add(xpos);
 		}
-		
+
 		if (finish && i != 0) {
 			finish();
 		}
@@ -58,11 +62,12 @@ public class FaderInSlide extends FaderIn {
 		while (i.hasNext()) {
 			float render = i.next();
 			xpos += w;
-			Renderer.renderColor(color.r, color.g, color.b, 1.0f, xpos - render, 0, xpos
-				, displayHeight);
-			
+			Renderer.renderColor(color.r, color.g, color.b, 1.0f,
+					xpos - render, 0, xpos, engine.height);
+
 		}
-		Renderer.renderColor(color.r, color.g, color.b, 1.0f, xpos, 0, engine.width, engine.height);
+		Renderer.renderColor(color.r, color.g, color.b, 1.0f, xpos, 0,
+				engine.width, engine.height);
 	}
 
 }

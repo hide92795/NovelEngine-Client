@@ -1,5 +1,7 @@
 package hide92795.novelengine;
 
+import hide92795.novelengine.character.Character;
+import hide92795.novelengine.character.effect.CharacterEffect;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.command.CommandButton;
 import hide92795.novelengine.data.Data;
@@ -9,11 +11,9 @@ import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataMainMenu;
 import hide92795.novelengine.data.DataStory;
 import hide92795.novelengine.fader.Fader;
-import hide92795.novelengine.fader.FaderIn;
 import hide92795.novelengine.fader.FaderInBlock;
 import hide92795.novelengine.fader.FaderInAlpha;
 import hide92795.novelengine.fader.FaderInSlide;
-import hide92795.novelengine.fader.FaderOut;
 import hide92795.novelengine.fader.FaderOutBlock;
 import hide92795.novelengine.fader.FaderOutAlpha;
 import hide92795.novelengine.fader.FaderOutSlide;
@@ -34,29 +34,33 @@ import hide92795.novelengine.story.StoryShowCG;
 import hide92795.novelengine.story.StoryWords;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.text.AttributedString;
-import java.util.Iterator;
-
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.Sys;
 import org.msgpack.MessagePack;
-import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
 import org.msgpack.unpacker.UnpackerIterator;
 
 public class DataLoader {
+	public static final int DATA_BASIC = 0;
+	public static final int DATA_MAINMENU = 1;
+	public static final int DATA_STORY = 2;
+	public static final int DATA_GUI = 3;
+	public static final int DATA_CHARACTER = 4;
+	public static final int DATA_BGIMAGE = 5;
+
 	public static Data loadData(NovelEngine engine, String path, String name,
-			Class<?> targetClass) throws FileNotFoundException, IOException {
+			int target) throws FileNotFoundException, IOException,
+			ClassNotFoundException {
 
 		Data returnData = null;
 		File file = NovelEngine.getCurrentDir();
@@ -66,16 +70,25 @@ public class DataLoader {
 		FileInputStream fis = new FileInputStream(file);
 		MessagePack msgpack = new MessagePack();
 		Unpacker unpacker = msgpack.createUnpacker(fis);
-		if (targetClass.equals(DataBasic.class)) {
+		switch (target) {
+		case DATA_BASIC:
 			returnData = parseBasic(engine, unpacker);
-		} else if (targetClass.equals(DataMainMenu.class)) {
+			break;
+		case DATA_MAINMENU:
 			returnData = parseMainMenu(engine, unpacker);
-		} else if (targetClass.equals(DataStory.class)) {
+			break;
+		case DATA_STORY:
 			returnData = parseStory(engine, unpacker);
-		} else if (targetClass.equals(DataGui.class)) {
+			break;
+		case DATA_GUI:
 			returnData = parseGui(engine, unpacker);
-		} else if (targetClass.equals(DataCharacter.class)) {
+			break;
+		case DATA_CHARACTER:
 			returnData = parseCharacter(engine, unpacker);
+			break;
+		case DATA_BGIMAGE:
+			returnData = parseBgImage(engine, unpacker);
+			break;
 		}
 		fis.close();
 		return returnData;
@@ -113,7 +126,6 @@ public class DataLoader {
 
 	private static Data parseMainMenu(NovelEngine engine, Unpacker p)
 			throws IOException {
-		System.out.println(Sys.getTime());
 		DataMainMenu data = new DataMainMenu();
 		int size1 = p.readInt();
 		int[] images = new int[size1];
@@ -162,12 +174,11 @@ public class DataLoader {
 		}
 		data.setButtons(button);
 		data.setButtonRenderingSeq(p.read(int[].class));
-		System.out.println(Sys.getTime());
 		return data;
 	}
 
 	private static Data parseStory(NovelEngine engine, Unpacker p)
-			throws IOException {
+			throws IOException, ClassNotFoundException {
 		DataStory data = new DataStory();
 		UnpackerIterator i = p.iterator();
 		System.out.println(Sys.getTime());
@@ -210,7 +221,7 @@ public class DataLoader {
 				case Fader.FADER_NONE:
 					break;
 				case Fader.FADER_ALPHA:
-					float af_time = i.next().asFloatValue().getFloat();
+					int af_time = i.next().asIntegerValue().getInt();
 					boolean af_via = i.next().asBooleanValue().getBoolean();
 					String af_color = i.next().asRawValue().getString();
 					FaderOutAlpha fadeoutalpha = new FaderOutAlpha(engine,
@@ -247,13 +258,40 @@ public class DataLoader {
 			case Story.COMMAND_CHANGE_CHARACTER:
 				// キャラ変更
 				int cc_count = i.next().asIntegerValue().getInt();
-				StoryChangeCharacter c = new StoryChangeCharacter(cc_count);
+				StoryChangeCharacter c = new StoryChangeCharacter();
 				for (int j = 0; j < cc_count; j++) {
 					int characterId = i.next().asIntegerValue().getInt();
 					int faceId = i.next().asIntegerValue().getInt();
 					int placeId = i.next().asIntegerValue().getInt();
 					boolean fade = i.next().asBooleanValue().getBoolean();
-					c.addChange(j, characterId, faceId, placeId, fade);
+
+					@SuppressWarnings("unchecked")
+					Class<CharacterEffect> effectClass = (Class<CharacterEffect>) Class
+							.forName("hide92795.novelengine.character.effect.Effect_AlphaNoMove");
+					Class<?>[] types = { int.class };
+					Constructor<CharacterEffect> constructor;
+					try {
+						constructor = effectClass.getConstructor(types);
+					} catch (SecurityException e) {
+						throw new RuntimeException(e);
+					} catch (NoSuchMethodException e) {
+						throw new RuntimeException(e);
+					}
+					Object[] args = { 1000 };
+					CharacterEffect effect;
+					try {
+						effect = constructor.newInstance(args);
+					} catch (IllegalArgumentException e) {
+						throw new RuntimeException(e);
+					} catch (InstantiationException e) {
+						throw new RuntimeException(e);
+					} catch (IllegalAccessException e) {
+						throw new RuntimeException(e);
+					} catch (InvocationTargetException e) {
+						throw new RuntimeException(e);
+					}
+
+					c.addChange(j, characterId, faceId, placeId, effect);
 				}
 				data.addStory(c);
 				break;
@@ -438,13 +476,11 @@ public class DataLoader {
 
 	private static Data parseCharacter(NovelEngine engine, Unpacker p)
 			throws IOException {
-		System.out.println("DataLoader.parseCharacter()");
 		DataCharacter data = new DataCharacter();
 		boolean end = false;
 		while (!end) {
 			try {
 				int charaImgId = p.readInt();
-				System.out.println(charaImgId);
 				byte[] charaImg = p.readByteArray();
 				QueueTexture q = new QueueTexture(engine, charaImgId, charaImg);
 				engine.queue.offer(q);
@@ -479,12 +515,27 @@ public class DataLoader {
 						}
 					}
 					data.addCharacter(c);
-
 				} finally {
 					fis.close();
 				}
 			}
 		}
 		return data;
+	}
+
+	private static Data parseBgImage(NovelEngine engine, Unpacker p)
+			throws IOException {
+		boolean end = false;
+		while (!end) {
+			try {
+				int bgImageId = p.readInt();
+				byte[] img = p.readByteArray();
+				QueueTexture q = new QueueTexture(engine, bgImageId, img);
+				engine.queue.offer(q);
+			} catch (EOFException e) {
+				end = true;
+			}
+		}
+		return null;
 	}
 }

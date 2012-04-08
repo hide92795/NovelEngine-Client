@@ -7,5 +7,4 @@ public class FaderOut extends Fader {
 	public FaderOut(NovelEngine engine, FaderListener listener, String color) {
 		super(engine, listener, color);
 	}
-
 }

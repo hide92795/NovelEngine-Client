@@ -15,7 +15,7 @@ public class StoryChangeBg extends Story implements FaderListener {
 	private boolean finish = false;
 
 	public StoryChangeBg(int bgId, FaderPair fader) {
-		this.nextBgId = NovelEngine.theEngine.dataMainMenu.getBackImageIds()[0];
+		this.nextBgId = bgId;
 		this.fader = fader;
 	}
 
@@ -35,6 +35,9 @@ public class StoryChangeBg extends Story implements FaderListener {
 
 	@Override
 	public void init(PanelStory story) {
+		//File
+		fader.reset();
+		finish = false;
 		if (story.getBgTextureId() == 0) {
 			fader.setCurrentFader(fader.getFadein());
 			if (fader instanceof FaderPairAlpha) {

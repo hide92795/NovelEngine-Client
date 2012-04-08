@@ -16,4 +16,9 @@ public class StoryScene extends Story {
 		return true;
 	}
 
+	@Override
+	public boolean isWait() {
+		return false;
+	}
+
 }

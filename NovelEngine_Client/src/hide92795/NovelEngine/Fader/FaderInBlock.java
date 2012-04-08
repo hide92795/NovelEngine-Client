@@ -25,13 +25,24 @@ public class FaderInBlock extends FaderIn {
 	private LinkedList<float[]> renderList;
 	private Color color;
 	private Random random;
+	private int x;
+	private int y;
 
 	public FaderInBlock(NovelEngine engine, FaderListener listener, int x,
 			int y, String color) {
 		super(engine, listener, color);
+		this.x = x;
+		this.y = y;
 		this.color = Color.decode(color);
 		this.w = (float) engine.width / x;
 		this.h = (float) engine.height / y;
+		reset();
+		random = new Random();
+	}
+	
+	@Override
+	public void reset() {
+		super.reset();
 		int count = x * y;
 		renderList = new LinkedList<float[]>();
 		for (int i = 0; i < count; i++) {
@@ -41,7 +52,6 @@ public class FaderInBlock extends FaderIn {
 			float renderY = ypos * h;
 			renderList.add(new float[] { renderX, renderY });
 		}
-		random = new Random();
 	}
 
 	@Override

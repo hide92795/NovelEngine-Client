@@ -42,4 +42,8 @@ public class Fader {
 			}
 		}
 	}
+	
+	public void reset() {
+		finish = false;
+	}
 }

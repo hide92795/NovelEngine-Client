@@ -1,15 +1,6 @@
 package hide92795.novelengine;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glTexCoord2f;
-import static org.lwjgl.opengl.GL11.glVertex2f;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -20,9 +11,7 @@ import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.text.AttributedString;
-import java.text.BreakIterator;
 import java.util.LinkedList;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -142,13 +131,9 @@ public class Renderer {
 		}
 
 		LineBreakMeasurer lbm_inner = new LineBreakMeasurer(
-				as_inner.getIterator(),
-				BreakIterator.getLineInstance(Locale.CANADA),
-				new FontRenderContext(null, true, true));
+				as_inner.getIterator(), new FontRenderContext(null, true, true));
 		LineBreakMeasurer lbm_edge = new LineBreakMeasurer(
-				as_edge.getIterator(),
-				BreakIterator.getLineInstance(Locale.CANADA),
-				new FontRenderContext(null, true, true));
+				as_edge.getIterator(), new FontRenderContext(null, true, true));
 
 		while (lbm_inner.getPosition() < textonly.length()) {
 			TextLayout tl_inner = lbm_inner.nextLayout(610);

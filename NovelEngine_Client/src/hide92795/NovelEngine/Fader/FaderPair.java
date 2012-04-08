@@ -73,4 +73,9 @@ public class FaderPair implements FaderListener {
 		}
 	}
 
+	public void reset() {
+		fadein.reset();
+		fadeout.reset();
+	}
+
 }

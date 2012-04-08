@@ -92,6 +92,9 @@ public class StoryWords extends Story {
 
 	@Override
 	public void init(PanelStory story) {
+		finish = false;
+		showed = false;
+		line = 0;
 		WordsManager wordsManager = story.engine.wordsManager;
 		ImageManager imageManager = story.engine.imageManager;
 

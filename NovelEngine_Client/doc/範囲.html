@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS"/>
+		<title>範囲</title>
+	</head>
+	<body>
+		<hr>
+		<small><span style="font-weight: bold;">NovelEngine</span></small>
+		<br>
+		<big><big><big>範囲</big></big></big>
+		<hr>
+		画像表示に関する範囲を指定するのに使用します。
+		<br>
+		<dl>
+			<dt>
+				<b>導入されたバージョン:</b>
+			</dt>
+			<dd>
+				NovelEngine β1.0
+			</dd>
+		</dl>
+		<hr>
+		<table style="width: 100%;" summary="" border="1" cellpadding="3" cellspacing="0">
+			<tbody>
+				<tr class="TableHeadingColor" bgcolor="#ccccff">
+					<th style="width: 100%;" colspan="2" align="left"><font size="+2"> <b>コマンドの概要</b></font></th>
+				</tr>
+				<tr class="TableRowColor" bgcolor="white">
+					<td align="right" valign="top"><font size="-1"> &nbsp;設定 </font></td>
+					<td><code><b><a href="#bounds">範囲</a></b>(数値 x, 数値 y, 数値 x1, 数値 y1, 数値 ix, 数値 iy, 数値 ix1, 数値 iy1, 文字列 背景色)</code>
+					<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;指定された数値と背景色で範囲を設定します。</td>
+				</tr>
+			</tbody>
+		</table>
+		<br>
+		<table border="1" width="100%" cellpadding="3" cellspacing="0" summary="">
+			<tr bgcolor="#ccccff" class="tableheadingcolor">
+				<th align="left" colspan="1"><font size="+2"> <b>コマンドの詳細</b></font></th>
+			</tr>
+		</table>
+		<a name="bounds"></a><h3>範囲</h3>
+		<pre><b>範囲</b>(数値 x, 数値 y, 数値 x1, 数値 y1, 数値 ix, 数値 iy, 数値 ix1, 数値 iy1, 文字列 背景色)</pre>
+		<dl>
+			<dd>
+				画像上の四角形(ix, iy. ix1, iy1)を切り抜いて、画面上の範囲(x, y, x1, y1)に収まるように拡大縮小を行い描画します。
+				画面上の範囲で指定された四角形が画面サイズより小さかった場合、余白の部分は背景色によって塗りつぶされます。
+				<p>
+					<dd>
+						<dl>
+							<dt>
+								<b>パラメータ:</b>
+							</dt>
+							<dd>
+								x - 画面上のx座標<br>
+								y - 画面上のy座標<br>
+								x1 - 画面上のx1座標<br>
+								y1 - 画面上のy1座標<br>
+								ix - 画像上のx座標<br>
+								iy - 画像上のy座標<br>
+								ix1 - 画像上のx1座標<br>
+								iy1 - 画像上のy1座標<br>
+								背景色 - 描画範囲外を塗りつぶす色。HTML表記<br>
+							</dd>
+						</dl>
+					</dd>
+					<dd>
+						<dl>
+							<dt>
+								<b>仕様:</b>
+							</dt>
+							<dd>
+								待機：×
+							</dd>
+						</dl>
+					</dd>
+			</dd>
+		</dl>
+		<hr>
+		
+	</body>
+</html>

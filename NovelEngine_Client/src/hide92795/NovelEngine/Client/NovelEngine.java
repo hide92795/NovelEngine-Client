@@ -1,9 +1,12 @@
 package hide92795.novelengine.client;
 
+import hide92795.novelengine.CharacterManager;
 import hide92795.novelengine.DataLoader;
 import hide92795.novelengine.ImageManager;
+import hide92795.novelengine.Logger;
 import hide92795.novelengine.QueueHandler;
 import hide92795.novelengine.SoundManager;
+import hide92795.novelengine.StoryManager;
 import hide92795.novelengine.WordsManager;
 import hide92795.novelengine.data.DataBasic;
 import hide92795.novelengine.data.DataCharacter;
@@ -17,12 +20,8 @@ import hide92795.novelengine.panel.PanelStory;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import javax.swing.JPanel;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -30,9 +29,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -58,14 +55,14 @@ public class NovelEngine {
 	private NovelEngineFrame frame;
 	public int width;
 	public int height;
-	protected DataStory s;
 	private Panel nextPanel;
 	private boolean changePanel;
 	private boolean hasCrash;
 	public WordsManager wordsManager;
 	public DataGui dataGui;
 	public DataCharacter dataCharacter;
-	public static Logger logger = LoggerFactory.getLogger("NovelEngine");
+	public StoryManager storyManager;
+	public CharacterManager characterManager;
 
 	public NovelEngine() {
 		theEngine = this;
@@ -73,6 +70,8 @@ public class NovelEngine {
 		soundManager = new SoundManager();
 		queue = new QueueHandler();
 		wordsManager = new WordsManager();
+		storyManager = new StoryManager();
+		characterManager = new CharacterManager(this);
 		initResource();
 		width = dataBasic.getWidth();
 		height = dataBasic.getHeight();
@@ -85,7 +84,6 @@ public class NovelEngine {
 			Display.setParent(frame.getCanvas());
 			Display.setVSyncEnabled(true);
 			lastFPS = getTime();
-			loadMenuData();
 
 			frame.setVisible(true);
 			initGL();
@@ -150,22 +148,6 @@ public class NovelEngine {
 		closeRequested = true;
 	}
 
-	private void loadMenuData() {
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				try {
-					dataMainMenu = (DataMainMenu) DataLoader.loadData(
-							NovelEngine.this, null, "menu.dat",
-							DataMainMenu.class);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		t.start();
-	}
-
 	private void update(int delta) {
 		if (currentPanel != null) {
 			currentPanel.update(delta);
@@ -201,11 +183,15 @@ public class NovelEngine {
 		Exception ex = null;
 		try {
 			dataBasic = (DataBasic) DataLoader.loadData(this, null,
-					"gameinfo.dat", DataBasic.class);
+					"gameinfo.dat", DataLoader.DATA_BASIC);
 			dataGui = (DataGui) DataLoader.loadData(this, null, "gui.dat",
-					DataGui.class);
+					DataLoader.DATA_GUI);
 			dataCharacter = (DataCharacter) DataLoader.loadData(this, null,
-					"chara.dat", DataCharacter.class);
+					"chara.dat", DataLoader.DATA_CHARACTER);
+			dataMainMenu = (DataMainMenu) DataLoader.loadData(NovelEngine.this,
+					null, "menu.dat", DataLoader.DATA_MAINMENU);
+			DataLoader.loadData(NovelEngine.this, null, "bgImage.dat",
+					DataLoader.DATA_BGIMAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ex = e;
@@ -283,6 +269,8 @@ public class NovelEngine {
 	}
 
 	public static void main(String[] argv) {
+		Logger.init();
+		Logger.info("NovelEngine launched!");
 		NovelEngine engine = new NovelEngine();
 		engine.start();
 	}
@@ -317,25 +305,13 @@ public class NovelEngine {
 	 *            スタート元のチャプターID
 	 */
 	public void startStory(int id) {
-		setCurrentPanel(new PanelStory(this, s));
+		DataStory story = storyManager.getStory(id);
+		story.reset();
+		characterManager.reset();
+		setCurrentPanel(new PanelStory(this, story));
 	}
 
 	public void loadStory(final int id) {
-		Thread t = new Thread() {
-			@Override
-			public void run() {
-				try {
-					s = (DataStory) DataLoader.loadData(NovelEngine.this, null,
-							id + ".dat", DataStory.class);
-					System.out
-							.println("NovelEngine.loadStory(...).new Thread() {...}.run()");
-				} catch (Exception e) {
-					// TODO 自動生成された catch ブロック
-					e.printStackTrace();
-				}
-				super.run();
-			}
-		};
-		t.start();
+		storyManager.loadStory(this, id);
 	}
 }

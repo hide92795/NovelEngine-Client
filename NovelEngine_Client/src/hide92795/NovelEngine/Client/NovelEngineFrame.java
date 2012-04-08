@@ -2,7 +2,6 @@ package hide92795.novelengine.client;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
@@ -12,7 +11,6 @@ import java.awt.event.WindowEvent;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 public class NovelEngineFrame extends JFrame {
 	private static final long serialVersionUID = 1L;

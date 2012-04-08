@@ -11,7 +11,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
 import hide92795.novelengine.Renderer;
-import hide92795.novelengine.Character;
+import hide92795.novelengine.character.Character;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataStory;
@@ -27,17 +27,11 @@ public class PanelStory extends Panel {
 	private boolean showBox = false;
 	public Color bgColor;
 
-	/**
-	 * Key:位置ID Val:キャラ
-	 */
-	public HashMap<Integer, Character> characters;
-
 	public PanelStory(NovelEngine engine, DataStory story) {
 		super(engine);
 		this.story = story;
 		this.bgColor = Color.black;
 		this.processList = new LinkedList<Story>();
-		this.characters = new HashMap<Integer, Character>();
 	}
 
 	@Override
@@ -72,24 +66,12 @@ public class PanelStory extends Panel {
 	@Override
 	public void render() {
 		renderBackGround();
-		renderCharacter();
+		engine.characterManager.render();
 		renderBox();
 		Iterator<Story> iterator = processList.iterator();
 		while (iterator.hasNext()) {
 			Story story = iterator.next();
 			story.render(engine);
-		}
-	}
-
-	private void renderCharacter() {
-		Set<Integer> positions = characters.keySet();
-		DataGui data = engine.dataGui;
-		for (int position : positions) {
-			Character c = characters.get(position);
-			if (c != null) {
-				int[] pos = data.getPortraitPosition(position);
-				c.render(engine, pos[0], pos[1]);
-			}
 		}
 	}
 

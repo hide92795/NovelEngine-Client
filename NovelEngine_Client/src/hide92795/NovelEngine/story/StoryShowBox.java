@@ -34,6 +34,8 @@ public class StoryShowBox extends Story {
 
 	@Override
 	public void init(PanelStory story) {
+		finish = false;
+		elapsedTime = 0;
 		if (show) {
 			now = height;
 		} else {
@@ -104,6 +106,5 @@ public class StoryShowBox extends Story {
 		Texture t = engine.imageManager.getImage(123456);
 		Renderer.renderImage(t, alpha, x, y, x + t.getTextureWidth(),
 				y + t.getTextureHeight());
-		// System.out.println("X:" + x + ", Y:" + y);
 	}
 }

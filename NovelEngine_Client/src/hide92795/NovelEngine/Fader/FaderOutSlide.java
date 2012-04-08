@@ -28,16 +28,18 @@ public class FaderOutSlide extends FaderOut {
 		this.decrease = (float) w / x1;
 		this.displayHeight = engine.height;
 		renderList = new LinkedList<Float>();
+	}@Override
+	public void reset() {
+		super.reset();
+		renderList.clear();
 	}
 
 	@Override
 	public void update(int delta) {
 		int i = renderList.size();
 		LinkedList<Float> newRenderList = new LinkedList<Float>();
-		Iterator<Float> f = renderList.iterator();
 		boolean finish = true;
-		while (f.hasNext()) {
-			float pos = f.next();
+		for (float pos : renderList) {
 			float xpos = pos + decrease;
 			if (xpos > w) {
 				xpos = w;

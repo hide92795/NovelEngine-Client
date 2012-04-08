@@ -27,6 +27,12 @@ public class FaderOutAlpha extends FaderOut {
 		this.color = Color.decode(color);
 		this.fadePerSec = (float) 1.0f / sec;
 	}
+	
+	@Override
+	public void reset() {
+		super.reset();
+		alpha= 1.0f;
+	}
 
 	@Override
 	public void update(int delta) {
@@ -52,7 +58,6 @@ public class FaderOutAlpha extends FaderOut {
 
 	private void renderTexture() {
 		glColor4f(1.0f, 1.0f, 1.0f, alpha);
-		System.out.println(texture);
 		texture.bind();
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);

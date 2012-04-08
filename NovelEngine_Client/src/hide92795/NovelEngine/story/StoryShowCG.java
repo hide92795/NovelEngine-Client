@@ -21,4 +21,9 @@ public class StoryShowCG extends Story {
 	public boolean isFinish() {
 		return false;
 	}
+	
+	@Override
+	public boolean isWait() {
+		return false;
+	}
 }

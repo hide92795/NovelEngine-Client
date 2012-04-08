@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 public class DataStory extends Data {
 	private int chapterId;
+	// Key:シーンID Val:行番号
 	public HashMap<Integer, Integer> scenes;
 	private LinkedList<Story> commandLine;
 	private int pos;
@@ -15,7 +16,6 @@ public class DataStory extends Data {
 	public DataStory() {
 		scenes = new HashMap<Integer, Integer>();
 		commandLine = new LinkedList<Story>();
-		pos = 0;
 	}
 
 	public final int getChapterId() {
@@ -33,7 +33,11 @@ public class DataStory extends Data {
 		commandLine.add(story);
 	}
 	
-	public final Story next(){
+	public final void reset(){
+		pos = 0;
+	}
+
+	public final Story next() {
 		Story s = commandLine.get(pos);
 		pos++;
 		return s;

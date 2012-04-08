@@ -21,7 +21,7 @@ public class QueueHandler {
 			if (q == null)
 				return;
 			q.execute();
-			System.out.println("Queue was done!");
+			Logger.info("Queue was done!");
 		}
 	}
 
