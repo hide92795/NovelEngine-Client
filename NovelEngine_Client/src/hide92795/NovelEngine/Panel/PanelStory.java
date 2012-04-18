@@ -64,8 +64,9 @@ public class PanelStory extends Panel {
 	}
 
 	@Override
-	public void render() {
-		renderBackGround();
+	public void render(NovelEngine engine) {
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		engine.backGroundManager.render(engine);
 		engine.characterManager.render();
 		renderBox();
 		Iterator<Story> iterator = processList.iterator();
@@ -99,15 +100,6 @@ public class PanelStory extends Panel {
 		int size = processList.size();
 		for (int i = 0; i < size; i++) {
 			processList.get(i).keyPressed(this, eventKey);
-		}
-	}
-
-	private void renderBackGround() {
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		if (nowBgTexture != null) {
-			Renderer.renderBgImage(nowBgTexture);
-		} else {
-			Renderer.renderColor(bgColor.r, bgColor.g, bgColor.b);
 		}
 	}
 

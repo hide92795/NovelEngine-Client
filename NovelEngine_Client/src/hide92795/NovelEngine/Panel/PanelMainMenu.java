@@ -155,9 +155,9 @@ public class PanelMainMenu extends Panel implements FaderListener {
 	}
 
 	@Override
-	public void render() {
+	public void render(NovelEngine engine) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		if(bgimage != null){
+		if (bgimage != null) {
 			Renderer.renderBgImage(bgimage, alpha);
 		}
 		if (changeBG && nextImage != null) {

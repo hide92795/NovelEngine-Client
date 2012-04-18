@@ -4,10 +4,10 @@ import java.util.LinkedList;
 
 import org.lwjgl.input.Keyboard;
 
-import hide92795.novelengine.CharacterManager;
 import hide92795.novelengine.character.EntryCharacter;
 import hide92795.novelengine.character.effect.CharacterEffect;
 import hide92795.novelengine.data.DataCharacter;
+import hide92795.novelengine.manager.CharacterManager;
 import hide92795.novelengine.panel.PanelStory;
 
 public class StoryChangeCharacter extends Story {

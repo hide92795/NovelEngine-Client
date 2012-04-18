@@ -1,4 +1,4 @@
-package hide92795.novelengine;
+package hide92795.novelengine.manager;
 
 import hide92795.novelengine.character.EntryCharacter;
 import hide92795.novelengine.client.NovelEngine;

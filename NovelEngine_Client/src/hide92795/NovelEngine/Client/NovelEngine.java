@@ -1,19 +1,20 @@
 package hide92795.novelengine.client;
 
-import hide92795.novelengine.CharacterManager;
 import hide92795.novelengine.DataLoader;
-import hide92795.novelengine.ImageManager;
 import hide92795.novelengine.Logger;
 import hide92795.novelengine.QueueHandler;
-import hide92795.novelengine.SoundManager;
-import hide92795.novelengine.StoryManager;
-import hide92795.novelengine.WordsManager;
 import hide92795.novelengine.data.DataBasic;
 import hide92795.novelengine.data.DataCharacter;
 import hide92795.novelengine.data.DataGui;
 import hide92795.novelengine.data.DataMainMenu;
 import hide92795.novelengine.data.DataStory;
 import hide92795.novelengine.gui.Button;
+import hide92795.novelengine.manager.BackGroundManager;
+import hide92795.novelengine.manager.CharacterManager;
+import hide92795.novelengine.manager.ImageManager;
+import hide92795.novelengine.manager.SoundManager;
+import hide92795.novelengine.manager.StoryManager;
+import hide92795.novelengine.manager.WordsManager;
 import hide92795.novelengine.panel.Panel;
 import hide92795.novelengine.panel.PanelFadeLogo;
 import hide92795.novelengine.panel.PanelStory;
@@ -63,6 +64,7 @@ public class NovelEngine {
 	public DataCharacter dataCharacter;
 	public StoryManager storyManager;
 	public CharacterManager characterManager;
+	public BackGroundManager backGroundManager;
 
 	public NovelEngine() {
 		theEngine = this;
@@ -71,6 +73,7 @@ public class NovelEngine {
 		queue = new QueueHandler();
 		wordsManager = new WordsManager();
 		storyManager = new StoryManager();
+		backGroundManager = new BackGroundManager();
 		characterManager = new CharacterManager(this);
 		initResource();
 		width = dataBasic.getWidth();
@@ -122,15 +125,16 @@ public class NovelEngine {
 		wordsManager.loop(false);
 		Display.destroy();
 		AL.destroy();
+		Logger.info("NovelEngine shutdowned!");
 		System.exit(0);
 	}
 
-	public void initGL() throws LWJGLException {
+	private void initGL() throws LWJGLException {
 		Display.create();
 		// enable alpha blending
 		glEnable(GL_BLEND);
+		glEnable(GL_STENCIL_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, dataBasic.getWidth(), dataBasic.getHeight(), 0, 1, -1);
@@ -155,9 +159,11 @@ public class NovelEngine {
 	}
 
 	private void render() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
+				| GL_STENCIL_BUFFER_BIT);
+		glLoadIdentity();
 		if (currentPanel != null) {
-			currentPanel.render();
+			currentPanel.render(this);
 		} else {
 			glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
 		}

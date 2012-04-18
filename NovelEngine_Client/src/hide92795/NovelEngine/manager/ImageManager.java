@@ -1,4 +1,4 @@
-package hide92795.novelengine;
+package hide92795.novelengine.manager;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;

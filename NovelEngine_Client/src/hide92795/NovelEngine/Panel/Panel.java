@@ -15,7 +15,7 @@ public class Panel {
 		this.buttons = new HashMap<Integer, Button>();
 	}
 
-	public void render() {
+	public void render(NovelEngine engine) {
 
 	}
 

@@ -1,5 +1,6 @@
-package hide92795.novelengine;
+package hide92795.novelengine.manager;
 
+import hide92795.novelengine.Logger;
 import hide92795.novelengine.queue.QueueWords;
 
 import java.util.HashMap;

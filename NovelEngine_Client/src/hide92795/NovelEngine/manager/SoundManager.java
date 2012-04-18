@@ -1,4 +1,4 @@
-package hide92795.novelengine;
+package hide92795.novelengine.manager;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

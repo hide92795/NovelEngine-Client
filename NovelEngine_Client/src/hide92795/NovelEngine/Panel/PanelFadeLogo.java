@@ -35,7 +35,7 @@ public class PanelFadeLogo extends Panel {
 	}
 
 	@Override
-	public void render() {
+	public void render(NovelEngine engine) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		int x1 = engine.width / 2 - texture.getImageWidth() / 2;
 		int y1 = engine.height / 2 - texture.getImageHeight() / 2;

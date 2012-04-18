@@ -35,9 +35,10 @@ public class StoryChangeBg extends Story implements FaderListener {
 
 	@Override
 	public void init(PanelStory story) {
-		//File
 		fader.reset();
-		finish = false;
+		//
+		finish = true;
+		story.engine.backGroundManager.changePrimaryBgID(0, nextBgId);
 		if (story.getBgTextureId() == 0) {
 			fader.setCurrentFader(fader.getFadein());
 			if (fader instanceof FaderPairAlpha) {

@@ -1,5 +1,7 @@
-package hide92795.novelengine;
+package hide92795.novelengine.manager;
 
+import hide92795.novelengine.DataLoader;
+import hide92795.novelengine.Logger;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.data.DataStory;
 

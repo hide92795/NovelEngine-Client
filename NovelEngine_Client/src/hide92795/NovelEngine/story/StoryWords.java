@@ -8,11 +8,11 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
-import hide92795.novelengine.ImageManager;
 import hide92795.novelengine.Renderer;
-import hide92795.novelengine.WordsManager;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.data.DataGui;
+import hide92795.novelengine.manager.ImageManager;
+import hide92795.novelengine.manager.WordsManager;
 import hide92795.novelengine.panel.PanelStory;
 
 import org.lwjgl.input.Keyboard;
