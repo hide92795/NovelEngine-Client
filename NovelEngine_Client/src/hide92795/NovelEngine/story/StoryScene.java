@@ -15,10 +15,4 @@ public class StoryScene extends Story {
 	public final boolean isFinish() {
 		return true;
 	}
-
-	@Override
-	public boolean isWait() {
-		return false;
-	}
-
 }

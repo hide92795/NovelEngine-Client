@@ -1,32 +1,29 @@
 package hide92795.novelengine.manager;
 
-import hide92795.novelengine.DataLoader;
 import hide92795.novelengine.Logger;
 import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.data.DataStory;
+import hide92795.novelengine.loader.LoaderStory;
+import hide92795.novelengine.loader.item.DataStory;
 
-import java.util.HashMap;
+import java.io.File;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StoryManager {
-	protected HashMap<Integer, DataStory> stories;
+	private ConcurrentHashMap<Integer, DataStory> stories;
 
 	public StoryManager() {
-		stories = new HashMap<Integer, DataStory>();
+		stories = new ConcurrentHashMap<Integer, DataStory>(32, 0.75f, 2);
 	}
 
-	public void loadStory(final NovelEngine engine, final int id) {
-		Thread t = new Thread("ChapterLoader:" + id) {
+	public void loadStory(final NovelEngine engine, final File file, final int id) {
+		Thread t = new Thread("ChapterLoader:" + file.getName()) {
 			@Override
 			public void run() {
 				try {
-					Logger.info("StoryID: " + id + " Load start");
-					String name = id + ".dat";
-					DataStory story = (DataStory) DataLoader.loadData(engine,
-							"st", name, DataLoader.DATA_STORY);
-					synchronized (stories) {
-						stories.put(id, story);
-					}
-					Logger.info("StoryID: " + id + " Load finish");
+					Logger.info("StoryID: " + file.getName() + " Load start");
+					DataStory story = LoaderStory.load(engine, file, id);
+					stories.put(id, story);
+					Logger.info("StoryID: " + file.getName() + " Load finish");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -36,8 +33,6 @@ public class StoryManager {
 	}
 
 	public DataStory getStory(int id) {
-		synchronized (stories) {
-			return stories.get(id);
-		}
+		return stories.get(id);
 	}
 }

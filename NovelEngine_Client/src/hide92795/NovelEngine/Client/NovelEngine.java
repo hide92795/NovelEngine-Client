@@ -1,29 +1,25 @@
 package hide92795.novelengine.client;
 
-import hide92795.novelengine.DataLoader;
 import hide92795.novelengine.Logger;
 import hide92795.novelengine.QueueHandler;
-import hide92795.novelengine.data.DataBasic;
-import hide92795.novelengine.data.DataCharacter;
-import hide92795.novelengine.data.DataGui;
-import hide92795.novelengine.data.DataMainMenu;
-import hide92795.novelengine.data.DataStory;
-import hide92795.novelengine.gui.Button;
+import hide92795.novelengine.loader.LoaderBasic;
+import hide92795.novelengine.loader.item.DataBasic;
+import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.BackGroundManager;
-import hide92795.novelengine.manager.CharacterManager;
+import hide92795.novelengine.manager.EffectManager;
 import hide92795.novelengine.manager.ImageManager;
+import hide92795.novelengine.manager.SettingManager;
 import hide92795.novelengine.manager.SoundManager;
 import hide92795.novelengine.manager.StoryManager;
-import hide92795.novelengine.manager.WordsManager;
 import hide92795.novelengine.panel.Panel;
-import hide92795.novelengine.panel.PanelFadeLogo;
+import hide92795.novelengine.panel.PanelPrestartStory;
 import hide92795.novelengine.panel.PanelStory;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -31,10 +27,13 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.slf4j.LoggerFactory;
-
 import static org.lwjgl.opengl.GL11.*;
 
+/**
+ *
+ *
+ * @author hide92795
+ */
 public class NovelEngine {
 	/** time at last frame */
 	private long lastFrame;
@@ -46,7 +45,6 @@ public class NovelEngine {
 	private Panel currentPanel;
 	private boolean leftClick = false;
 	private boolean rightClick = false;
-	public DataMainMenu dataMainMenu;
 	public static NovelEngine theEngine;
 	public ImageManager imageManager;
 	public SoundManager soundManager;
@@ -59,22 +57,20 @@ public class NovelEngine {
 	private Panel nextPanel;
 	private boolean changePanel;
 	private boolean hasCrash;
-	public WordsManager wordsManager;
-	public DataGui dataGui;
-	public DataCharacter dataCharacter;
 	public StoryManager storyManager;
-	public CharacterManager characterManager;
 	public BackGroundManager backGroundManager;
+	public EffectManager effectManager;
+	public SettingManager settingManager;
 
 	public NovelEngine() {
 		theEngine = this;
+		settingManager = new SettingManager();
+		effectManager = new EffectManager();
 		imageManager = new ImageManager();
 		soundManager = new SoundManager();
 		queue = new QueueHandler();
-		wordsManager = new WordsManager();
 		storyManager = new StoryManager();
 		backGroundManager = new BackGroundManager();
-		characterManager = new CharacterManager(this);
 		initResource();
 		width = dataBasic.getWidth();
 		height = dataBasic.getHeight();
@@ -83,14 +79,13 @@ public class NovelEngine {
 
 	public void start() {
 		try {
-			wordsManager.loop(true);
 			Display.setParent(frame.getCanvas());
 			Display.setVSyncEnabled(true);
 			lastFPS = getTime();
 
 			frame.setVisible(true);
 			initGL();
-			setCurrentPanel(new PanelFadeLogo(this));
+			setCurrentPanel(new PanelPrestartStory(theEngine, "start".hashCode()));
 			closeRequested = false;
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -117,12 +112,10 @@ public class NovelEngine {
 				Display.update();
 				Display.sync(60);
 			} catch (Exception e) {
-				System.out.println("NovelEngine.start()");
 				e.printStackTrace();
 				hasCrash = true;
 			}
 		}
-		wordsManager.loop(false);
 		Display.destroy();
 		AL.destroy();
 		Logger.info("NovelEngine shutdowned!");
@@ -131,7 +124,7 @@ public class NovelEngine {
 
 	private void initGL() throws LWJGLException {
 		Display.create();
-		// enable alpha blending
+		glClearColor(0f, 0f, 0f, 1f);
 		glEnable(GL_BLEND);
 		glEnable(GL_STENCIL_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -159,8 +152,7 @@ public class NovelEngine {
 	}
 
 	private void render() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
-				| GL_STENCIL_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glLoadIdentity();
 		if (currentPanel != null) {
 			currentPanel.render(this);
@@ -186,21 +178,11 @@ public class NovelEngine {
 	}
 
 	private void initResource() {
-		Exception ex = null;
 		try {
-			dataBasic = (DataBasic) DataLoader.loadData(this, null,
-					"gameinfo.dat", DataLoader.DATA_BASIC);
-			dataGui = (DataGui) DataLoader.loadData(this, null, "gui.dat",
-					DataLoader.DATA_GUI);
-			dataCharacter = (DataCharacter) DataLoader.loadData(this, null,
-					"chara.dat", DataLoader.DATA_CHARACTER);
-			dataMainMenu = (DataMainMenu) DataLoader.loadData(NovelEngine.this,
-					null, "menu.dat", DataLoader.DATA_MAINMENU);
-			DataLoader.loadData(NovelEngine.this, null, "bgImage.dat",
-					DataLoader.DATA_BGIMAGE);
+			dataBasic = LoaderBasic.load();
+			loadStory("start".hashCode());
 		} catch (Exception e) {
 			e.printStackTrace();
-			ex = e;
 		}
 
 	}
@@ -254,7 +236,7 @@ public class NovelEngine {
 
 	/**
 	 * Get the accurate system time
-	 * 
+	 *
 	 * @return The system time in milliseconds
 	 */
 	public long getTime() {
@@ -274,7 +256,7 @@ public class NovelEngine {
 		fps++;
 	}
 
-	public static void main(String[] argv) {
+	public static void main(String[] argv) throws IOException {
 		Logger.init();
 		Logger.info("NovelEngine launched!");
 		NovelEngine engine = new NovelEngine();
@@ -284,40 +266,68 @@ public class NovelEngine {
 	public static File getCurrentDir() {
 		URI uri = null;
 		try {
-			uri = NovelEngine.class.getProtectionDomain().getCodeSource()
-					.getLocation().toURI();
+			uri = NovelEngine.class.getProtectionDomain().getCodeSource().getLocation().toURI();
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		return new File(uri).getParentFile();
 	}
 
-	public void actionPerformed(Button button, boolean isLeft) {
-		if (currentPanel != null) {
-			currentPanel.actionPerformed(button, isLeft);
-		}
-	}
+	//	public void actionPerformed(Button button, boolean isLeft) {
+	//		if (currentPanel != null) {
+	//			currentPanel.actionPerformed(button, isLeft);
+	//		}
+	//	}
+	//
+	//	public void onMouse(Button button) {
+	//		if (currentPanel != null) {
+	//			currentPanel.onMouse(button);
+	//		}
+	//	}
 
-	public void onMouse(Button button) {
-		if (currentPanel != null) {
-			currentPanel.onMouse(button);
-		}
+	/**
+	 * 指定されたチャプターIDのデータのロードを待ってから開始します。<br>
+	 * 画面は{@link PanelPrestartStory}により提供されます。
+	 *
+	 * @param id
+	 *            スタート元のチャプターID
+	 */
+	public void prestartStory(int id) {
+		setCurrentPanel(new PanelPrestartStory(this, id));
 	}
 
 	/**
-	 * 指定されたチャプターIDからストーリーを開始します。
-	 * 
+	 * 指定されたチャプターIDからストーリーを開始します。<br>
+	 * すべてのロードが終わっていない場合、表示に問題が発生する可能性があります。<br>
+	 * このメソッドは{@link PanelPrestartStory}より呼び出されるのが適切です。<br>
+	 *
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
 	public void startStory(int id) {
 		DataStory story = storyManager.getStory(id);
 		story.reset();
-		characterManager.reset();
 		setCurrentPanel(new PanelStory(this, story));
 	}
 
-	public void loadStory(final int id) {
-		storyManager.loadStory(this, id);
+	/**
+	 * 指定したチャプターのロードを開始します。<br>
+	 * ロードは別スレッドにて行われます。
+	 *
+	 * @param chapterId
+	 */
+	public void loadStory(int chapterId) {
+		File current = NovelEngine.getCurrentDir();
+		File file;
+		if (chapterId == "start".hashCode()) {
+			file = new File(current, "start.nes");
+		} else if (chapterId == "menu".hashCode()) {
+			file = new File(current, "menu.nes");
+		} else {
+			file = new File(current, "story");
+			file = new File(file, chapterId + ".nes");
+		}
+		storyManager.loadStory(this, file, chapterId);
 	}
+
 }

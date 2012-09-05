@@ -21,90 +21,103 @@ import org.newdawn.slick.opengl.Texture;
 
 /**
  * 描画に関する処理を行います。
- * 
+ *
  * @author hide92795
  */
 public class Renderer {
 	/**
 	 * 指定したテクスチャを左上を起点に描画します。
-	 * 
+	 *
 	 * @param texture
 	 *            描画するテクスチャ
 	 */
 	public static void renderBgImage(Texture texture) {
-		renderImage(texture, 1.0f, 1.0f, 1.0f, 1.0f, 0, 0,
-				texture.getTextureWidth(), texture.getTextureHeight());
+		renderImage(texture, 1.0f, 1.0f, 1.0f, 1.0f, 0, 0, texture.getTextureWidth(), texture.getTextureHeight());
 	}
 
 	/**
 	 * 指定したテクスチャを指定したアルファ値で描画します。
-	 * 
+	 *
 	 * @param texture
 	 *            描画するテクスチャ
 	 * @param alpha
 	 *            アルファ値
 	 */
-	public static void renderBgImage(Texture texture, double alpha) {
-		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, 0, 0,
-				texture.getTextureWidth(), texture.getTextureHeight());
+	public static void renderBgImage(Texture texture, float alpha) {
+		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, 0, 0, texture.getTextureWidth(), texture.getTextureHeight());
 	}
 
-	public static void renderImage(Texture texture, double x, double y,
-			double x1, double y1) {
-		renderImage(texture, 1.0f, 1.0f, 1.0f, 1.0f, x, y, x1, y1);
+	public static void renderImage(Texture texture, float x, float y, float alpha, float magnificartion) {
+		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, x, y, x + texture.getTextureWidth() * magnificartion,
+				y + texture.getTextureHeight() * magnificartion);
 	}
 
-	public static void renderImage(Texture texture, double alpha, double x,
-			double y, double x1, double y1) {
+	public static void renderImage(Texture texture, float alpha, float x, float y, float x1, float y1) {
 		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, x, y, x1, y1);
 	}
 
-	public static void renderImage(Texture texture, double red, double green,
-			double blue, double a, double x, double y, double x1, double y1) {
+	public static void renderImage(Texture texture, float red, float green, float blue, float a, float x, float y,
+			float x1, float y1) {
 		texture.bind();
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		{
 			glColor4d(red, green, blue, a);
 			glTexCoord2f(0, 0);
-			glVertex2d(x, y);
+			glVertex2f(x, y);
 			glTexCoord2f(1, 0);
-			glVertex2d(x1, y);
+			glVertex2f(x1, y);
 			glTexCoord2f(1, 1);
-			glVertex2d(x1, y1);
+			glVertex2f(x1, y1);
 			glTexCoord2f(0, 1);
-			glVertex2d(x, y1);
+			glVertex2f(x, y1);
 		}
 		glEnd();
 	}
 
-	public static void renderColor(double red, double green, double blue) {
-		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.width,
-				NovelEngine.theEngine.height);
+	public static void renderColor(float red, float green, float blue) {
+		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.width, NovelEngine.theEngine.height);
 	}
 
-	public static void renderColor(double red, double green, double blue,
-			double alpha) {
-		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.width,
-				NovelEngine.theEngine.height);
+	public static void renderColor(float red, float green, float blue, float alpha) {
+		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.width, NovelEngine.theEngine.height);
 	}
 
-	public static void renderColor(double red, double green, double blue,
-			double alpha, double x, double y, double x1, double y1) {
+	public static void renderColor(float red, float green, float blue, float alpha, float x, float y, float x1, float y1) {
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		{
 			glColor4d(red, green, blue, alpha);
-			glVertex2d(x, y);
-			glVertex2d(x1, y);
-			glVertex2d(x1, y1);
-			glVertex2d(x, y1);
+			glVertex2f(x, y);
+			glVertex2f(x1, y);
+			glVertex2f(x1, y1);
+			glVertex2f(x, y1);
 		}
 		glEnd();
 	}
 
-	public static BufferedImage[] drawEdgedText(String words, Color inner,
-			Color edge) {
+	public static void renderColor(byte red, byte green, byte blue) {
+		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.width, NovelEngine.theEngine.height);
+	}
+
+	public static void renderColor(byte red, byte green, byte blue, byte alpha) {
+		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.width, NovelEngine.theEngine.height);
+	}
+
+	public static void renderColor(byte red, byte green, byte blue, byte alpha, float x, float y, float x1, float y1) {
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+		{
+			glColor4ub(red, green, blue, alpha);
+			glVertex2f(x, y);
+			glVertex2f(x1, y);
+			glVertex2f(x1, y1);
+			glVertex2f(x, y1);
+		}
+		glEnd();
+	}
+
+	public static BufferedImage[] drawEdgedText(String words, Color inner, Color edge) {
 		LinkedList<BufferedImage> list = new LinkedList<BufferedImage>();
 		String textonly = words.replaceAll("\\[改行\\]", "\n");
 		textonly = textonly.replaceAll("\\[サイズ\\s\\d+\\]", "");
@@ -130,22 +143,19 @@ public class Renderer {
 			as_edge.addAttribute(TextAttribute.FONT, f1, begin, end);
 		}
 
-		LineBreakMeasurer lbm_inner = new LineBreakMeasurer(
-				as_inner.getIterator(), new FontRenderContext(null, true, true));
-		LineBreakMeasurer lbm_edge = new LineBreakMeasurer(
-				as_edge.getIterator(), new FontRenderContext(null, true, true));
+		LineBreakMeasurer lbm_inner = new LineBreakMeasurer(as_inner.getIterator(), new FontRenderContext(null, true,
+				true));
+		LineBreakMeasurer lbm_edge = new LineBreakMeasurer(as_edge.getIterator(), new FontRenderContext(null, true,
+				true));
 
 		while (lbm_inner.getPosition() < textonly.length()) {
 			TextLayout tl_inner = lbm_inner.nextLayout(610);
 			TextLayout tl_edge = lbm_edge.nextLayout(610);
 			int w = (int) Math.ceil(tl_inner.getAdvance()) + 4;
-			int h = (int) Math.ceil(tl_inner.getDescent()
-					+ tl_inner.getAscent()) + 4;
-			BufferedImage bi = new BufferedImage(w, h,
-					BufferedImage.TYPE_INT_ARGB_PRE);
+			int h = (int) Math.ceil(tl_inner.getDescent() + tl_inner.getAscent()) + 4;
+			BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB_PRE);
 			Graphics2D g2d = bi.createGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-					RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			int x = 1, y = h - 6;
 			tl_edge.draw(g2d, x - 1, y);
 			tl_edge.draw(g2d, x - 1, y - 1);

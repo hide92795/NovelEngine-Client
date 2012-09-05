@@ -18,10 +18,4 @@ public class StoryLoadChapter extends Story {
 	public final boolean isFinish() {
 		return true;
 	}
-	
-	@Override
-	public boolean isWait() {
-		return false;
-	}
-
 }

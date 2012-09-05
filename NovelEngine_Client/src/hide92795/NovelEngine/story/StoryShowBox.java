@@ -11,20 +11,15 @@ public class StoryShowBox extends Story {
 	protected boolean finish = false;
 	private int height = 241;
 	private int width = 700;
-	private double now;
-	private double speed = 0.05d;
-	// 経過時間
+	private float now;
+	private float speed = 0.05f;
+	// 邨碁℃譎る俣
 	private int elapsedTime;
 	private int totalTime = 400;
-	private double alpha;
+	private float alpha;
 
 	public StoryShowBox(boolean show) {
 		this.show = show;
-	}
-
-	@Override
-	public boolean isWait() {
-		return true;
 	}
 
 	@Override
@@ -39,14 +34,14 @@ public class StoryShowBox extends Story {
 		if (show) {
 			now = height;
 		} else {
-			now = 0.0d;
+			now = 0.0f;
 			story.setShowBox(false);
 		}
 	}
 
 	private void skip(PanelStory story) {
 		if (show) {
-			now = 0.0d;
+			now = 0.0f;
 			story.setShowBox(true);
 			finish = true;
 		} else {
@@ -69,31 +64,30 @@ public class StoryShowBox extends Story {
 
 	@Override
 	public void update(PanelStory panelStory, int delta) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)
-				|| Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 			skip(panelStory);
 		}
 
 		elapsedTime += delta;
 		if (show) {
-			double d = Math.pow(speed, (double) elapsedTime / totalTime);
-			alpha = 1.0d - d;
+			float f = (float) Math.pow(speed, (float) elapsedTime / totalTime);
+			alpha = 1.0f - f;
 
-			now = (double) height * (d - speed);
-			if (now <= 0d) {
+			now = (float) height * (f - speed);
+			if (now <= 0f) {
 				now = 0;
 				panelStory.setShowBox(true);
 				finish = true;
 			}
 		} else {
-			double d = (double) elapsedTime / totalTime;
-			alpha = 1.0d - d;
-			if (d >= 1.0d) {
+			float f = (float) elapsedTime / totalTime;
+			alpha = 1.0f - f;
+			if (f >= 1.0f) {
 				now = height;
 				finish = true;
 				return;
 			}
-			now = (double) height * d;
+			now = (float) height * f;
 		}
 
 	}
@@ -104,7 +98,6 @@ public class StoryShowBox extends Story {
 		float y = (float) (engine.height - height + now);
 
 		Texture t = engine.imageManager.getImage(123456);
-		Renderer.renderImage(t, alpha, x, y, x + t.getTextureWidth(),
-				y + t.getTextureHeight());
+		Renderer.renderImage(t, alpha, x, y, x + t.getTextureWidth(), y + t.getTextureHeight());
 	}
 }

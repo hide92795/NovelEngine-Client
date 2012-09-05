@@ -1,9 +1,10 @@
 package hide92795.novelengine.figure;
 
-import static org.lwjgl.opengl.GL11.*;
-
-import org.lwjgl.Sys;
-
+import static org.lwjgl.opengl.GL11.GL_TRIANGLE_FAN;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glVertex2d;
+import static org.lwjgl.opengl.GL11.glVertex2i;
 import hide92795.novelengine.client.NovelEngine;
 
 public class Figure_Circle extends Figure {

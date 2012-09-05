@@ -1,26 +1,26 @@
 package hide92795.novelengine.story;
 
-import org.lwjgl.input.Keyboard;
-
-import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.fader.Fader;
-import hide92795.novelengine.fader.FaderListener;
-import hide92795.novelengine.fader.FaderPair;
-import hide92795.novelengine.fader.FaderPairAlpha;
+import hide92795.novelengine.background.BackGround;
 import hide92795.novelengine.panel.PanelStory;
 
-public class StoryChangeBg extends Story implements FaderListener {
+public class StoryChangeBg extends Story {
 	private final int nextBgId;
-	private final FaderPair fader;
+	private final byte target;
+	private final int xPos;
+	private final int yPos;
+	private final int magnification;
+	private final int delay;
 	private boolean finish = false;
+	private int elapsedTime;
 
-	public StoryChangeBg(int bgId, FaderPair fader) {
+	public StoryChangeBg(int bgId, byte target, int xPos, int yPos,
+			int magnification, int delay) {
 		this.nextBgId = bgId;
-		this.fader = fader;
-	}
-
-	public int getNextBgId() {
-		return nextBgId;
+		this.target = target;
+		this.xPos = xPos;
+		this.yPos = yPos;
+		this.magnification = magnification;
+		this.delay = delay;
 	}
 
 	@Override
@@ -29,64 +29,23 @@ public class StoryChangeBg extends Story implements FaderListener {
 	}
 
 	@Override
-	public boolean isWait() {
-		return true;
-	}
-
-	@Override
 	public void init(PanelStory story) {
-		fader.reset();
-		//
-		finish = true;
-		story.engine.backGroundManager.changePrimaryBgID(0, nextBgId);
-		if (story.getBgTextureId() == 0) {
-			fader.setCurrentFader(fader.getFadein());
-			if (fader instanceof FaderPairAlpha) {
-				((FaderPairAlpha) fader).setVia(true);
-			}
-		} else {
-			fader.setCurrentFader(fader.getFadeout());
-		}
-		fader.init(this, story, nextBgId);
-		story.bgColor = fader.getCurrentFader().color;
+		finish = false;
 	}
 
 	@Override
 	public void update(PanelStory story, int delta) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)
-				|| Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-			skip();
+		if (elapsedTime >= delay && !finish) {
+			// 閭梧勹螟画峩
+			BackGround background = story.engine.backGroundManager
+					.getBackGround(target);
+			background.setImageId(nextBgId);
+			background.setxPos(xPos);
+			background.setyPos(yPos);
+			background.setMagnificartion(magnification);
+
+			finish = true;
 		}
-		if (fader != null) {
-			fader.update(delta);
-		}
-	}
-
-	private void skip() {
-		fader.skip();
-	}
-
-	@Override
-	public void leftClick(PanelStory story, int x, int y) {
-		skip();
-	}
-
-	@Override
-	public void keyPressed(PanelStory story, int eventKey) {
-		if (eventKey == Keyboard.KEY_RETURN) {
-			skip();
-		}
-	}
-
-	@Override
-	public void render(NovelEngine engine) {
-		if (fader != null) {
-			fader.render();
-		}
-	}
-
-	@Override
-	public void onFinish(Fader fader) {
-		finish = true;
+		elapsedTime += delta;
 	}
 }

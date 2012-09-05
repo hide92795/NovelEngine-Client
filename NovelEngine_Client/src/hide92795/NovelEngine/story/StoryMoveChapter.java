@@ -12,20 +12,14 @@ public class StoryMoveChapter extends Story {
 	public final int getChapterId() {
 		return chapterId;
 	}
-	
+
 	@Override
 	public void update(PanelStory story, int delta) {
-		story.engine.startStory(chapterId);
+		story.engine.prestartStory(chapterId);
 	}
 
 	@Override
 	public final boolean isFinish() {
 		return false;
 	}
-	
-	@Override
-	public boolean isWait() {
-		return true;
-	}
-
 }

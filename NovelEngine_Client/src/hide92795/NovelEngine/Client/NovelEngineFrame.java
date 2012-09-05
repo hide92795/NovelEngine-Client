@@ -26,10 +26,9 @@ public class NovelEngineFrame extends JFrame {
 	}
 
 	private void init() {
-		getContentPane().setPreferredSize(
-				new Dimension(engine.width, engine.height));
+		getContentPane().setPreferredSize(new Dimension(engine.width, engine.height));
 		getContentPane().setBackground(Color.black);
-		setResizable(false);
+		//setResizable(false);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(getCanvas(), BorderLayout.CENTER);

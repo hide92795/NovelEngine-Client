@@ -2,35 +2,27 @@ package hide92795.novelengine.panel;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Set;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.Texture;
-
-import hide92795.novelengine.Renderer;
-import hide92795.novelengine.character.Character;
+import org.lwjgl.openal.AL10;
+import org.newdawn.slick.openal.Audio;
 import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.data.DataGui;
-import hide92795.novelengine.data.DataStory;
+import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.story.Story;
+import hide92795.novelengine.story.StoryBlock;
 
 public class PanelStory extends Panel {
 
 	private DataStory story;
 	private int now = 0;
 	private LinkedList<Story> processList;
-	private Texture nowBgTexture;
-	private int nowBgTextureId = 0;
 	private boolean showBox = false;
-	public Color bgColor;
+	private Audio bgm;
 
 	public PanelStory(NovelEngine engine, DataStory story) {
 		super(engine);
 		this.story = story;
-		this.bgColor = Color.black;
 		this.processList = new LinkedList<Story>();
 	}
 
@@ -48,12 +40,25 @@ public class PanelStory extends Panel {
 		if (finishAll) {
 			processList.clear();
 			Story s;
+			boolean b = false;
 			do {
 				s = story.next();
+				if (s instanceof StoryBlock) {
+					b = ((StoryBlock) s).isStartBlock();
+				}
+			} while (!b);
+			s = story.next();
+			while (b) {
 				System.out.println(s.getClass());
-				s.init(this);
-				processList.add(s);
-			} while (!s.isWait());
+				if (s instanceof StoryBlock) {
+					b = ((StoryBlock) s).isStartBlock();
+				} else {
+					s.init(this);
+					processList.add(s);
+					s = story.next();
+				}
+				
+			}
 		}
 
 		Iterator<Story> iterator = processList.iterator();
@@ -67,7 +72,7 @@ public class PanelStory extends Panel {
 	public void render(NovelEngine engine) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		engine.backGroundManager.render(engine);
-		engine.characterManager.render();
+		//engine.characterManager.render();
 		renderBox();
 		Iterator<Story> iterator = processList.iterator();
 		while (iterator.hasNext()) {
@@ -77,14 +82,17 @@ public class PanelStory extends Panel {
 	}
 
 	private void renderBox() {
-		if (showBox) {
-			DataGui data = engine.dataGui;
-			Texture t = engine.imageManager.getImage(data.getBoxImageId());
-			int x = data.getBoxXpos();
-			int y = data.getBoxYpos();
-			Renderer.renderImage(t, x, y, x + t.getTextureWidth(),
-					y + t.getTextureHeight());
-		}
+		//		if (showBox) {
+		//			//DataGui data = engine.dataGui;
+		//			Texture t = engine.imageManager.getImage(data.getBoxImageId());
+		//			int x = data.getBoxXpos();
+		//			int y = data.getBoxYpos();
+		//			Renderer.renderImage(t, x, y, x + t.getTextureWidth(), y + t.getTextureHeight());
+		//		}
+	}
+
+	public void moveScene(int sceneId) {
+		story.moveScene(sceneId);
 	}
 
 	@Override
@@ -103,15 +111,6 @@ public class PanelStory extends Panel {
 		}
 	}
 
-	public final int getBgTextureId() {
-		return nowBgTextureId;
-	}
-
-	public final void setBgTextureId(int id) {
-		this.nowBgTextureId = id;
-		this.nowBgTexture = engine.imageManager.getImage(id);
-	}
-
 	public final boolean isShowBox() {
 		return showBox;
 	}
@@ -122,5 +121,21 @@ public class PanelStory extends Panel {
 
 	public final int getChapterId() {
 		return story.getChapterId();
+	}
+
+	public final void playBGM(int id) {
+		if (bgm != null) {
+			bgm.stop();
+		}
+		bgm = engine.soundManager.getSound(id);
+		if (bgm != null) {
+			bgm.playAsMusic(1.0f, 1.0f, true);
+		}
+	}
+
+	public final void stopBGM() {
+		if (bgm != null) {
+			bgm.stop();
+		}
 	}
 }
