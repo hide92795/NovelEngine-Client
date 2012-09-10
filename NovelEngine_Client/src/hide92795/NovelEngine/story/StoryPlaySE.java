@@ -1,15 +1,16 @@
 package hide92795.novelengine.story;
 
-import org.lwjgl.input.Keyboard;
-import org.newdawn.slick.openal.Audio;
-
 import hide92795.novelengine.panel.PanelStory;
+
+import org.lwjgl.input.Keyboard;
+
+import soundly.XSound;
 
 public class StoryPlaySE extends Story {
 	private boolean finish;
 	private final int seId;
 	private final boolean wait;
-	private Audio sound;
+	private XSound sound;
 	private boolean played;
 
 	public StoryPlaySE(int seId, boolean wait) {
@@ -27,18 +28,23 @@ public class StoryPlaySE extends Story {
 		finish = false;
 		played = false;
 		sound = story.engine.soundManager.getSound(seId);
+		sound.seek(0.0f);
+		sound.rewind();
+		sound.setMusic(false);
+		sound.setLooping(false);
+		sound.setVolume(1.0f);
 	}
 
 	@Override
 	public void update(PanelStory panelStory, int delta) {
-
 		if (!finish) {
 			if (!played) {
-				sound.playAsSoundEffect(1.0f, 1.0f, false);
+				sound.queue();
 				played = true;
 			}
 			if (wait) {
-				if (!sound.isPlaying()) {
+				if (sound.isStopped()) {
+					sound.stop();
 					finish = true;
 				}
 			} else {
@@ -60,7 +66,7 @@ public class StoryPlaySE extends Story {
 	}
 
 	private void skip(PanelStory story) {
-		if(canSkip(story)){
+		if (canSkip(story)) {
 			sound.stop();
 		}
 	}

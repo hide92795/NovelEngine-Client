@@ -127,7 +127,7 @@ public class PanelStory extends Panel {
 		if (bgm != null) {
 			bgm.stop();
 		}
-		bgm = engine.soundManager.getSound(id);
+		//bgm = engine.soundManager.getSound(id);
 		if (bgm != null) {
 			bgm.playAsMusic(1.0f, 1.0f, true);
 		}

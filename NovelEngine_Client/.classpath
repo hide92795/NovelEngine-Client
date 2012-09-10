@@ -32,5 +32,6 @@
 	<classpathentry kind="lib" path="E:/java_library/messagepack/msgpack-0.6.7-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/slick-util/jogg-0.0.7.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/slick-util/jorbis-0.0.15.jar"/>
+	<classpathentry kind="lib" path="E:/java_library/soundly.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

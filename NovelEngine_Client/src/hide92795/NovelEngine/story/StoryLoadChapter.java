@@ -11,7 +11,7 @@ public class StoryLoadChapter extends Story {
 	
 	@Override
 	public void update(PanelStory story, int delta) {
-		story.engine.loadStory(loadChapterId);
+		//story.engine.loadStory(loadChapterId);
 	}
 
 	@Override

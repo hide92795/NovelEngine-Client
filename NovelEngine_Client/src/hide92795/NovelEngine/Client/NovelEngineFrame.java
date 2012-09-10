@@ -12,6 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.JFrame;
 
+import org.lwjgl.input.Mouse;
+
 public class NovelEngineFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private NovelEngine engine;
@@ -28,7 +30,7 @@ public class NovelEngineFrame extends JFrame {
 	private void init() {
 		getContentPane().setPreferredSize(new Dimension(engine.width, engine.height));
 		getContentPane().setBackground(Color.black);
-		//setResizable(false);
+		setResizable(engine.dataBasic.isArrowResize());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(getCanvas(), BorderLayout.CENTER);
@@ -42,6 +44,7 @@ public class NovelEngineFrame extends JFrame {
 			canvas.addComponentListener(new ComponentAdapter() {
 				@Override
 				public void componentResized(ComponentEvent e) {
+					System.out.println("NovelEngineFrame.getCanvas().new ComponentAdapter() {...}.componentResized()");
 					newCanvasSize.set(canvas.getSize());
 				}
 			});

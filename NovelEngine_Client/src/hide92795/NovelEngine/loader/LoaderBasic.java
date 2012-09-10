@@ -12,14 +12,14 @@ import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataBasic;
 
 /**
- * 
+ *
  * @since b1.0
  * @author hide92795
  */
 public class LoaderBasic extends Loader {
 	public static DataBasic load() throws IOException {
 		File file = NovelEngine.getCurrentDir();
-		file = new File(file, "main.neb");
+		file = new File(file, "basic.neb");
 
 		FileInputStream fis = new FileInputStream(file);
 
@@ -32,6 +32,9 @@ public class LoaderBasic extends Loader {
 		data.setVersion(unpacker.readString());
 		data.setHeight(unpacker.readInt());
 		data.setWidth(unpacker.readInt());
+		data.setMinHeight(unpacker.readInt());
+		data.setMinWidth(unpacker.readInt());
+		data.setArrowResize(unpacker.readBoolean());
 		return data;
 	}
 }

@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glColorMask;
 import static org.lwjgl.opengl.GL11.glDepthMask;
 import static org.lwjgl.opengl.GL11.glStencilFunc;
-import static org.lwjgl.opengl.GL11.glStencilOp;
+import static org.lwjgl.opengl.GL11.*;
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.figure.Figure;
@@ -20,6 +20,7 @@ public class BackGround {
 	private int imageId;
 	private int xPos;
 	private int yPos;
+	//拡大率
 	private float magnificartion;
 
 	//private LinkedList<EntityCharacter> characters;
@@ -40,7 +41,7 @@ public class BackGround {
 	}
 
 	public void createStencil(NovelEngine engine, int target) {
-		glStencilFunc(GL_ALWAYS, target, ~0);
+		glStencilFunc(GL_ALWAYS, 1, ~0);
 		glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
 		glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
 		figure.renderStencil(engine);
@@ -49,8 +50,9 @@ public class BackGround {
 	}
 
 	public void render(NovelEngine engine, int target) {
+		glPushMatrix();
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-		glStencilFunc(GL_EQUAL, target, ~0);
+		glStencilFunc(GL_EQUAL, 1, ~0);
 		// 背景
 		Renderer.renderColor(r, g, b, alpha);
 		Texture texture = engine.imageManager.getImage(imageId);
@@ -61,6 +63,7 @@ public class BackGround {
 		//		for (EntityCharacter character : characters) {
 		//			character.render();
 		//		}
+		glPopMatrix();
 	}
 
 	public int getImageId() {
@@ -96,7 +99,7 @@ public class BackGround {
 	}
 
 	public void setMagnificartion(int magnificartion) {
-		this.magnificartion = (float)magnificartion / 100;
+		this.magnificartion = (float) magnificartion / 100;
 	}
 
 	public float getR() {

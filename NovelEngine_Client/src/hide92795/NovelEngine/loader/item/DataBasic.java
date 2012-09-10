@@ -5,7 +5,9 @@ public class DataBasic extends Data {
 	private String version;
 	private int width;
 	private int height;
-//	private boolean arrowResize;
+	private int minWidth;
+	private int minHeight;
+	private boolean arrowResize;
 //	private boolean isShowMaximizeButton;
 
 	public final String getGamename() {
@@ -38,5 +40,29 @@ public class DataBasic extends Data {
 
 	public final void setHeight(int height) {
 		this.height = height;
+	}
+
+	public int getMinWidth() {
+		return minWidth;
+	}
+
+	public void setMinWidth(int minWidth) {
+		this.minWidth = minWidth;
+	}
+
+	public int getMinHeight() {
+		return minHeight;
+	}
+
+	public void setMinHeight(int minHeight) {
+		this.minHeight = minHeight;
+	}
+
+	public boolean isArrowResize() {
+		return arrowResize;
+	}
+
+	public void setArrowResize(boolean arrowResize) {
+		this.arrowResize = arrowResize;
 	}
 }

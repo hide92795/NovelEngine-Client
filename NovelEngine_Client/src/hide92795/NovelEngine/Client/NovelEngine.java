@@ -30,8 +30,8 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- *
- *
+ * 
+ * 
  * @author hide92795
  */
 public class NovelEngine {
@@ -64,12 +64,12 @@ public class NovelEngine {
 
 	public NovelEngine() {
 		theEngine = this;
+		storyManager = new StoryManager();
 		settingManager = new SettingManager();
 		effectManager = new EffectManager();
 		imageManager = new ImageManager();
 		soundManager = new SoundManager();
 		queue = new QueueHandler();
-		storyManager = new StoryManager();
 		backGroundManager = new BackGroundManager();
 		initResource();
 		width = dataBasic.getWidth();
@@ -82,7 +82,6 @@ public class NovelEngine {
 			Display.setParent(frame.getCanvas());
 			Display.setVSyncEnabled(true);
 			lastFPS = getTime();
-
 			frame.setVisible(true);
 			initGL();
 			setCurrentPanel(new PanelPrestartStory(theEngine, "start".hashCode()));
@@ -102,6 +101,7 @@ public class NovelEngine {
 				updateFPS();
 				if (!hasCrash) {
 					pollInput();
+					
 					update(getDelta());
 					render();
 					queue.execute();
@@ -146,6 +146,7 @@ public class NovelEngine {
 	}
 
 	private void update(int delta) {
+		soundManager.update(delta);
 		if (currentPanel != null) {
 			currentPanel.update(delta);
 		}
@@ -236,7 +237,7 @@ public class NovelEngine {
 
 	/**
 	 * Get the accurate system time
-	 *
+	 * 
 	 * @return The system time in milliseconds
 	 */
 	public long getTime() {
@@ -288,7 +289,7 @@ public class NovelEngine {
 	/**
 	 * 指定されたチャプターIDのデータのロードを待ってから開始します。<br>
 	 * 画面は{@link PanelPrestartStory}により提供されます。
-	 *
+	 * 
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
@@ -300,7 +301,7 @@ public class NovelEngine {
 	 * 指定されたチャプターIDからストーリーを開始します。<br>
 	 * すべてのロードが終わっていない場合、表示に問題が発生する可能性があります。<br>
 	 * このメソッドは{@link PanelPrestartStory}より呼び出されるのが適切です。<br>
-	 *
+	 * 
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
@@ -313,7 +314,7 @@ public class NovelEngine {
 	/**
 	 * 指定したチャプターのロードを開始します。<br>
 	 * ロードは別スレッドにて行われます。
-	 *
+	 * 
 	 * @param chapterId
 	 */
 	public void loadStory(int chapterId) {
