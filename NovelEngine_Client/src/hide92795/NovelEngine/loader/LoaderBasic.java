@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import org.msgpack.MessagePack;
 import org.msgpack.unpacker.Unpacker;
@@ -12,7 +13,7 @@ import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataBasic;
 
 /**
- *
+ * 
  * @since b1.0
  * @author hide92795
  */
@@ -32,9 +33,17 @@ public class LoaderBasic extends Loader {
 		data.setVersion(unpacker.readString());
 		data.setHeight(unpacker.readInt());
 		data.setWidth(unpacker.readInt());
-		data.setMinHeight(unpacker.readInt());
-		data.setMinWidth(unpacker.readInt());
+		//data.setMinHeight(unpacker.readInt());
+		//data.setMinWidth(unpacker.readInt());
 		data.setArrowResize(unpacker.readBoolean());
+		data.setAspectRatio(unpacker.readInt(), unpacker.readInt());
+
+		int iconNum = unpacker.readInt();
+		ByteBuffer[] icons = new ByteBuffer[iconNum];
+		for (int i = 0; i < iconNum; i++) {
+			icons[i] = unpacker.readByteBuffer();
+		}
+		data.setIcons(icons);
 		return data;
 	}
 }

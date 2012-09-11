@@ -76,11 +76,13 @@ public class Renderer {
 	}
 
 	public static void renderColor(float red, float green, float blue) {
-		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.width, NovelEngine.theEngine.height);
+		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.dataBasic.getWidth(),
+				NovelEngine.theEngine.dataBasic.getHeight());
 	}
 
 	public static void renderColor(float red, float green, float blue, float alpha) {
-		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.width, NovelEngine.theEngine.height);
+		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.dataBasic.getWidth(),
+				NovelEngine.theEngine.dataBasic.getHeight());
 	}
 
 	public static void renderColor(float red, float green, float blue, float alpha, float x, float y, float x1, float y1) {
@@ -97,11 +99,13 @@ public class Renderer {
 	}
 
 	public static void renderColor(byte red, byte green, byte blue) {
-		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.width, NovelEngine.theEngine.height);
+		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.dataBasic.getWidth(),
+				NovelEngine.theEngine.dataBasic.getHeight());
 	}
 
 	public static void renderColor(byte red, byte green, byte blue, byte alpha) {
-		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.width, NovelEngine.theEngine.height);
+		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.dataBasic.getWidth(),
+				NovelEngine.theEngine.dataBasic.getHeight());
 	}
 
 	public static void renderColor(byte red, byte green, byte blue, byte alpha, float x, float y, float x1, float y1) {

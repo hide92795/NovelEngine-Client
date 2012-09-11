@@ -5,13 +5,13 @@
 	<classpathentry kind="lib" path="E:/Git/msgpack-java/build/lib/javassist-3.15.0-GA.jar"/>
 	<classpathentry kind="lib" path="E:/Git/msgpack-java/build/lib/json-simple-1.1.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/slf4j-1.6.4/slf4j-api-1.6.4.jar" sourcepath="E:/java_library/slf4j-1.6.4/slf4j-api-1.6.4-sources.jar"/>
-	<classpathentry kind="lib" path="E:/java_library/lwjgl-2.8.3/jar/lwjgl.jar" sourcepath="E:/java_library/lwjgl-2.8.3/lwjgl-source-2.8.3/src/java">
+	<classpathentry kind="lib" path="E:/java_library/lwjgl-2.8.4/jar/lwjgl.jar" sourcepath="E:/java_library/lwjgl-2.8.4/lwjgl-source-2.8.4/src/java">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/E:/java_library/lwjgl-2.8.3/javadoc/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/java_library/lwjgl-2.8.3/native/windows"/>
+			<attribute name="javadoc_location" value="file:/E:/java_library/lwjgl-2.8.4/javadoc/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/java_library/lwjgl-2.8.4/native/windows"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/java_library/lwjgl-2.8.3/jar/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="E:/java_library/lwjgl-2.8.4/jar/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/slick-util/slick-util.jar" sourcepath="E:/java_library/slick-util/slick-util-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/E:/java_library/slick-util/javadoc/"/>
@@ -33,5 +33,6 @@
 	<classpathentry kind="lib" path="E:/java_library/slick-util/jogg-0.0.7.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/slick-util/jorbis-0.0.15.jar"/>
 	<classpathentry kind="lib" path="E:/java_library/soundly.jar"/>
+	<classpathentry kind="lib" path="E:/java_library/lwjgl-2.8.4/jar/jinput.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

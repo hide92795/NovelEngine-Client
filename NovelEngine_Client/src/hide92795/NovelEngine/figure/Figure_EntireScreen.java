@@ -7,8 +7,8 @@ public class Figure_EntireScreen extends Figure {
 
 	@Override
 	public void renderStencil(NovelEngine engine) {
-		int width = engine.width;
-		int height = engine.height;
+		int width = engine.dataBasic.getWidth();
+		int height = engine.dataBasic.getHeight();
 		glBegin(GL_QUADS);
 		{
 			glVertex2d(0, 0);

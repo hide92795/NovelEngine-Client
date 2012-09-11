@@ -1,5 +1,6 @@
 package hide92795.novelengine.client;
 
+import hide92795.novelengine.AspectRatio;
 import hide92795.novelengine.Logger;
 import hide92795.novelengine.QueueHandler;
 import hide92795.novelengine.loader.LoaderBasic;
@@ -15,7 +16,6 @@ import hide92795.novelengine.panel.Panel;
 import hide92795.novelengine.panel.PanelPrestartStory;
 import hide92795.novelengine.panel.PanelStory;
 
-import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -26,12 +26,12 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * 
- * 
+ *
+ *
  * @author hide92795
  */
 public class NovelEngine {
@@ -51,9 +51,6 @@ public class NovelEngine {
 	public QueueHandler queue;
 	private boolean closeRequested;
 	public int nowfps;
-	private NovelEngineFrame frame;
-	public int width;
-	public int height;
 	private Panel nextPanel;
 	private boolean changePanel;
 	private boolean hasCrash;
@@ -72,37 +69,33 @@ public class NovelEngine {
 		queue = new QueueHandler();
 		backGroundManager = new BackGroundManager();
 		initResource();
-		width = dataBasic.getWidth();
-		height = dataBasic.getHeight();
-		frame = new NovelEngineFrame(this);
 	}
 
 	public void start() {
 		try {
-			Display.setParent(frame.getCanvas());
+			//ディスプレイ初期化
+			Display.setDisplayMode(new DisplayMode(dataBasic.getWidth(), dataBasic.getHeight()));
+			Display.setResizable(dataBasic.isArrowResize());
 			Display.setVSyncEnabled(true);
-			lastFPS = getTime();
-			frame.setVisible(true);
-			initGL();
-			setCurrentPanel(new PanelPrestartStory(theEngine, "start".hashCode()));
-			closeRequested = false;
+			Display.setIcon(dataBasic.getIcons());
+			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		Dimension newDim;
+		lastFPS = getTime();
+		initGL();
+		setCurrentPanel(new PanelPrestartStory(theEngine, "start".hashCode()));
+		closeRequested = false;
 		while (!Display.isCloseRequested() && !closeRequested) {
 			try {
-				newDim = frame.newCanvasSize.getAndSet(null);
-				if (newDim != null) {
-					width = newDim.width;
-					height = newDim.height;
-					GL11.glViewport(0, 0, width, height);
+				int delta = getDelta();
+				if (Display.wasResized()) {
+					resize();
 				}
-				updateFPS();
+
 				if (!hasCrash) {
 					pollInput();
-					
-					update(getDelta());
+					update(delta);
 					render();
 					queue.execute();
 				} else {
@@ -122,8 +115,11 @@ public class NovelEngine {
 		System.exit(0);
 	}
 
-	private void initGL() throws LWJGLException {
-		Display.create();
+	private void resize() {
+		dataBasic.getAspectRatio().adjust(Display.getWidth(), Display.getHeight());
+	}
+
+	private void initGL() {
 		glClearColor(0f, 0f, 0f, 1f);
 		glEnable(GL_BLEND);
 		glEnable(GL_STENCIL_TEST);
@@ -150,6 +146,7 @@ public class NovelEngine {
 		if (currentPanel != null) {
 			currentPanel.update(delta);
 		}
+		updateFPS();
 	}
 
 	private void render() {
@@ -190,8 +187,9 @@ public class NovelEngine {
 
 	public void pollInput() {
 		// 左クリック
-		// System.out.println("X:"+Mouse.getX() + " Y:" + Mouse.getY());
+
 		if (Mouse.isButtonDown(0)) {
+			//System.out.println("X:" + Mouse.getX() + " Y:" + Mouse.getY());
 			if (!leftClick) {
 				int x = Mouse.getX();
 				int y = Mouse.getY();
@@ -236,20 +234,20 @@ public class NovelEngine {
 	}
 
 	/**
-	 * Get the accurate system time
-	 * 
-	 * @return The system time in milliseconds
+	 * 正確なシステムの時刻を取得します。
+	 *
+	 * @return ミリ秒単位でのシステム上の時間
 	 */
-	public long getTime() {
+	private long getTime() {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
 	/**
-	 * Calculate the FPS and set it in the title bar
+	 * FPSを測定し、デバッグモードの場合はタイトルバーにその結果を表示します。
 	 */
 	public void updateFPS() {
 		if (getTime() - lastFPS > 1000) {
-			frame.setTitle("FPS: " + fps);
+			Display.setTitle("FPS: " + fps);
 			nowfps = fps;
 			fps = 0;
 			lastFPS += 1000;
@@ -264,6 +262,11 @@ public class NovelEngine {
 		engine.start();
 	}
 
+	/**
+	 * クライアントjarがあるフォルダを返します。
+	 *
+	 * @return jarファイルのある場所を示すFile。エラーが発生した場合はnull
+	 */
 	public static File getCurrentDir() {
 		URI uri = null;
 		try {
@@ -289,7 +292,7 @@ public class NovelEngine {
 	/**
 	 * 指定されたチャプターIDのデータのロードを待ってから開始します。<br>
 	 * 画面は{@link PanelPrestartStory}により提供されます。
-	 * 
+	 *
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
@@ -301,7 +304,7 @@ public class NovelEngine {
 	 * 指定されたチャプターIDからストーリーを開始します。<br>
 	 * すべてのロードが終わっていない場合、表示に問題が発生する可能性があります。<br>
 	 * このメソッドは{@link PanelPrestartStory}より呼び出されるのが適切です。<br>
-	 * 
+	 *
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
@@ -314,7 +317,7 @@ public class NovelEngine {
 	/**
 	 * 指定したチャプターのロードを開始します。<br>
 	 * ロードは別スレッドにて行われます。
-	 * 
+	 *
 	 * @param chapterId
 	 */
 	public void loadStory(int chapterId) {

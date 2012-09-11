@@ -1,14 +1,17 @@
 package hide92795.novelengine.loader.item;
 
+import hide92795.novelengine.AspectRatio;
+
+import java.nio.ByteBuffer;
+
 public class DataBasic extends Data {
 	private String gamename;
 	private String version;
 	private int width;
 	private int height;
-	private int minWidth;
-	private int minHeight;
 	private boolean arrowResize;
-//	private boolean isShowMaximizeButton;
+	private ByteBuffer[] icons;
+	private AspectRatio aspectRatio;
 
 	public final String getGamename() {
 		return gamename;
@@ -42,27 +45,27 @@ public class DataBasic extends Data {
 		this.height = height;
 	}
 
-	public int getMinWidth() {
-		return minWidth;
-	}
-
-	public void setMinWidth(int minWidth) {
-		this.minWidth = minWidth;
-	}
-
-	public int getMinHeight() {
-		return minHeight;
-	}
-
-	public void setMinHeight(int minHeight) {
-		this.minHeight = minHeight;
-	}
-
-	public boolean isArrowResize() {
+	public final boolean isArrowResize() {
 		return arrowResize;
 	}
 
-	public void setArrowResize(boolean arrowResize) {
+	public final void setArrowResize(boolean arrowResize) {
 		this.arrowResize = arrowResize;
+	}
+
+	public final ByteBuffer[] getIcons() {
+		return icons;
+	}
+
+	public final void setIcons(ByteBuffer[] icons) {
+		this.icons = icons;
+	}
+
+	public final AspectRatio getAspectRatio() {
+		return aspectRatio;
+	}
+
+	public final void setAspectRatio(int width, int height) {
+		this.aspectRatio = new AspectRatio(width, height);
 	}
 }

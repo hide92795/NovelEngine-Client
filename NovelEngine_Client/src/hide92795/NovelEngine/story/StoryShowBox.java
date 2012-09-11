@@ -94,8 +94,8 @@ public class StoryShowBox extends Story {
 
 	@Override
 	public void render(NovelEngine engine) {
-		float x = engine.width - width;
-		float y = (float) (engine.height - height + now);
+		float x = engine.dataBasic.getWidth() - width;
+		float y = (float) (engine.dataBasic.getHeight() - height + now);
 
 		Texture t = engine.imageManager.getImage(123456);
 		Renderer.renderImage(t, alpha, x, y, x + t.getTextureWidth(), y + t.getTextureHeight());
