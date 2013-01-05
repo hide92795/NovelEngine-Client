@@ -7,67 +7,129 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class DataStory extends Data {
-	private int chapterId;
-	// Key:シーンID Val:行番号
-	public HashMap<Integer, Integer> scenes;
+/**
+ * １チャプター分のストーリーデータを格納及び管理を行うクラスです。<br>
+ * ストーリーを開始するためには全てのリソースが使用可能である必要があります。
+ *
+ * @author hide92795
+ */
+public class DataStory {
+	/**
+	 * このストーリーのチャプターIDです。
+	 */
+	private final int chapterId;
+	/**
+	 * ストーリー内のシーンの位置を表すマップです<br>
+	 * キーにシーンID、値にシーンの行番号が格納されます。
+	 */
+	private HashMap<Integer, Integer> scenes;
+	/**
+	 * このチャプター内のストーリーデータのリストです。
+	 */
 	private LinkedList<Story> commandLine;
+	/**
+	 * 次に {@link #next() }を呼び出した際に返されるストーリーデータの番号です。
+	 */
 	private int pos;
+	/**
+	 * 全てのリソースデータが使用可能になったかどうかを表します。
+	 */
 	private AtomicBoolean dataLoaded;
+	/**
+	 * 画像データのリソースデータが使用可能になったかどうかを表します。
+	 */
 	private boolean imageLoaded;
-	private boolean wordsLoaded = true;
+	/**
+	 * 文章データのリソースデータが使用可能になったかどうかを表します。
+	 */
+	private boolean wordsLoaded;
+	/**
+	 * 音楽データのリソースデータが使用可能になったかどうかを表します。
+	 */
 	private boolean soundLoaded;
-	private boolean voiceLoaded = true;
+	/**
+	 * 音声データのリソースデータが使用可能になったかどうかを表します。
+	 */
+	private boolean voiceLoaded;
 
-	public DataStory() {
+	/**
+	 * 指定されたチャプターIDのストーリーを作成します。
+	 *
+	 * @param chapterId
+	 *            チャプターID
+	 */
+	public DataStory(final int chapterId) {
+		this.chapterId = chapterId;
 		scenes = new HashMap<Integer, Integer>();
 		commandLine = new LinkedList<Story>();
 		dataLoaded = new AtomicBoolean(false);
 	}
 
+	/**
+	 * このストーリーのチャプターIDを取得します。
+	 *
+	 * @return チャプターID
+	 */
 	public final int getChapterId() {
 		return chapterId;
 	}
 
-	public final void setChapterId(int chapterId) {
-		this.chapterId = chapterId;
-	}
-
-	public final void addStory(Story story) {
+	/**
+	 * このストーリーにストーリーデータを追加します。<br>
+	 * ストーリーは追加した順に保存されます。
+	 *
+	 * @param story
+	 *            追加するストーリーデータ
+	 */
+	public final void addStory(final Story story) {
 		if (story instanceof StoryScene) {
 			scenes.put(((StoryScene) story).getSceneId(), commandLine.size());
 		}
 		commandLine.add(story);
 	}
 
+	/**
+	 * ストーリーの現在の位置を最初に戻します。
+	 */
 	public final void reset() {
 		pos = 0;
 	}
 
+	/**
+	 * 次のストーリーデータを読み込みます。
+	 *
+	 * @return 次のストーリーデータ
+	 */
 	public final Story next() {
 		Story s = commandLine.get(pos);
 		pos++;
 		return s;
 	}
 
-	public final void moveScene(int sceneId) {
+	/**
+	 * ストーリー内の指定されたシーンIDの位置に移動します。
+	 *
+	 * @param sceneId
+	 *            移動先のシーンID
+	 */
+	public final void moveScene(final int sceneId) {
 		Integer integer = scenes.get(sceneId);
 		this.pos = integer.intValue();
-		System.out.println("DataStory.moveScene()");
-		System.out.println(pos);
 	}
 
 	/**
 	 * 画像・文字・BGM,SE・ボイスデータ全てのロードが終わっており、ストーリーの開始に問題がない場合はtrueを返します。
+	 *
+	 * @return 読み込みが終わっているか
 	 */
-	public boolean isDataLoaded() {
+	public final boolean isDataLoaded() {
 		return dataLoaded.get();
 	}
 
 	/**
 	 * 画像データのテクスチャ登録が完了したことをマークします。
 	 */
-	public void imageLoaded() {
+	public final void imageLoaded() {
 		this.imageLoaded = true;
 		checkLoaded();
 	}
@@ -75,7 +137,7 @@ public class DataStory extends Data {
 	/**
 	 * 文字データのテクスチャ登録が完了したことをマークします。
 	 */
-	public void wordsLoaded() {
+	public final void wordsLoaded() {
 		this.wordsLoaded = true;
 		checkLoaded();
 	}
@@ -83,7 +145,7 @@ public class DataStory extends Data {
 	/**
 	 * BGM・SEのサウンド登録が完了したことをマークします。
 	 */
-	public void soundLoaded() {
+	public final void soundLoaded() {
 		this.soundLoaded = true;
 		checkLoaded();
 	}
@@ -91,7 +153,7 @@ public class DataStory extends Data {
 	/**
 	 * ボイスデータのサウンド登録が完了したことをマークします。
 	 */
-	public void voiceLoaded() {
+	public final void voiceLoaded() {
 		this.voiceLoaded = true;
 		checkLoaded();
 	}
@@ -105,7 +167,10 @@ public class DataStory extends Data {
 		}
 	}
 
-	public void trace() {
+	/**
+	 * ストーリー内に保存されたストーリーデータの一覧を出力します。
+	 */
+	public final void trace() {
 		for (Story story : commandLine) {
 			System.out.println(story.getClass());
 		}

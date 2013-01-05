@@ -1,33 +1,111 @@
 package hide92795.novelengine.story;
 
 import hide92795.novelengine.Properties;
-import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.manager.SettingManager;
 import hide92795.novelengine.panel.PanelStory;
 
+/**
+ * 計算を行うストーリーデータです。
+ *
+ * @author hide92795
+ */
 public class StoryCalculation extends Story {
+	/**
+	 * 加算を表す定数です。
+	 */
 	public static final byte OPERATOR_PLUS = 0;
+	/**
+	 * 減算を表す定数です。
+	 */
 	public static final byte OPERATOR_MINUS = 1;
+	/**
+	 * 乗算を表す定数です。
+	 */
 	public static final byte OPERATOR_TIMES = 2;
+	/**
+	 * 除算を表す定数です。
+	 */
 	public static final byte OPERATOR_DIVIDED = 3;
+	/**
+	 * モジュラ計算を表す定数です。
+	 */
 	public static final byte OPERATOR_MODULO = 4;
+	/**
+	 * 論理積演算を表す定数です。
+	 */
 	public static final byte OPERATOR_AND = 5;
+	/**
+	 * 論理和演算を表す定数です。
+	 */
 	public static final byte OPERATOR_OR = 6;
+	/**
+	 * 排他的論理和演算を表す定数です。
+	 */
 	public static final byte OPERATOR_XOR = 7;
+	/**
+	 * 左算術シフト演算を表す定数です。
+	 */
 	public static final byte OPERATOR_SHIFT_LEFT = 8;
+	/**
+	 * 右算術シフト演算を表す定数です。
+	 */
 	public static final byte OPERATOR_SHIFT_RIGHT = 9;
+	/**
+	 * 左論理シフト演算を表す定数です。
+	 */
 	public static final byte OPERATOR_SHIFT_RIGHT_UNSIGNED = 10;
+	/**
+	 * このストーリーデータの処理が終了したかどうかを表します。
+	 */
 	private boolean finish;
+	/**
+	 * 演算結果を代入する変数の種類です。
+	 */
 	private final byte varType;
-	private final int varName;
+	/**
+	 * 演算結果を代入する変数の名前です。
+	 */
+	private final String varName;
+	/**
+	 * このストーリーデータが行う演算子を表します。
+	 */
 	private final byte operator;
+	/**
+	 * 演算子の左側の変数の種類です。
+	 */
 	private final byte leftVarType;
-	private final int leftVarName;
+	/**
+	 * 演算子の左側の変数の名前です。
+	 */
+	private final String leftVarName;
+	/**
+	 * 演算子の右側の変数の種類です。
+	 */
 	private final byte rightVarType;
-	private final int rightVarName;
+	/**
+	 * 演算子の右側の変数の名前です。
+	 */
+	private final String rightVarName;
 
-	public StoryCalculation(byte varType, int varName, byte operator, byte leftVarType, int leftVarName,
-			byte rightVarType, int rightVarName) {
+	/**
+	 * 計算を行うストーリーデータを生成します。
+	 *
+	 * @param varType
+	 *            演算結果を代入する変数の種類
+	 * @param varName
+	 *            演算結果を代入する変数の名前
+	 * @param operator
+	 *            ストーリーデータが行う演算子
+	 * @param leftVarType
+	 *            演算子の左側の変数の種類
+	 * @param leftVarName
+	 *            演算子の左側の変数の名前
+	 * @param rightVarType
+	 *            演算子の右側の変数の種類
+	 * @param rightVarName
+	 *            演算子の右側の変数の名前
+	 */
+	public StoryCalculation(final byte varType, final String varName, final byte operator, final byte leftVarType,
+			final String leftVarName, final byte rightVarType, final String rightVarName) {
 		this.varType = varType;
 		this.varName = varName;
 		this.operator = operator;
@@ -36,26 +114,37 @@ public class StoryCalculation extends Story {
 		this.rightVarType = rightVarType;
 		this.rightVarName = rightVarName;
 	}
-	
+
 	@Override
-	public void init(PanelStory story) {
+	public final void init(final PanelStory story) {
 		finish = false;
 	}
 
 	@Override
-	public void update(PanelStory story, int delta) {
+	public final void update(final PanelStory story, final int delta) {
 		if (!finish) {
-			int leftValue = getValue(story.engine, leftVarType, leftVarName);
-			int rightValue = getValue(story.engine, rightVarType, rightVarName);
+			int leftValue = story.engine().getSettingManager().getValue(leftVarType, leftVarName);
+			int rightValue = story.engine().getSettingManager().getValue(rightVarType, rightVarName);
 			int value = calculate(operator, leftValue, rightValue);
-			Properties p = story.engine.settingManager.getProperties(varType);
+			Properties p = story.engine().getSettingManager().getProperties(varType);
 			p.setProperty(varName, value);
 			finish = true;
 		}
 	}
 
-	private int calculate(byte operator1, int leftValue, int rightValue) {
-		switch (operator1) {
+	/**
+	 * 計算を行います。
+	 *
+	 * @param operator
+	 *            計算を行う演算子
+	 * @param leftValue
+	 *            演算子の左側の値
+	 * @param rightValue
+	 *            演算子の右側の値
+	 * @return 計算結果
+	 */
+	private int calculate(final byte operator, final int leftValue, final int rightValue) {
+		switch (operator) {
 		case OPERATOR_PLUS:
 			return leftValue + rightValue;
 		case OPERATOR_MINUS:
@@ -78,21 +167,14 @@ public class StoryCalculation extends Story {
 			return leftValue >> rightValue;
 		case OPERATOR_SHIFT_RIGHT_UNSIGNED:
 			return leftValue >>> rightValue;
+		default:
+			break;
 		}
 		return 0;
 	}
 
-	private int getValue(NovelEngine engine, byte type, int name) {
-		if (type == SettingManager.VARIABLE_RAW) {
-			return name;
-		} else {
-			Properties p = engine.settingManager.getProperties(type);
-			return p.getProperty(name);
-		}
-	}
-
 	@Override
-	public boolean isFinish() {
+	public final boolean isFinish() {
 		return finish;
 	}
 

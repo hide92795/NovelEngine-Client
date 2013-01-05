@@ -1,46 +1,106 @@
 package hide92795.novelengine.story;
 
-import hide92795.novelengine.Properties;
-import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.manager.SettingManager;
 import hide92795.novelengine.panel.PanelStory;
 
+/**
+ * ２つの値を比較するストーリーデータです。<br>
+ * 結果によってそれぞれ指定されたシーンIDへ移動します。
+ *
+ * @author hide92795
+ */
 public class StoryIF extends Story {
-	public static final byte IF_EQUAL = 0;
-	public static final byte IF_GREATER = 1;
-	public static final byte IF_LESS = 2;
-	public static final byte IF_GREATER_EQUAL = 3;
-	public static final byte IF_LESS_EQUAL = 4;
+	/**
+	 * イコールを表します。
+	 */
+	public static final int IF_EQUAL = 0;
+	/**
+	 * 大なりを表します。
+	 */
+	public static final int IF_GREATER = 1;
+	/**
+	 * 小なりを表します。
+	 */
+	public static final int IF_LESS = 2;
+	/**
+	 * 大なりイコールを表します。
+	 */
+	public static final int IF_GREATER_EQUAL = 3;
+	/**
+	 * 小なりイコールを表します。
+	 */
+	public static final int IF_LESS_EQUAL = 4;
+	/**
+	 * 比較を行う演算子です。
+	 */
 	private final byte operator;
+	/**
+	 * 演算子の左側の変数の種類です。
+	 */
 	private final byte leftVarType;
-	private final int leftValue;
+	/**
+	 * 演算子の左側の変数の名前です。
+	 */
+	private final String leftVarName;
+	/**
+	 * 演算子の右側の変数の種類です。
+	 */
 	private final byte rightVarType;
-	private final int rightValue;
+	/**
+	 * 演算子の右側の変数の名前です。
+	 */
+	private final String rightVarName;
+	/**
+	 * 演算結果が真の場合に移動するシーンIDです。
+	 */
 	private final int trueGoto;
+	/**
+	 * 演算結果が偽の場合に移動するシーンIDです。
+	 */
 	private final int falseGoto;
+	/**
+	 * このストーリーデータの処理が終了したかどうかを表します。
+	 */
 	private boolean finish;
 
-	public StoryIF(byte operator, byte leftVarType, int leftValue, byte rightVarType, int rightValue, int trueGoto,
-			int falseGoto) {
+	/**
+	 * ２つの値を比較するストーリーデータを生成します。
+	 *
+	 * @param operator
+	 *            ストーリーデータが行う演算子
+	 * @param leftVarType
+	 *            演算子の左側の変数の種類
+	 * @param leftVarName
+	 *            演算子の左側の変数の名前
+	 * @param rightVarType
+	 *            演算子の右側の変数の種類
+	 * @param rightVarName
+	 *            演算子の右側の変数の名前
+	 * @param trueGoto
+	 *            演算結果が真の場合に移動するシーンID
+	 * @param falseGoto
+	 *            演算結果が偽の場合に移動するシーンID
+	 */
+	public StoryIF(final byte operator, final byte leftVarType, final String leftVarName, final byte rightVarType,
+			final String rightVarName, final int trueGoto, final int falseGoto) {
 		this.operator = operator;
 		this.leftVarType = leftVarType;
-		this.leftValue = leftValue;
+		this.leftVarName = leftVarName;
 		this.rightVarType = rightVarType;
-		this.rightValue = rightValue;
+		this.rightVarName = rightVarName;
 		this.trueGoto = trueGoto;
 		this.falseGoto = falseGoto;
 	}
 
 	@Override
-	public void init(PanelStory story) {
+	public final void init(final PanelStory story) {
 		finish = false;
 	}
 
 	@Override
-	public void update(PanelStory story, int delta) {
+	public final void update(final PanelStory story, final int delta) {
 		if (!finish) {
-			int left = getValue(story.engine, leftVarType, leftValue);
-			int right = getValue(story.engine, rightVarType, rightValue);
+			int left = story.engine().getSettingManager().getValue(leftVarType, leftVarName);
+			int right = story.engine().getSettingManager().getValue(rightVarType, rightVarName);
 			boolean b = evaluation(left, right);
 			if (b) {
 				story.moveScene(trueGoto);
@@ -51,7 +111,16 @@ public class StoryIF extends Story {
 		}
 	}
 
-	private boolean evaluation(int left, int right) {
+	/**
+	 * 比較を行います。
+	 *
+	 * @param left
+	 *            演算子の左側の変数
+	 * @param right
+	 *            演算子の右側の変数
+	 * @return 比較結果
+	 */
+	private boolean evaluation(final int left, final int right) {
 		switch (operator) {
 		case IF_EQUAL:
 			return left == right;
@@ -63,21 +132,14 @@ public class StoryIF extends Story {
 			return left >= right;
 		case IF_LESS_EQUAL:
 			return left <= right;
+		default:
+			break;
 		}
 		return false;
 	}
 
-	private int getValue(NovelEngine engine, byte type, int name) {
-		if (type == SettingManager.VARIABLE_RAW) {
-			return name;
-		} else {
-			Properties p = engine.settingManager.getProperties(type);
-			return p.getProperty(name);
-		}
-	}
-
 	@Override
-	public boolean isFinish() {
+	public final boolean isFinish() {
 		return finish;
 	}
 

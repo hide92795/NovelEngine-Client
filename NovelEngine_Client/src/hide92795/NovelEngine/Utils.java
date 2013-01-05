@@ -1,36 +1,83 @@
 package hide92795.novelengine;
 
-import java.awt.Font;
-import java.awt.font.TextAttribute;
-import java.text.AttributedString;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class Utils {
+/**
+ * 　多クラスから利用される機能を提供します。
+ *
+ * @author hide92795
+ */
+public final class Utils {
+	/**
+	 * 乱数生成用の{@link java.util.Random Random}
+	 */
 	private static Random random = new Random();
-	public static int getRandom(int num){
+
+	/**
+	 * このクラスはユーティリティクラスのためオブジェクト化できません。
+	 */
+	private Utils() {
+	}
+
+	/**
+	 * 0から指定された値までの乱数を生成します。
+	 *
+	 * @param num
+	 *            乱数の上限数
+	 * @return 生成された乱数
+	 */
+	public static int getRandom(final int num) {
 		return random.nextInt(num);
 	}
 
-	public static AttributedString parceWords(String words) {
-		String textonly = words.replaceAll("\\[改行\\]", "\n");
-		textonly = textonly.replaceAll("\\[サイズ\\s\\d+\\]", "");
-		textonly = textonly.replaceAll("\\[\\/サイズ\\]", "");
-		AttributedString as = new AttributedString(textonly);
-		Font f = new Font("ＭＳ ゴシック", Font.PLAIN, 30);
-		as.addAttribute(TextAttribute.FONT, f);
-		as.addAttribute(TextAttribute.FOREGROUND, java.awt.Color.BLACK);
-		Pattern p = Pattern.compile("\\[サイズ\\s(\\d+)\\](.+)\\[/サイズ\\]");
-		Matcher m = p.matcher(words);
-		while (m.find()) {
-			int size = Integer.parseInt(m.group(1));
-			String str = m.group(2);
-			int begin = textonly.indexOf(str);
-			int end = begin + str.length() - 1;
-			Font f1 = new Font("メイリオ", Font.PLAIN, 20 * size / 100);
-			as.addAttribute(TextAttribute.FONT, f1, begin, end);
+	/**
+	 * 発生した例外をロガーに出力します。
+	 *
+	 * @param e
+	 *            発生した例外
+	 */
+	public static void printStackTraceToLogger(final Exception e) {
+		Logger.error(e);
+		StackTraceElement[] trace = e.getStackTrace();
+		for (int i = 0; i < trace.length; i++) {
+			Logger.error("\tat " + trace[i]);
 		}
-		return as;
+
+		Throwable ourCause = e.getCause();
+		if (ourCause != null) {
+			printStackTraceToLoggerAsCause(ourCause, trace);
+
+		}
+	}
+
+	/**
+	 * 元の例外をスローさせた原因となる{@link java.lang.Throwable Throwable}を出力します。
+	 *
+	 * @param t
+	 *            例外の原因
+	 * @param causedTrace
+	 *            元の例外の要素
+	 */
+	private static void printStackTraceToLoggerAsCause(final Throwable t, final StackTraceElement[] causedTrace) {
+		StackTraceElement[] trace2 = t.getStackTrace();
+		int m = trace2.length - 1, n = causedTrace.length - 1;
+		while (m >= 0 && n >= 0 && trace2[m].equals(causedTrace[n])) {
+			m--;
+			n--;
+		}
+		int framesInCommon = trace2.length - 1 - m;
+
+		Logger.error("Caused by: " + t);
+		for (int i = 0; i <= m; i++) {
+			Logger.error("\tat " + trace2[i]);
+		}
+		if (framesInCommon != 0) {
+			Logger.error("\t... " + framesInCommon + " more");
+		}
+
+		Throwable ourCause = t.getCause();
+		if (ourCause != null) {
+			printStackTraceToLoggerAsCause(ourCause, causedTrace);
+		}
 	}
 }

@@ -10,10 +10,24 @@ import soundly.AudioData;
 import soundly.Soundly;
 import soundly.XSound;
 
+/**
+ * サウンドデータを管理するためのマネージャーです。
+ *
+ * @author hide92795
+ */
 public class SoundManager {
+	/**
+	 * サウンドIDとそれに対応するサウンドを格納するマップです。
+	 */
 	private HashMap<Integer, XSound> sounds;
+	/**
+	 * サウンドを再生するために使う {@link soundly.Soundly Soundly} オブジェクトです。
+	 */
 	private Soundly sound;
 
+	/**
+	 * {@link hide92795.novelengine.manager.SoundManager SoundManager} のオブジェクトを生成します。
+	 */
 	public SoundManager() {
 		sounds = new HashMap<Integer, XSound>();
 		sound = Soundly.get();
@@ -21,12 +35,27 @@ public class SoundManager {
 		sound.setMusicTrackCount(2);
 	}
 
-	public XSound getSound(int id) {
+	/**
+	 * 指定されたIDのサウンドを取得します。
+	 *
+	 * @param id
+	 *            サウンドID
+	 * @return 指定されたIDのサウンド
+	 */
+	public final XSound getSound(final int id) {
 		XSound p = sounds.get(id);
 		return p;
 	}
 
-	public void putSound(int id, byte[] sound) {
+	/**
+	 * サウンドを登録します。
+	 *
+	 * @param id
+	 *            サウンドID
+	 * @param sound
+	 *            サウンドデータが格納された <code>byte</code> 配列
+	 */
+	public final void putSound(final int id, final byte[] sound) {
 		XSound sound2 = null;
 		ByteArrayInputStream bis = new ByteArrayInputStream(sound);
 		try {
@@ -39,15 +68,24 @@ public class SoundManager {
 		sounds.put(id, sound2);
 	}
 
-	public void update(int delta) {
+	/**
+	 * 再生中のサウンドを更新します。
+	 *
+	 * @param delta
+	 *            前回のupdateとの時間差
+	 */
+	public final void update(final int delta) {
 		sound.update(delta);
 	}
 
-	public boolean isLoaded(int id) {
+	/**
+	 * 指定されたサウンドIDのサウンドが登録されているかを返します。
+	 *
+	 * @param id
+	 *            検索するサウンドID
+	 * @return 登録されている場合は <code>true</code>
+	 */
+	public final boolean isLoaded(final int id) {
 		return sounds.containsKey(id);
-	}
-
-	public void trace() {
-
 	}
 }

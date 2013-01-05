@@ -6,6 +6,13 @@ import java.util.HashMap;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 
+/**
+ * 音声データを管理するためのマネージャーです。<br>
+ * このクラスは将来別のクラスに移動される予定です。
+ *
+ * @author hide92795
+ */
+@Deprecated
 public class VoiceManager {
 
 	private HashMap<Integer, Audio> voices;

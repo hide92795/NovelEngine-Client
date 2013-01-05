@@ -1,6 +1,17 @@
 package hide92795.novelengine;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glColor4d;
+import static org.lwjgl.opengl.GL11.glColor4ub;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glVertex2f;
+import hide92795.novelengine.client.NovelEngine;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -15,8 +26,6 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import hide92795.novelengine.client.NovelEngine;
-
 import org.newdawn.slick.opengl.Texture;
 
 /**
@@ -24,45 +33,94 @@ import org.newdawn.slick.opengl.Texture;
  *
  * @author hide92795
  */
-public class Renderer {
+public final class Renderer {
+	/**
+	 * このクラスはユーティリティクラスのためオブジェクト化できません。
+	 */
+	private Renderer() {
+	}
+
 	/**
 	 * 指定したテクスチャを左上を起点に描画します。
 	 *
 	 * @param texture
 	 *            描画するテクスチャ
 	 */
-	public static void renderBgImage(Texture texture) {
-		renderImage(texture, 1.0f, 1.0f, 1.0f, 1.0f, 0, 0, texture.getTextureWidth(), texture.getTextureHeight());
+	public static void renderImage(final Texture texture) {
+		renderImage(texture, 1.0f);
 	}
 
 	/**
-	 * 指定したテクスチャを指定したアルファ値で描画します。
+	 * 指定したテクスチャを左上を起点に指定したアルファ値で描画します。
 	 *
 	 * @param texture
 	 *            描画するテクスチャ
 	 * @param alpha
 	 *            アルファ値
 	 */
-	public static void renderBgImage(Texture texture, float alpha) {
-		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, 0, 0, texture.getTextureWidth(), texture.getTextureHeight());
+	public static void renderImage(final Texture texture, final float alpha) {
+		renderImage(texture, alpha, 0.0f, 0.0f);
 	}
 
-	public static void renderImage(Texture texture, float x, float y, float alpha, float magnificartion) {
-		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, x, y, x + texture.getTextureWidth() * magnificartion,
+	/**
+	 * 指定したテクスチャを指定された点を起点に指定したアルファ値で描画します。
+	 *
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 */
+	public static void renderImage(final Texture texture, final float alpha, final float x, final float y) {
+		renderImage(texture, alpha, x, y, 1.0f);
+	}
+
+	/**
+	 * 指定したテクスチャを指定された点を起点から指定した拡大率で拡大縮小し、指定したアルファ値で描画します。
+	 *
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 * @param magnificartion
+	 *            拡大率
+	 */
+	public static void renderImage(final Texture texture, final float alpha, final float x, final float y,
+			final float magnificartion) {
+		renderImage(texture, alpha, x, y, x + texture.getTextureWidth() * magnificartion,
 				y + texture.getTextureHeight() * magnificartion);
 	}
 
-	public static void renderImage(Texture texture, float alpha, float x, float y, float x1, float y1) {
-		renderImage(texture, 1.0f, 1.0f, 1.0f, alpha, x, y, x1, y1);
-	}
-
-	public static void renderImage(Texture texture, float red, float green, float blue, float a, float x, float y,
-			float x1, float y1) {
+	/**
+	 * 指定したテクスチャを指定した範囲内に収まるように拡大縮小し、指定したアルファ値で描画します。
+	 *
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 * @param x1
+	 *            画像を描画する右下の点のX座標
+	 * @param y1
+	 *            画像を描画する右下の点のY座標
+	 */
+	public static void renderImage(final Texture texture, final float alpha, final float x, final float y,
+			final float x1, final float y1) {
 		texture.bind();
+		glColor4d(1.0f, 1.0f, 1.0f, alpha);
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		{
-			glColor4d(red, green, blue, a);
 			glTexCoord2f(0, 0);
 			glVertex2f(x, y);
 			glTexCoord2f(1, 0);
@@ -75,21 +133,63 @@ public class Renderer {
 		glEnd();
 	}
 
-	public static void renderColor(float red, float green, float blue) {
-		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.dataBasic.getWidth(),
-				NovelEngine.theEngine.dataBasic.getHeight());
+	/**
+	 * 画面全体を指定した色で塗りつぶします。
+	 *
+	 * @param red
+	 *            赤成分(0.0f～1.0fの範囲内)
+	 * @param green
+	 *            緑成分(0.0f～1.0fの範囲内)
+	 * @param blue
+	 *            青成分(0.0f～1.0fの範囲内)
+	 */
+	public static void renderColor(final float red, final float green, final float blue) {
+		renderColor(red, green, blue, 1.0f);
 	}
 
-	public static void renderColor(float red, float green, float blue, float alpha) {
-		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.dataBasic.getWidth(),
-				NovelEngine.theEngine.dataBasic.getHeight());
+	/**
+	 * 画面全体を指定した色とアルファ値で塗りつぶします。
+	 *
+	 * @param red
+	 *            赤成分(0.0f～1.0fの範囲内)
+	 * @param green
+	 *            緑成分(0.0f～1.0fの範囲内)
+	 * @param blue
+	 *            青成分(0.0f～1.0fの範囲内)
+	 * @param alpha
+	 *            アルファ値(0.0f～1.0fの範囲内)
+	 */
+	public static void renderColor(final float red, final float green, final float blue, final float alpha) {
+		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.getEngine().getDefaultWidth(), NovelEngine.getEngine()
+				.getDefaultHeight());
 	}
 
-	public static void renderColor(float red, float green, float blue, float alpha, float x, float y, float x1, float y1) {
+	/**
+	 * 指定した範囲内を指定した色とアルファ値で塗りつぶします。
+	 *
+	 * @param red
+	 *            赤成分(0.0f～1.0fの範囲内)
+	 * @param green
+	 *            緑成分(0.0f～1.0fの範囲内)
+	 * @param blue
+	 *            青成分(0.0f～1.0fの範囲内)
+	 * @param alpha
+	 *            アルファ値(0.0f～1.0fの範囲内)
+	 * @param x
+	 *            塗りつぶす範囲の左上の点のX座標
+	 * @param y
+	 *            塗りつぶす範囲の左上の点のY座標
+	 * @param x1
+	 *            塗りつぶす範囲の右下の点のX座標
+	 * @param y1
+	 *            塗りつぶす範囲の右下の点のY座標
+	 */
+	public static void renderColor(final float red, final float green, final float blue, final float alpha,
+			final float x, final float y, final float x1, final float y1) {
+		glColor4d(red, green, blue, alpha);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		{
-			glColor4d(red, green, blue, alpha);
 			glVertex2f(x, y);
 			glVertex2f(x1, y);
 			glVertex2f(x1, y1);
@@ -98,21 +198,63 @@ public class Renderer {
 		glEnd();
 	}
 
-	public static void renderColor(byte red, byte green, byte blue) {
-		renderColor(red, green, blue, 1.0f, 0, 0, NovelEngine.theEngine.dataBasic.getWidth(),
-				NovelEngine.theEngine.dataBasic.getHeight());
+	/**
+	 * 画面全体を指定した色で塗りつぶします。
+	 *
+	 * @param red
+	 *            赤成分(0～255の範囲内)
+	 * @param green
+	 *            緑成分(0～255の範囲内)
+	 * @param blue
+	 *            青成分(0～255の範囲内)
+	 */
+	public static void renderColor(final byte red, final byte green, final byte blue) {
+		renderColor(red, green, blue, (byte) 0xFF);
 	}
 
-	public static void renderColor(byte red, byte green, byte blue, byte alpha) {
-		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.theEngine.dataBasic.getWidth(),
-				NovelEngine.theEngine.dataBasic.getHeight());
+	/**
+	 * 画面全体を指定した色とアルファ値で塗りつぶします。
+	 *
+	 * @param red
+	 *            赤成分(0～255の範囲内)
+	 * @param green
+	 *            緑成分(0～255の範囲内)
+	 * @param blue
+	 *            青成分(0～255の範囲内)
+	 * @param alpha
+	 *            アルファ値(0～255の範囲内)
+	 */
+	public static void renderColor(final byte red, final byte green, final byte blue, final byte alpha) {
+		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.getEngine().getDefaultWidth(), NovelEngine.getEngine()
+				.getDefaultHeight());
 	}
 
-	public static void renderColor(byte red, byte green, byte blue, byte alpha, float x, float y, float x1, float y1) {
+	/**
+	 * 指定した範囲内を指定した色とアルファ値で塗りつぶします。
+	 *
+	 * @param red
+	 *            赤成分(0～255の範囲内)
+	 * @param green
+	 *            緑成分(0～255の範囲内)
+	 * @param blue
+	 *            青成分(0～255の範囲内)
+	 * @param alpha
+	 *            アルファ値(0～255の範囲内)
+	 * @param x
+	 *            塗りつぶす範囲の左上の点のX座標
+	 * @param y
+	 *            塗りつぶす範囲の左上の点のY座標
+	 * @param x1
+	 *            塗りつぶす範囲の右下の点のX座標
+	 * @param y1
+	 *            塗りつぶす範囲の右下の点のY座標
+	 */
+	public static void renderColor(final byte red, final byte green, final byte blue, final byte alpha, final float x,
+			final float y, final float x1, final float y1) {
+		glColor4ub(red, green, blue, alpha);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 		{
-			glColor4ub(red, green, blue, alpha);
 			glVertex2f(x, y);
 			glVertex2f(x1, y);
 			glVertex2f(x1, y1);

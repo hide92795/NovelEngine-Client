@@ -8,19 +8,45 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.BufferedImageUtil;
 
-public class ImageManager{
+/**
+ * イメージデータを管理するためのマネージャーです。
+ *
+ * @author hide92795
+ */
+public class ImageManager {
+	/**
+	 * イメージIDとそれに対応するイメージを格納するマップです。
+	 */
 	private HashMap<Integer, Texture> images;
 
+	/**
+	 * {@link hide92795.novelengine.manager.ImageManager ImageManager} のオブジェクトを生成します。
+	 */
 	public ImageManager() {
 		images = new HashMap<Integer, Texture>();
 	}
 
-	public Texture getImage(int id) {
+	/**
+	 * 指定されたIDのイメージを取得します。
+	 *
+	 * @param id
+	 *            イメージID
+	 * @return 指定されたIDのイメージ
+	 */
+	public final Texture getImage(final int id) {
 		Texture t = images.get(id);
 		return t;
 	}
 
-	public void putTexture(int id, byte[] image) {
+	/**
+	 * イメージを登録します。
+	 *
+	 * @param id
+	 *            イメージID
+	 * @param image
+	 *            イメージデータが格納された <code>byte</code> 配列
+	 */
+	public final void putTexture(final int id, final byte[] image) {
 		Texture t = null;
 		ByteArrayInputStream bis = new ByteArrayInputStream(image);
 		try {
@@ -32,7 +58,15 @@ public class ImageManager{
 		images.put(id, t);
 	}
 
-	public void putTexture(int id, BufferedImage image) {
+	/**
+	 * イメージを登録します。
+	 *
+	 * @param id
+	 *            イメージID
+	 * @param image
+	 *            イメージデータが格納された <code>BufferedImage</code>
+	 */
+	public final void putTexture(final int id, final BufferedImage image) {
 		Texture t = null;
 		try {
 			t = BufferedImageUtil.getTexture(String.valueOf(id), image);
@@ -43,8 +77,14 @@ public class ImageManager{
 		images.put(id, t);
 	}
 
-
-	public boolean isLoaded(int id) {
+	/**
+	 * 指定されたイメージIDのイメージが登録されているかを返します。
+	 *
+	 * @param id
+	 *            検索するイメージID
+	 * @return 登録されている場合は <code>true</code>
+	 */
+	public final boolean isLoaded(final int id) {
 		return images.containsKey(id);
 	}
 }

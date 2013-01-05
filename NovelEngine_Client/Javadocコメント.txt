@@ -1,0 +1,19 @@
+engine
+ 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+story
+ 現在、画面を描画している {@link hide92795.novelengine.panel.Panel Panel} オブジェクト
+target
+ 描画するレイヤーID
+delta
+ 前回のupdateとの時間差
+
+Figure
+ {@link hide92795.novelengine.background.Figure Figure}
+
+ @throws IOException
+ 何らかの入出力エラーが発生した場合
+
+  {@link hide92795.novelengine.background.BackGround BackGround} オブジェクト
+
+
+このストーリーデータの処理が終了したかどうかを表します。

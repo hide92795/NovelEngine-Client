@@ -6,8 +6,20 @@ import java.io.File;
 import java.io.IOException;
 import javax.crypto.CipherInputStream;
 
+/**
+ * 音楽データを外部ファイルから読み込むクラスです。
+ *
+ * @author hide92795
+ */
 public class LoaderSound extends Loader {
-	public static byte[] load(int id) {
+	/**
+	 * 指定された音楽IDの音楽を読み込みます。
+	 *
+	 * @param id
+	 *            読み込む対象の音楽ID
+	 * @return 読み込んだデータが格納されたbyte配列
+	 */
+	public static byte[] load(final int id) {
 		CipherInputStream cis = null;
 		byte[] data = null;
 		try {

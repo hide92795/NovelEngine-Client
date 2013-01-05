@@ -3,23 +3,56 @@ package hide92795.novelengine.queue;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataStory;
 
-public class QueueLoadedMarker extends Queue {
+/**
+ * 各種リソースが使用可能になったことを通知するためのキューデータです。
+ *
+ * @author hide92795
+ */
+public class QueueLoadedMarker extends QueueData {
+	/**
+	 * イメージデータを表す定数です。
+	 */
 	public static final int MAKER_IMAGE = 0;
+	/**
+	 * 文章データを表す定数です。
+	 */
 	public static final int MAKER_WORDS = 1;
+	/**
+	 * 音楽データを表す定数です。
+	 */
 	public static final int MAKER_SOUND = 2;
+	/**
+	 * 音声データを表す定数です。
+	 */
 	public static final int MAKER_VOICE = 3;
+	/**
+	 * このキューデータによってロードされているチャプターのIDです。
+	 */
 	private final int chapterId;
+	/**
+	 * このキューデータがどのリソースの完了通知を行うかを保存します。
+	 */
 	private final int maker;
 
-	public QueueLoadedMarker(NovelEngine engine, int chapterId, int maker) {
+	/**
+	 * 指定されたチャプター及びリソースが使用可能になったことを通知するキューデータを生成します。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 * @param chapterId
+	 *            このキューデータによってロードされているチャプターのID
+	 * @param maker
+	 *            このキューデータが完了通知を行うリソースの種類
+	 */
+	public QueueLoadedMarker(final NovelEngine engine, final int chapterId, final int maker) {
 		super(engine);
 		this.chapterId = chapterId;
 		this.maker = maker;
 	}
 
 	@Override
-	public void execute() {
-		DataStory story = engine.storyManager.getStory(chapterId);
+	public final void execute() {
+		DataStory story = engine().getStoryManager().getStory(chapterId);
 		if (story != null) {
 			switch (maker) {
 			case MAKER_IMAGE:
@@ -34,9 +67,11 @@ public class QueueLoadedMarker extends Queue {
 			case MAKER_VOICE:
 				story.voiceLoaded();
 				break;
+			default:
+				break;
 			}
 		} else {
-			engine.queue.offer(this);
+			engine().getQueueManager().enqueue(this);
 		}
 	}
 

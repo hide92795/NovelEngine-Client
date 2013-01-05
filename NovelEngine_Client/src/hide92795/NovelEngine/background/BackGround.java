@@ -8,121 +8,286 @@ import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glColorMask;
 import static org.lwjgl.opengl.GL11.glDepthMask;
 import static org.lwjgl.opengl.GL11.glStencilFunc;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glStencilOp;
 import hide92795.novelengine.Renderer;
+import hide92795.novelengine.background.figure.Figure_EntireScreen;
 import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.figure.Figure;
-import hide92795.novelengine.figure.Figure_EntireScreen;
 
 import org.newdawn.slick.opengl.Texture;
 
+/**
+ * ストーリー上で背景とキャラクターを保持する１枚のレイヤーとして機能します。
+ *
+ * @author hide92795
+ */
 public class BackGround {
+	/**
+	 * 背景のイメージIDです。
+	 */
 	private int imageId;
-	private int xPos;
-	private int yPos;
-	//拡大率
-	private float magnificartion;
+	/**
+	 * X軸方向の描画の起点です。
+	 */
+	private int x;
+	/**
+	 * Y軸方向の描画の起点です。
+	 */
+	private int y;
+	/**
+	 * 描画をする際の拡大率です。
+	 */
+	private float magnificartion = 1.0f;
 
-	//private LinkedList<EntityCharacter> characters;
+	// private LinkedList<EntityCharacter> characters;
+	/**
+	 * 描画範囲を示す{@link hide92795.novelengine.background.Figure Figure}です
+	 */
 	private Figure figure;
 
-	private float r;
-	private float g;
-	private float b;
+	/**
+	 * 背景色の赤成分です。
+	 */
+	private float red;
+	/**
+	 * 背景色の緑成分です。
+	 */
+	private float green;
+	/**
+	 * 背景色の青成分です。
+	 */
+	private float blue;
+	/**
+	 * 背景全体のアルファ値です。
+	 */
 	private float alpha = 1.0f;
 
-	public BackGround(Figure figure) {
+	/**
+	 * {@link hide92795.novelengine.background.BackGround BackGround}
+	 * オブジェクトを指定された描画範囲で作成します。<br>
+	 * 背景色のデフォルトは白、アルファ値のデフォルトは透明(0.0f)です。
+	 *
+	 * @param figure
+	 *            描画範囲を示す{@link hide92795.novelengine.background.Figure Figure}
+	 */
+	public BackGround(final Figure figure) {
 		this.figure = figure;
-		//characters = new LinkedList<EntityCharacter>();
+		// characters = new LinkedList<EntityCharacter>();
 	}
 
+	/**
+	 * {@link hide92795.novelengine.background.BackGround BackGround}
+	 * オブジェクトを画面全体を描画範囲として作成します。<br>
+	 * 背景色のデフォルトは白、アルファ値のデフォルトは透明(0.0f)です。
+	 *
+	 */
 	public BackGround() {
 		this(new Figure_EntireScreen());
 	}
 
-	public void createStencil(NovelEngine engine, int target) {
+	/**
+	 * 描画範囲を表すステンシル領域を描画します。
+	 *
+	 * @param engine
+	 *            実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
+	 */
+	public final void createStencil(final NovelEngine engine) {
 		glStencilFunc(GL_ALWAYS, 1, ~0);
 		glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
 		glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
 		figure.renderStencil(engine);
-		glColorMask(true, true, true, true);
-		glDepthMask(true);
 	}
 
-	public void render(NovelEngine engine, int target) {
-		glPushMatrix();
+	/**
+	 * 背景画像、キャラクターなどの描画を行います。
+	 *
+	 * @param engine
+	 *            実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
+	 */
+	public final void render(final NovelEngine engine) {
+		glColorMask(true, true, true, true);
+		glDepthMask(true);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 		glStencilFunc(GL_EQUAL, 1, ~0);
 		// 背景
-		Renderer.renderColor(r, g, b, alpha);
-		Texture texture = engine.imageManager.getImage(imageId);
+		Renderer.renderColor(red, green, blue, alpha);
+		Texture texture = engine.getImageManager().getImage(imageId);
 		if (texture != null) {
-			Renderer.renderImage(texture, xPos, yPos, alpha, magnificartion);
+			Renderer.renderImage(texture, alpha, x, y);
 		}
 		// キャラクター
-		//		for (EntityCharacter character : characters) {
-		//			character.render();
-		//		}
-		glPopMatrix();
+		// for (EntityCharacter character : characters) {
+		// character.render();
+		// }
 	}
 
-	public int getImageId() {
+	/**
+	 * 現在の背景のイメージIDを取得します。
+	 *
+	 * @return 現在の背景のイメージID
+	 */
+	public final int getImageId() {
 		return imageId;
 	}
 
-	public void setImageId(int imageId) {
+	/**
+	 * 背景のイメージIDを設定します。
+	 *
+	 * @param imageId
+	 *            設定するイメージID
+	 */
+	public final void setImageId(final int imageId) {
 		this.imageId = imageId;
 	}
 
-	public float getAlpha() {
+	/**
+	 * 現在のアルファ値を取得します。
+	 *
+	 * @return 現在のアルファ値
+	 */
+	public final float getAlpha() {
 		return alpha;
 	}
 
-	public void setAlpha(float alpha) {
+	/**
+	 * アルファ値を設定します。
+	 *
+	 * @param alpha
+	 *            設定するアルファ値
+	 */
+	public final void setAlpha(final float alpha) {
 		this.alpha = alpha;
 	}
 
-	public int getxPos() {
-		return xPos;
+	/**
+	 * 現在のX軸方向の位置を取得します。
+	 *
+	 * @return 現在のX軸方向の位置
+	 */
+	public final int getX() {
+		return x;
 	}
 
-	public void setxPos(int xPos) {
-		this.xPos = xPos;
+	/**
+	 * X軸方向の位置を設定します。
+	 *
+	 * @param x
+	 *            設定するX軸方向の位置
+	 */
+	public final void setX(final int x) {
+		this.x = x;
 	}
 
-	public int getyPos() {
-		return yPos;
+	/**
+	 * 現在のY軸方向の位置を取得します。
+	 *
+	 * @return 現在のY軸方向の位置
+	 */
+	public final int getY() {
+		return y;
 	}
 
-	public void setyPos(int yPos) {
-		this.yPos = yPos;
+	/**
+	 * Y軸方向の位置を設定します。
+	 *
+	 * @param y
+	 *            設定するY軸方向の位置
+	 */
+	public final void setY(final int y) {
+		this.y = y;
 	}
 
-	public void setMagnificartion(int magnificartion) {
-		this.magnificartion = (float) magnificartion / 100;
+	/**
+	 * 現在の拡大率を取得します。
+	 *
+	 * @return 現在の拡大率
+	 */
+	public final float getMagnificartion() {
+		return magnificartion;
 	}
 
-	public float getR() {
-		return r;
+	/**
+	 * 拡大率を設定します。
+	 *
+	 * @param magnificartion
+	 *            設定する拡大率
+	 */
+	public final void setMagnificartion(final float magnificartion) {
+		this.magnificartion = magnificartion;
 	}
 
-	public void setR(float r) {
-		this.r = r;
+	/**
+	 * 現在の描画範囲を表す{@link hide92795.novelengine.background.Figure}オブジェクトを取得します。
+	 *
+	 * @return 現在の描画範囲を表す{@link hide92795.novelengine.background.Figure}オブジェクト
+	 */
+	public final Figure getFigure() {
+		return figure;
 	}
 
-	public float getG() {
-		return g;
+	/**
+	 * 描画範囲を設定します。
+	 *
+	 * @param figure
+	 *            描画範囲を表す{@link hide92795.novelengine.background.Figure}オブジェクト
+	 */
+	public final void setFigure(final Figure figure) {
+		this.figure = figure;
 	}
 
-	public void setG(float g) {
-		this.g = g;
+	/**
+	 * 現在の背景色の赤成分を取得します。
+	 *
+	 * @return 現在の背景色の赤成分
+	 */
+	public final float getRed() {
+		return red;
 	}
 
-	public float getB() {
-		return b;
+	/**
+	 * 背景色の赤成分を設定します。
+	 *
+	 * @param red
+	 *            設定する背景色の赤成分
+	 */
+	public final void setRed(final float red) {
+		this.red = red;
 	}
 
-	public void setB(float b) {
-		this.b = b;
+	/**
+	 * 現在の背景色の緑成分を取得します。
+	 *
+	 * @return 現在の背景色の緑成分
+	 */
+	public final float getGreen() {
+		return green;
+	}
+
+	/**
+	 * 背景色の緑成分を設定します。
+	 *
+	 * @param green
+	 *            設定する背景色の緑成分
+	 */
+	public final void setGreen(final float green) {
+		this.green = green;
+	}
+
+	/**
+	 * 現在の背景色の青成分を取得します。
+	 *
+	 * @return 現在の背景色の青成分
+	 */
+	public final float getBlue() {
+		return blue;
+	}
+
+	/**
+	 * 背景色の青成分を設定します。
+	 *
+	 * @param blue
+	 *            設定する背景色の青成分
+	 */
+	public final void setBlue(final float blue) {
+		this.blue = blue;
 	}
 }

@@ -13,11 +13,18 @@ import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataBasic;
 
 /**
- * 
- * @since b1.0
+ * 基本データを外部ファイルから読み込むクラスです。
+ *
  * @author hide92795
  */
 public class LoaderBasic extends Loader {
+	/**
+	 * 基本データを外部ファイルから読み込みます。
+	 *
+	 * @return ロードされた基本データ
+	 * @throws IOException
+	 *             何らかの入出力エラーが発生した場合
+	 */
 	public static DataBasic load() throws IOException {
 		File file = NovelEngine.getCurrentDir();
 		file = new File(file, "basic.neb");
@@ -33,8 +40,8 @@ public class LoaderBasic extends Loader {
 		data.setVersion(unpacker.readString());
 		data.setHeight(unpacker.readInt());
 		data.setWidth(unpacker.readInt());
-		//data.setMinHeight(unpacker.readInt());
-		//data.setMinWidth(unpacker.readInt());
+		// data.setMinHeight(unpacker.readInt());
+		// data.setMinWidth(unpacker.readInt());
 		data.setArrowResize(unpacker.readBoolean());
 		data.setAspectRatio(unpacker.readInt(), unpacker.readInt());
 

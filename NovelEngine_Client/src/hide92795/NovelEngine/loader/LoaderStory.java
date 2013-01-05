@@ -1,6 +1,6 @@
 package hide92795.novelengine.loader;
 
-import hide92795.novelengine.background.Effect;
+import hide92795.novelengine.background.BackGroundEffect;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.EffectManager.ClassData;
@@ -19,42 +19,72 @@ import hide92795.novelengine.story.StoryRandom;
 import hide92795.novelengine.story.StoryScene;
 import hide92795.novelengine.story.StoryShowBox;
 import hide92795.novelengine.story.StoryStopBGM;
-
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
 import javax.crypto.CipherInputStream;
 import javax.crypto.NoSuchPaddingException;
-
 import org.msgpack.MessagePack;
 import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
 import org.msgpack.unpacker.UnpackerIterator;
 
-public class LoaderStory {
-	public static DataStory load(NovelEngine engine, File file, int id) throws IOException, NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, ClassNotFoundException,
-			SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException,
-			IllegalAccessException, InvocationTargetException {
+/**
+ * ストーリーデータを外部ファイルから読み込むクラスです。
+ *
+ * @author hide92795
+ */
+public class LoaderStory extends Loader {
+	/**
+	 * ストーリーデータを外部ファイルから読み込み、必要なリソースをローダーに登録します。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 * @param file
+	 *            ストーリーデータが格納されているファイル
+	 * @param id
+	 *            読み込むストーリーのチャプターID
+	 * @return 読み込まれたストーリーデータ
+	 * @throws IOException
+	 *             何らかの入出力エラーが発生した場合
+	 * @throws NoSuchAlgorithmException
+	 *             暗号化に使用されているアルゴリズムがサポートされない場合
+	 * @throws NoSuchPaddingException
+	 *             指定されたパディングがサポートされない場合
+	 * @throws InvalidKeyException
+	 *             不正な鍵が使用された場合
+	 * @throws InvalidAlgorithmParameterException
+	 *             不適切なアルゴリズムパラメーターが渡された場合
+	 * @throws ClassNotFoundException
+	 *             指定されたクラスが見つからなかった場合
+	 * @throws NoSuchMethodException
+	 *             一致するメソッドが見つからない場合
+	 * @throws InstantiationException
+	 *             基本となるコンストラクタを宣言するクラスが <code>abstract</code> クラスを表す場合
+	 * @throws IllegalAccessException
+	 *             この <code>Constructor</code> オブジェクトが言語アクセス制御を実施し、基本となるコンストラクタにアクセスできない場合
+	 * @throws InvocationTargetException
+	 *             基本となるコンストラクタが例外をスローする場合
+	 */
+	public static DataStory load(final NovelEngine engine, final File file, final int id) throws IOException,
+			NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
+			ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException,
+			InvocationTargetException {
 		LoaderResource resourceLoader = new LoaderResource(engine, id);
 		CipherInputStream cis = Loader.createCipherInputStream(file);
 
 		MessagePack msgpack = new MessagePack();
 		Unpacker unpacker = msgpack.createUnpacker(cis);
 
-		DataStory data = new DataStory();
-		data.setChapterId(id);
+		DataStory data = new DataStory(id);
 		UnpackerIterator i = unpacker.iterator();
-		int wordsCounter = 0;
+		// int wordsCounter = 0;
 		while (i.hasNext()) {
 			Value v = i.next();
-			//System.out.println(v);
 			byte command = 0;
 			try {
 				command = v.asIntegerValue().getByte();
@@ -128,12 +158,12 @@ public class LoaderStory {
 				// byte 演算子, byte 左変数タイプ ,int 左数字, byte 右変数タイプ ,int 右数字, int 真, int 偽
 				byte operator = i.next().asIntegerValue().getByte();
 				byte leftVarType = i.next().asIntegerValue().getByte();
-				int leftValue = i.next().asIntegerValue().getInt();
+				String leftVarName = String.valueOf(i.next().asIntegerValue().getInt());
 				byte rightVarType = i.next().asIntegerValue().getByte();
-				int rightValue = i.next().asIntegerValue().getInt();
+				String rightVarName = String.valueOf(i.next().asIntegerValue().getInt());
 				int trueGoto = i.next().asIntegerValue().getInt();
 				int falseGoto = i.next().asIntegerValue().getInt();
-				StoryIF story = new StoryIF(operator, leftVarType, leftValue, rightVarType, rightValue, trueGoto,
+				StoryIF story = new StoryIF(operator, leftVarType, leftVarName, rightVarType, rightVarName, trueGoto,
 						falseGoto);
 				data.addStory(story);
 				break;
@@ -173,8 +203,8 @@ public class LoaderStory {
 				break;
 			}
 			case Story.COMMAND_SET_BACKGROUND_COLOR: {
-				//背景色
-				//byte 対象, int 色, int アルファ値
+				// 背景色
+				// byte 対象, int 色, int アルファ値
 				byte target = i.next().asIntegerValue().getByte();
 				int color_i = i.next().asIntegerValue().getInt();
 				int alpha = i.next().asIntegerValue().getInt();
@@ -186,45 +216,41 @@ public class LoaderStory {
 			}
 			case Story.COMMAND_EFFECT: {
 				// エフェクト
-				//数値 対象, 数値 遅延（ms）, エフェクター エフェクト
+				// 数値 対象, 数値 遅延（ms）, エフェクター エフェクト
 				byte target = i.next().asIntegerValue().getByte();
 				int delay = i.next().asIntegerValue().getInt();
 				int effectId = i.next().asIntegerValue().getInt();
-				System.out.println(effectId);
-				ClassData cd = engine.effectManager.getBackgroundEffect(effectId);
-				Class<?> effectclass = cd.targetClass;
-				Class<?>[] argClass = cd.constructor;
-				Constructor<?> constructor = effectclass.getConstructor(argClass);
-				int argCount = cd.constructor.length;
+				ClassData cd = engine.getEffectManager().getBackgroundEffect(effectId);
+				Object[] argClass = cd.getArgumentList();
+				int argCount = argClass.length;
 				Object[] c_obj = new Object[argCount];
-				c_obj[0] = target;
-				for (int j = 1; j < argCount; j++) {
+				for (int j = 0; j < argCount; j++) {
 					Value val = i.next();
 					if (argClass[j].equals(int.class)) {
 						// int
 						c_obj[j] = val.asIntegerValue().asIntegerValue().getInt();
 					}
 				}
-				Effect effect = (Effect) constructor.newInstance(c_obj);
-				StoryEffect s_effect = new StoryEffect(target, delay, effect);
+				BackGroundEffect backGroundEffect = (BackGroundEffect) cd.instantiation(c_obj);
+				StoryEffect s_effect = new StoryEffect(target, delay, backGroundEffect);
 				data.addStory(s_effect);
 				break;
 			}
 			case Story.COMMAND_SET_VARIABLE: {
-				//設定
-				//byte type, int name, int value
+				// 設定
+				// byte type, int name, int value
 				byte type = i.next().asIntegerValue().getByte();
-				int name = i.next().asIntegerValue().getInt();
+				String name = String.valueOf(i.next().asIntegerValue().getInt());
 				int value = i.next().asIntegerValue().getInt();
 				StoryAssignment story = new StoryAssignment(type, name, value);
 				data.addStory(story);
 				break;
 			}
 			case Story.COMMAND_RANDOM: {
-				//乱数
-				//byte type, int name, int num
+				// 乱数
+				// byte type, int name, int num
 				byte type = i.next().asIntegerValue().getByte();
-				int name = i.next().asIntegerValue().getInt();
+				String name = String.valueOf(i.next().asIntegerValue().getInt());
 				int num = i.next().asIntegerValue().getInt();
 				StoryRandom story = new StoryRandom(type, name, num);
 				data.addStory(story);
@@ -234,11 +260,11 @@ public class LoaderStory {
 				break;
 			}
 		}
-		//ロード完了の通知
+		// ロード完了の通知
 		resourceLoader.loadImage(0);
-
+		resourceLoader.loadWords(0, null);
 		resourceLoader.loadSound(0);
-		//resourceLoader.loadVoice(0);
+		resourceLoader.loadVoice(0);
 
 		return data;
 	}

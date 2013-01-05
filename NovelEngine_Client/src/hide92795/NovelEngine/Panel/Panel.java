@@ -1,32 +1,84 @@
 package hide92795.novelengine.panel;
 
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.gui.event.MouseEvent;
+import hide92795.novelengine.gui.listener.KeybordListener;
+import hide92795.novelengine.gui.listener.MouseListener;
 
-public abstract class Panel {
+/**
+ * 画面描画を担当するクラスの抽象クラスです。
+ *
+ * @author hide92795
+ */
+public abstract class Panel implements MouseListener, KeybordListener {
 
-	public NovelEngine engine;
+	/**
+	 * 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクトです。
+	 */
+	private NovelEngine engine;
 
-	public Panel(NovelEngine engine) {
+	/**
+	 * {@link hide92795.novelengine.panel.Panel Panel} のオブジェクトを生成します。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 */
+	public Panel(final NovelEngine engine) {
 		this.engine = engine;
 	}
 
+	/**
+	 * 描画を行います。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 */
 	public abstract void render(NovelEngine engine);
 
+	/**
+	 * アップデートを行います。
+	 *
+	 * @param delta
+	 *            前回のupdateとの時間差
+	 */
 	public abstract void update(int delta);
 
-	public void init() {
+	/**
+	 * パネルを初期化及び使えるようにします。
+	 */
+	public abstract void init();
 
+	/**
+	 * 実行中の{@link hide92795.novelengine.client.NovelEngine} オブジェクトを返します。
+	 *
+	 * @return 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 */
+	public final NovelEngine engine() {
+		return engine;
 	}
 
-	public void leftClick(int x, int y) {
+	@Override
+	public void onLeftClickStart(final MouseEvent event) {
 	}
 
-	public void rightClick(int x, int y) {
+	@Override
+	public void onRightClickStart(final MouseEvent event) {
 	}
 
-	public void keyPressed(int eventKey) {
+	@Override
+	public void onLeftClickFinish(final MouseEvent event) {
 	}
 
-	public void keyReleased(int eventKey) {
+	@Override
+	public void onRightClickFinish(final MouseEvent event) {
 	}
+
+	@Override
+	public void onKeyPressed(final NovelEngine engine, final int key) {
+	}
+
+	@Override
+	public void onKeyReleased(final NovelEngine engine, final int key) {
+	}
+
 }

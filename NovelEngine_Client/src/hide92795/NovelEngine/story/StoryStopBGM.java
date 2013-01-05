@@ -2,23 +2,31 @@ package hide92795.novelengine.story;
 
 import hide92795.novelengine.panel.PanelStory;
 
+/**
+ * BGMの再生を行うストーリーデータです。
+ *
+ * @author hide92795
+ */
 public class StoryStopBGM extends Story {
+	/**
+	 * このストーリーデータの処理が終了したかどうかを表します。
+	 */
 	private boolean finish;
 
 	@Override
-	public void update(PanelStory story, int delta) {
+	public final void update(final PanelStory story, final int delta) {
 		if (!finish) {
-			story.stopBGM();
+			// story.stopBGM();
 		}
 	}
 
 	@Override
-	public void init(PanelStory story) {
+	public final void init(final PanelStory story) {
 		finish = false;
 	}
 
 	@Override
-	public boolean isFinish() {
+	public final boolean isFinish() {
 		return finish;
 	}
 

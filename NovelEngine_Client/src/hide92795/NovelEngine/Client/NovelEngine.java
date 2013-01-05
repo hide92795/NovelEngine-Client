@@ -1,25 +1,43 @@
 package hide92795.novelengine.client;
 
-import hide92795.novelengine.AspectRatio;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_TEST;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glOrtho;
 import hide92795.novelengine.Logger;
-import hide92795.novelengine.QueueHandler;
+import hide92795.novelengine.Utils;
+import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.loader.LoaderBasic;
 import hide92795.novelengine.loader.item.DataBasic;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.BackGroundManager;
+import hide92795.novelengine.manager.ConfigurationManager;
 import hide92795.novelengine.manager.EffectManager;
 import hide92795.novelengine.manager.ImageManager;
-import hide92795.novelengine.manager.SettingManager;
+import hide92795.novelengine.manager.QueueManager;
 import hide92795.novelengine.manager.SoundManager;
 import hide92795.novelengine.manager.StoryManager;
 import hide92795.novelengine.panel.Panel;
+import hide92795.novelengine.panel.PanelCrashInfo;
 import hide92795.novelengine.panel.PanelPrestartStory;
 import hide92795.novelengine.panel.PanelStory;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -27,154 +45,141 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import static org.lwjgl.opengl.GL11.*;
 
 /**
- *
+ * NovelEngineの中枢機能を担うクラスです。
  *
  * @author hide92795
  */
 public class NovelEngine {
-	/** time at last frame */
+	/**
+	 * NovelEngineをデバッグモードで動かす際にtrueにします。
+	 */
+	public static final boolean DEBUG = true;
+	/**
+	 * 最後にループ処理が行われた時間です。
+	 */
 	private long lastFrame;
-	/** frames per second */
+	/**
+	 * 前回、fpsを計算した時から経過したフレーム数です。
+	 */
 	private int fps;
-	/** last fps time */
+	/**
+	 * 最後にfpsを求めた時刻です。
+	 */
 	private long lastFPS;
-	public DataBasic dataBasic;
+	/**
+	 * 現在進行中のゲームに関する情報を保管します。
+	 */
+	private DataBasic dataBasic;
+	/**
+	 * 現在描画を行なっている{@link hide92795.novelengine.panel.Panel Panel}オブジェクトです。
+	 */
 	private Panel currentPanel;
-	private boolean leftClick = false;
-	private boolean rightClick = false;
-	public static NovelEngine theEngine;
-	public ImageManager imageManager;
-	public SoundManager soundManager;
-	public QueueHandler queue;
-	private boolean closeRequested;
-	public int nowfps;
+	/**
+	 * 次の更新の際に描画を開始する{@link hide92795.novelengine.panel.Panel Panel}オブジェクトです。
+	 */
 	private Panel nextPanel;
-	private boolean changePanel;
+	/**
+	 * マウスの左ボタンが押下されている時にtrueです。
+	 */
+	private boolean leftClick = false;
+	/**
+	 * マウスの右ボタンが押下されている時にtrueです。
+	 */
+	private boolean rightClick = false;
+	/**
+	 * ユーザーよりゲームの終了の要求があった時にtrueです。
+	 */
+	private boolean closeRequested;
+	/**
+	 * 進行中のゲームが何らかのエラーにより続行不可能になった場合にtrueです。
+	 */
 	private boolean hasCrash;
-	public StoryManager storyManager;
-	public BackGroundManager backGroundManager;
-	public EffectManager effectManager;
-	public SettingManager settingManager;
+	/**
+	 * 画面内での有効な描画範囲の左上のX座標です。
+	 */
+	private int x;
+	/**
+	 * 画面内での有効な描画範囲の左上のY座標です。
+	 */
+	private int y;
+	/**
+	 * 画面内での有効な描画範囲の横幅です。
+	 */
+	private int width;
+	/**
+	 * 画面内での有効な描画範囲の縦幅です。
+	 */
+	private int height;
+	/**
+	 * 画面の有効な描画範囲がデフォルトの描画範囲よりどれほど拡大縮小されているかを表します。
+	 */
+	private float magnification = 1.0f;
+	/**
+	 * キューデータを実行するキューマネージャーです。
+	 */
+	private final QueueManager queueManager;
+	/**
+	 * 画像の管理を行うイメージマネージャーです。
+	 */
+	private final ImageManager imageManager;
+	/**
+	 * 音声の管理を行うサウンドマネージャーです。
+	 */
+	private final SoundManager soundManager;
+	/**
+	 * ストーリーデーターの管理を行うストーリーマネージャーです。
+	 */
+	private final StoryManager storyManager;
+	/**
+	 * ストーリー上での描画の管理を行うバックグラウンドマネージャーです。
+	 */
+	private final BackGroundManager backGroundManager;
+	/**
+	 * 各種エフェクトの管理を行うエフェクトマネージャーです。
+	 */
+	private final EffectManager effectManager;
+	/**
+	 * ゲーム上での設定及びフラグを管理するコンフィグマネージャーです。
+	 */
+	private final ConfigurationManager configurationManager;
+	/**
+	 * 現在実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクトです。
+	 */
+	private static NovelEngine theEngine;
 
+	/**
+	 * 各種マネージャの作成及び必要なリソースを読み込みます。
+	 */
 	public NovelEngine() {
 		theEngine = this;
 		storyManager = new StoryManager();
-		settingManager = new SettingManager();
+		configurationManager = new ConfigurationManager();
 		effectManager = new EffectManager();
 		imageManager = new ImageManager();
 		soundManager = new SoundManager();
-		queue = new QueueHandler();
+		queueManager = new QueueManager();
 		backGroundManager = new BackGroundManager();
 		initResource();
 	}
 
-	public void start() {
-		try {
-			//ディスプレイ初期化
-			Display.setDisplayMode(new DisplayMode(dataBasic.getWidth(), dataBasic.getHeight()));
-			Display.setResizable(dataBasic.isArrowResize());
-			Display.setVSyncEnabled(true);
-			Display.setIcon(dataBasic.getIcons());
-			Display.create();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-		}
-		lastFPS = getTime();
-		initGL();
-		setCurrentPanel(new PanelPrestartStory(theEngine, "start".hashCode()));
-		closeRequested = false;
-		while (!Display.isCloseRequested() && !closeRequested) {
-			try {
-				int delta = getDelta();
-				if (Display.wasResized()) {
-					resize();
-				}
-
-				if (!hasCrash) {
-					pollInput();
-					update(delta);
-					render();
-					queue.execute();
-				} else {
-					setCurrentPanel(null);
-				}
-				panelChange();
-				Display.update();
-				Display.sync(60);
-			} catch (Exception e) {
-				e.printStackTrace();
-				hasCrash = true;
-			}
-		}
-		Display.destroy();
-		AL.destroy();
-		Logger.info("NovelEngine shutdowned!");
-		System.exit(0);
+	/**
+	 * NovelEngineシステムを起動します。
+	 *
+	 * @param arg
+	 *            起動時に与えられた引数
+	 */
+	public static void main(final String[] arg) {
+		Logger.init();
+		Logger.info("NovelEngine launched!");
+		NovelEngine engine = new NovelEngine();
+		engine.start();
 	}
 
-	private void resize() {
-		dataBasic.getAspectRatio().adjust(Display.getWidth(), Display.getHeight());
-	}
-
-	private void initGL() {
-		glClearColor(0f, 0f, 0f, 1f);
-		glEnable(GL_BLEND);
-		glEnable(GL_STENCIL_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, dataBasic.getWidth(), dataBasic.getHeight(), 0, 1, -1);
-		glMatrixMode(GL_MODELVIEW);
-	}
-
-	private int getDelta() {
-		long time = getTime();
-		int delta = (int) (time - lastFrame);
-		lastFrame = time;
-		return delta;
-	}
-
-	public void exit() {
-		closeRequested = true;
-	}
-
-	private void update(int delta) {
-		soundManager.update(delta);
-		if (currentPanel != null) {
-			currentPanel.update(delta);
-		}
-		updateFPS();
-	}
-
-	private void render() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		glLoadIdentity();
-		if (currentPanel != null) {
-			currentPanel.render(this);
-		} else {
-			glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
-		}
-	}
-
-	public void setCurrentPanel(Panel panel) {
-		nextPanel = panel;
-		changePanel = true;
-	}
-
-	private void panelChange() {
-		if (changePanel == true) {
-			changePanel = false;
-			this.currentPanel = nextPanel;
-			if (currentPanel != null) {
-				currentPanel.init();
-			}
-		}
-
-	}
-
+	/**
+	 * 起動時に必要なリソース類を読み込みます。
+	 */
 	private void initResource() {
 		try {
 			dataBasic = LoaderBasic.load();
@@ -183,83 +188,6 @@ public class NovelEngine {
 			e.printStackTrace();
 		}
 
-	}
-
-	public void pollInput() {
-		// 左クリック
-
-		if (Mouse.isButtonDown(0)) {
-			//System.out.println("X:" + Mouse.getX() + " Y:" + Mouse.getY());
-			if (!leftClick) {
-				int x = Mouse.getX();
-				int y = Mouse.getY();
-				leftClick = true;
-				if (currentPanel != null) {
-					currentPanel.leftClick(x, y);
-				}
-			}
-		} else {
-			leftClick = false;
-		}
-
-		// 右クリック
-		if (Mouse.isButtonDown(1)) {
-			if (!rightClick) {
-				int x = Mouse.getX();
-				int y = Mouse.getY();
-				rightClick = true;
-				if (currentPanel != null) {
-					currentPanel.rightClick(x, y);
-				}
-			}
-		} else {
-			rightClick = false;
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			System.out.println("SPACE KEY IS DOWN");
-		}
-
-		while (Keyboard.next()) {
-			if (Keyboard.getEventKeyState()) {
-				if (currentPanel != null) {
-					currentPanel.keyPressed(Keyboard.getEventKey());
-				}
-			} else {
-				if (currentPanel != null) {
-					currentPanel.keyReleased(Keyboard.getEventKey());
-				}
-			}
-		}
-	}
-
-	/**
-	 * 正確なシステムの時刻を取得します。
-	 *
-	 * @return ミリ秒単位でのシステム上の時間
-	 */
-	private long getTime() {
-		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
-	}
-
-	/**
-	 * FPSを測定し、デバッグモードの場合はタイトルバーにその結果を表示します。
-	 */
-	public void updateFPS() {
-		if (getTime() - lastFPS > 1000) {
-			Display.setTitle("FPS: " + fps);
-			nowfps = fps;
-			fps = 0;
-			lastFPS += 1000;
-		}
-		fps++;
-	}
-
-	public static void main(String[] argv) throws IOException {
-		Logger.init();
-		Logger.info("NovelEngine launched!");
-		NovelEngine engine = new NovelEngine();
-		engine.start();
 	}
 
 	/**
@@ -277,17 +205,233 @@ public class NovelEngine {
 		return new File(uri).getParentFile();
 	}
 
-	//	public void actionPerformed(Button button, boolean isLeft) {
-	//		if (currentPanel != null) {
-	//			currentPanel.actionPerformed(button, isLeft);
-	//		}
-	//	}
-	//
-	//	public void onMouse(Button button) {
-	//		if (currentPanel != null) {
-	//			currentPanel.onMouse(button);
-	//		}
-	//	}
+	/**
+	 * ディスプレイ表示、メインループなどの処理を行います。
+	 */
+	private void start() {
+		try {
+			// ディスプレイ初期化
+			Display.setDisplayMode(new DisplayMode(dataBasic.getWidth(), dataBasic.getHeight()));
+			Display.setResizable(dataBasic.isArrowResize());
+			Display.setVSyncEnabled(true);
+			Display.setIcon(dataBasic.getIcons());
+			Display.create();
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
+		lastFPS = getTime();
+		width = getDefaultWidth();
+		height = getDefaultHeight();
+		initGL();
+		setCurrentPanel(new PanelPrestartStory(theEngine, "start".hashCode()));
+		closeRequested = false;
+		while (!Display.isCloseRequested() && !closeRequested) {
+			try {
+				int delta = getDelta();
+				if (Display.wasResized()) {
+					dataBasic.getAspectRatio().adjust(this, Display.getWidth(), Display.getHeight());
+				}
+				if (!hasCrash) {
+					pollInput();
+					update(delta);
+					render();
+					queueManager.execute();
+				} else {
+					render();
+				}
+			} catch (Exception e) {
+				Utils.printStackTraceToLogger(e);
+				nextPanel = new PanelCrashInfo(this, e);
+				hasCrash = true;
+			} finally {
+				panelChange();
+				Display.update();
+				Display.sync(60);
+			}
+		}
+		Display.destroy();
+		AL.destroy();
+		Logger.info("NovelEngine shutdowned!");
+		System.exit(0);
+	}
+
+	/**
+	 * OpenGL系の初期化処理を行います。
+	 */
+	private void initGL() {
+		glClearColor(0f, 0f, 0f, 0f);
+		glEnable(GL_BLEND);
+		glEnable(GL_STENCIL_TEST);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0, dataBasic.getWidth(), dataBasic.getHeight(), 0, 1, -1);
+		glMatrixMode(GL_MODELVIEW);
+	}
+
+	/**
+	 * マウス及びキーボードの押下状態を検知します。
+	 */
+	private void pollInput() {
+		// 左クリック
+		if (Mouse.isButtonDown(0)) {
+			if (!leftClick) {
+				leftClick = true;
+				if (currentPanel != null) {
+					int x = Math.round((Mouse.getX() - this.x) / magnification);
+					int y = Math.round((Display.getHeight() - (Mouse.getY() + 1) - this.y) / magnification);
+					MouseEvent event = new MouseEvent(this, x, y);
+					currentPanel.onLeftClickStart(event);
+				}
+			}
+		} else {
+			if (leftClick) {
+				leftClick = false;
+				if (currentPanel != null) {
+					int x = Math.round((Mouse.getX() - this.x) / magnification);
+					int y = Math.round((Display.getHeight() - (Mouse.getY() + 1) - this.y) / magnification);
+					MouseEvent event = new MouseEvent(this, x, y);
+					currentPanel.onLeftClickFinish(event);
+				}
+			}
+		}
+		// 右クリック
+		if (Mouse.isButtonDown(1)) {
+			if (!rightClick) {
+				rightClick = true;
+				if (currentPanel != null) {
+					int x = Math.round((Mouse.getX() - this.x) / magnification);
+					int y = Math.round((Display.getHeight() - (Mouse.getY() + 1) - this.y) / magnification);
+					MouseEvent event = new MouseEvent(this, x, y);
+					currentPanel.onRightClickStart(event);
+				}
+			}
+		} else {
+			if (rightClick) {
+				rightClick = false;
+				if (currentPanel != null) {
+					int x = Math.round((Mouse.getX() - this.x) / magnification);
+					int y = Math.round((Display.getHeight() - (Mouse.getY() + 1) - this.y) / magnification);
+					MouseEvent event = new MouseEvent(this, x, y);
+					currentPanel.onRightClickFinish(event);
+				}
+			}
+		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			System.out.println("SPACE KEY IS DOWN");
+		}
+
+		while (Keyboard.next()) {
+			if (Keyboard.getEventKeyState()) {
+				if (currentPanel != null) {
+					currentPanel.onKeyPressed(this, Keyboard.getEventKey());
+				}
+			} else {
+				if (currentPanel != null) {
+					currentPanel.onKeyReleased(this, Keyboard.getEventKey());
+				}
+			}
+		}
+	}
+
+	/**
+	 * マネージャー及び画面に対してアップデートを行います。
+	 *
+	 * @param delta
+	 *            前回のupdateとの時間差
+	 */
+	private void update(final int delta) {
+		soundManager.update(delta);
+		if (currentPanel != null) {
+			currentPanel.update(delta);
+		}
+		updateFPS();
+	}
+
+	/**
+	 * 画面の描画を行います。
+	 */
+	private void render() {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glLoadIdentity();
+		if (currentPanel != null) {
+			currentPanel.render(this);
+		} else {
+			glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+	}
+
+	/**
+	 * {@link NovelEngine#setCurrentPanel(Panel panel) setCurrentPanel}
+	 * によってパネルの変更がマークされている場合、パネルの変更及び初期化の通知をパネルに対して送ります。
+	 */
+	private void panelChange() {
+		if (nextPanel != null) {
+			currentPanel = nextPanel;
+			nextPanel = null;
+			if (currentPanel != null) {
+				currentPanel.init();
+			}
+		}
+
+	}
+
+	/**
+	 * 正確なシステムの時刻を取得します。
+	 *
+	 * @return ミリ秒単位でのシステム上の時間
+	 */
+	private long getTime() {
+		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+	}
+
+	/**
+	 * 前回のフレームとの時間差をミリ秒単位で返します。
+	 *
+	 * @return 前回のフレームとの時間差
+	 */
+	private int getDelta() {
+		long time = getTime();
+		int delta = (int) (time - lastFrame);
+		lastFrame = time;
+		return delta;
+	}
+
+	/**
+	 * FPSを測定し、デバッグモードの場合はタイトルバーにその結果を表示します。
+	 */
+	private void updateFPS() {
+		if (getTime() - lastFPS > 1000) {
+			if (DEBUG) {
+				Display.setTitle(dataBasic.getGamename() + " FPS: " + fps);
+			}
+			fps = 0;
+			lastFPS += 1000;
+		}
+		fps++;
+	}
+
+	/**
+	 * 指定したチャプターのロードを開始します。<br>
+	 * ロードは別スレッドにて行われます。
+	 *
+	 * @param chapterId
+	 *            読み込み先のチャプターID
+	 */
+	public final void loadStory(final int chapterId) {
+		File current = NovelEngine.getCurrentDir();
+		File file;
+		if (chapterId == StoryManager.CHAPTER_START) {
+			file = new File(current, "start.nes");
+		} else if (chapterId == StoryManager.CHAPTER_MENU) {
+			file = new File(current, "menu.nes");
+		} else {
+			file = new File(current, "story");
+			file = new File(file, chapterId + ".nes");
+		}
+		storyManager.loadStory(this, file, chapterId);
+	}
 
 	/**
 	 * 指定されたチャプターIDのデータのロードを待ってから開始します。<br>
@@ -296,8 +440,20 @@ public class NovelEngine {
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
-	public void prestartStory(int id) {
+	public final void prestartStory(final int id) {
 		setCurrentPanel(new PanelPrestartStory(this, id));
+	}
+
+	/**
+	 * 画面に表示するパネルを変更します。<br>
+	 * 実際に入れ替わるのは{@link NovelEngine#panelChange() panelChange}が呼ばれた時です。
+	 *
+	 * @see NovelEngine#panelChange()
+	 * @param panel
+	 *            次に処理を行う{@link hide92795.novelengine.panel.Panel Panel}オブジェクト
+	 */
+	public final void setCurrentPanel(final Panel panel) {
+		nextPanel = panel;
 	}
 
 	/**
@@ -308,30 +464,214 @@ public class NovelEngine {
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
-	public void startStory(int id) {
+	public final void startStory(final int id) {
 		DataStory story = storyManager.getStory(id);
 		story.reset();
 		setCurrentPanel(new PanelStory(this, story));
 	}
 
 	/**
-	 * 指定したチャプターのロードを開始します。<br>
-	 * ロードは別スレッドにて行われます。
+	 * 現在実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクトを返します。
 	 *
-	 * @param chapterId
+	 * @return 実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 */
-	public void loadStory(int chapterId) {
-		File current = NovelEngine.getCurrentDir();
-		File file;
-		if (chapterId == "start".hashCode()) {
-			file = new File(current, "start.nes");
-		} else if (chapterId == "menu".hashCode()) {
-			file = new File(current, "menu.nes");
-		} else {
-			file = new File(current, "story");
-			file = new File(file, chapterId + ".nes");
-		}
-		storyManager.loadStory(this, file, chapterId);
+	public static final NovelEngine getEngine() {
+		return theEngine;
 	}
 
+	/**
+	 * キューデータを実行するキューマネージャーを返します。
+	 *
+	 * @return キューマネージャー
+	 */
+	public final QueueManager getQueueManager() {
+		return queueManager;
+	}
+
+	/**
+	 * 画像の管理を行うイメージマネージャーを返します。
+	 *
+	 * @return イメージマネージャー
+	 */
+	public final ImageManager getImageManager() {
+		return imageManager;
+	}
+
+	/**
+	 * 音声の管理を行うサウンドマネージャーを返します。
+	 *
+	 * @return サウンドマネージャー
+	 */
+	public final SoundManager getSoundManager() {
+		return soundManager;
+	}
+
+	/**
+	 * ストーリーデーターの管理を行うストーリーマネージャーを返します。
+	 *
+	 * @return ストーリーマネージャー
+	 */
+	public final StoryManager getStoryManager() {
+		return storyManager;
+	}
+
+	/**
+	 * ストーリー上での描画の管理を行うバックグラウンドマネージャーを返します。
+	 *
+	 * @return バックグラウンドマネージャー
+	 */
+	public final BackGroundManager getBackGroundManager() {
+		return backGroundManager;
+	}
+
+	/**
+	 * 各種エフェクトの管理を行うエフェクトマネージャーを返します。
+	 *
+	 * @return エフェクトマネージャー
+	 */
+	public final EffectManager getEffectManager() {
+		return effectManager;
+	}
+
+	/**
+	 * ゲーム上での設定及びフラグを管理するコンフィグマネージャーを返します。
+	 *
+	 * @return コンフィグマネージャー
+	 */
+	public final ConfigurationManager getSettingManager() {
+		return configurationManager;
+	}
+
+	/**
+	 * 進行中のゲームで設定されているデフォルトの画面の横幅を取得します。
+	 *
+	 * @return デフォルトの画面の横幅
+	 */
+	public final int getDefaultWidth() {
+		return dataBasic.getWidth();
+	}
+
+	/**
+	 * 進行中のゲームで設定されているデフォルトの画面の縦幅を取得します。
+	 *
+	 * @return デフォルトの画面の縦幅
+	 */
+	public final int getDefaultHeight() {
+		return dataBasic.getHeight();
+	}
+
+	/**
+	 * 現在のマウスのX座標を返します。この座標はデフォルトの画面の大きさ上での位置を表します。
+	 *
+	 * @return 現在のマウスのX座標
+	 */
+	public final int getMouseX() {
+		int x = Math.round((Mouse.getX() - this.x) / magnification);
+		return x;
+	}
+
+	/**
+	 * 現在のマウスのY座標を返します。この座標はデフォルトの画面の大きさ上での位置を表します。
+	 *
+	 * @return 現在のマウスのY 座標
+	 */
+	public final int getMouseY() {
+		int y = Math.round((Display.getHeight() - (Mouse.getY() + 1) - this.y) / magnification);
+		return y;
+	}
+
+	/**
+	 * 画面内での有効な描画範囲の左上のX座標を返します。
+	 *
+	 * @return 有効な描画範囲の左上のX座標
+	 */
+	public final int getX() {
+		return x;
+	}
+
+	/**
+	 * 画面内での有効な描画範囲の左上のX座標を設定します。
+	 *
+	 * @param x
+	 *            描画範囲として設定された範囲の左上のX座標
+	 */
+	public final void setX(final int x) {
+		this.x = x;
+	}
+
+	/**
+	 * 画面内での有効な描画範囲の左上のY座標を返します。
+	 *
+	 * @return y 有効な描画範囲の左上のY座標
+	 */
+	public final int getY() {
+		return y;
+	}
+
+	/**
+	 * 画面内での有効な描画範囲の左上のY座標を設定します。
+	 *
+	 * @param y
+	 *            描画範囲として設定された範囲の左上のY座標
+	 */
+	public final void setY(final int y) {
+		this.y = y;
+	}
+
+	/**
+	 * 画面内の描画範囲の横幅を取得します。
+	 *
+	 * @return 現在の画面内の描画範囲の横幅
+	 */
+	public final int getWidth() {
+		return width;
+	}
+
+	/**
+	 * 新しく画面内の描画範囲の横幅を設定します。
+	 *
+	 * @param width
+	 *            新しい画面内の描画範囲の横幅
+	 */
+	public final void setWidth(final int width) {
+		this.width = width;
+	}
+
+	/**
+	 * 画面内の描画範囲の縦幅を取得します。
+	 *
+	 * @return 現在の画面内の描画範囲の縦幅
+	 */
+	public final int getHeight() {
+		return height;
+	}
+
+	/**
+	 * 新しく画面内の描画範囲の縦幅を設定します。
+	 *
+	 * @param height
+	 *            新しい画面内の描画範囲の縦幅
+	 */
+	public final void setHeight(final int height) {
+		this.height = height;
+	}
+
+	/**
+	 * デフォルト画面大きさに対する現在の画面の大きさの拡大縮小率を取得します。
+	 *
+	 * @return 画面の大きさの拡大縮小率
+	 */
+	public final float getMagnification() {
+		return magnification;
+	}
+
+	/**
+	 * 新しくデフォルト画面大きさに対する現在の画面の大きさの拡大縮小率を設定します。
+	 *
+	 * @param magnification
+	 *            新しい画面の大きさの拡大縮小率
+	 */
+	public final void setMagnification(final float magnification) {
+		this.magnification = magnification;
+	}
 }

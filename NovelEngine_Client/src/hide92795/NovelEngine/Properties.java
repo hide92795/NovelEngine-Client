@@ -17,19 +17,54 @@ import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
 import org.msgpack.unpacker.UnpackerIterator;
 
-public class Properties extends HashMap<Integer, Integer> {
-	private static final long serialVersionUID = 785300521248095499L;
+/**
+ * 設定・フラグなどの情報を管理します。
+ *
+ * @author hide92795
+ */
+public class Properties extends HashMap<String, Integer> {
+	/**
+	 * このクラスを直列化することは推奨されていません。
+	 */
+	private static final long serialVersionUID = 1L;
 
-	public void setProperty(int key, int value) {
+	/**
+	 * 指定されたキーに登録されている値を変更します。
+	 *
+	 * @param key
+	 *            値を設定するキー
+	 * @param value
+	 *            キーに対して設定する値
+	 */
+	public final void setProperty(final String key, final int value) {
 		put(key, value);
 	}
 
-	public int getProperty(int key) {
+	/**
+	 * 指定されたキーに登録されている値を取得します。キーに対して値が登録されていない場合は0が返されます。
+	 *
+	 * @param key
+	 *            取得する値のキー
+	 * @return キーに対して登録されている値。キーに対して値が登録されていない場合は0
+	 */
+	public final int getProperty(final String key) {
 		Integer value = get(key);
-		return value != null ? value.intValue() : 0;
+		if (value == null) {
+			return 0;
+		} else {
+			return value.intValue();
+		}
 	}
 
-	public void store(File file) throws Exception {
+	/**
+	 * 指定した{@link java.io.File File}オブジェクトに対してこのプロパティが保持しているキー及び値の組み合わせを保存します。
+	 *
+	 * @param file
+	 *            保存先のファイル
+	 * @throws Exception
+	 *             保存の最中に何らかのエラーが発生した場合
+	 */
+	public final void store(final File file) throws Exception {
 		Key key = Loader.getKey();
 		Cipher cipher = Cipher.getInstance("AES/PCBC/PKCS5Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -38,15 +73,23 @@ public class Properties extends HashMap<Integer, Integer> {
 		fos.write(cipher.getIV());
 		MessagePack msgpack = new MessagePack();
 		Packer p = msgpack.createPacker(cos);
-		for (Integer i : this.keySet()) {
-			p.write(i.intValue());
+		for (String i : this.keySet()) {
+			p.write(i);
 			p.write(getProperty(i));
 		}
 		p.flush();
 		p.close();
 	}
 
-	public void load(File file) throws Exception {
+	/**
+	 * 指定した{@link java.io.File File}オブジェクトからキー及び値の組み合わせを読み込み、プロパティに登録します。
+	 *
+	 * @param file
+	 *            読み込み元のファイル
+	 * @throws Exception
+	 *             読み込みの最中に何らかのエラーが発生した場合
+	 */
+	public final void load(final File file) throws Exception {
 		CipherInputStream cis = null;
 		try {
 			cis = Loader.createCipherInputStream(file);
@@ -66,10 +109,16 @@ public class Properties extends HashMap<Integer, Integer> {
 		}
 	}
 
-	private void load(Unpacker p) {
+	/**
+	 * 指定された{@link org.msgpack.unpacker.Unpacker Unpacker} オブジェクトからキー及び値を読み込み、プロパティに登録します。
+	 *
+	 * @param p
+	 *            キー及び値が保持されている{@link org.msgpack.unpacker.Unpacker Unpacker} オブジェクト
+	 */
+	private void load(final Unpacker p) {
 		for (UnpackerIterator iterator = p.iterator(); iterator.hasNext();) {
 			Value v = (Value) iterator.next();
-			int key = v.asIntegerValue().intValue();
+			String key = v.asRawValue().getString();
 			v = (Value) iterator.next();
 			int value = v.asIntegerValue().intValue();
 			setProperty(key, value);

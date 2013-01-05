@@ -2,16 +2,31 @@ package hide92795.novelengine.story;
 
 import hide92795.novelengine.panel.PanelStory;
 
+/**
+ * チャプターのロードを開始するためのストーリーデータです。
+ *
+ * @author hide92795
+ */
 public class StoryLoadChapter extends Story {
-	protected final int loadChapterId;
-	
-	public StoryLoadChapter(int chapterId) {
+	/**
+	 * ロードを行うチャプターのIDを表します。
+	 */
+	private final int loadChapterId;
+
+	/**
+	 * チャプターのロードを開始するためのストーリーデータを生成します。
+	 *
+	 * @param chapterId
+	 *            ロードを行うチャプターのID
+	 */
+	public StoryLoadChapter(final int chapterId) {
 		this.loadChapterId = chapterId;
 	}
-	
+
 	@Override
-	public void update(PanelStory story, int delta) {
-		//story.engine.loadStory(loadChapterId);
+	public final void update(final PanelStory story, final int delta) {
+		// TODO
+		// story.engine.loadStory(loadChapterId);
 	}
 
 	@Override

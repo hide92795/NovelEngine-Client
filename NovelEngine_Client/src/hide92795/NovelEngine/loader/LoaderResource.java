@@ -7,19 +7,63 @@ import hide92795.novelengine.queue.QueueSound;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * 各種リソースの読み込みを非同期で行うために読み込み専用スレッドにキューの登録、実行を行うクラスです。
+ *
+ * @author hide92795
+ */
 public class LoaderResource extends Loader {
+	/**
+	 * 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクトです。
+	 */
 	private NovelEngine engine;
+	/**
+	 * リソースの読み込みを行なっているチャプターのIDです。
+	 */
 	private int chapterId;
+	/**
+	 * 画像データの読み込みキューデータを格納するキューです。
+	 */
 	private ConcurrentLinkedQueue<Integer> imageQueue;
+	/**
+	 * 文章データの読み込みキューデータを格納するキューです。
+	 */
 	private ConcurrentLinkedQueue<Integer> wordsQueue;
+	/**
+	 * 音楽データの読み込みキューデータを格納するキューです。
+	 */
 	private ConcurrentLinkedQueue<Integer> soundQueue;
+	/**
+	 * 音声データの読み込みキューデータを格納するキューです。
+	 */
 	private ConcurrentLinkedQueue<Integer> voiceQueue;
+	/**
+	 * 画像データの読み込みキューを実行するスレッドです。
+	 */
 	private Thread imageLoadThread;
+	/**
+	 * 文章データの読み込みキューを実行するスレッドです。
+	 */
 	private Thread wordsLoadThread;
+	/**
+	 * 音楽データの読み込みキューを実行するスレッドです。
+	 */
 	private Thread soundLoadThread;
+	/**
+	 * 音声データの読み込みキューを実行するスレッドです。
+	 */
 	private Thread voiceLoadThread;
 
-	public LoaderResource(NovelEngine engine, int chapterId) {
+	/**
+	 * 指定されたチャプターのリソース読み込みをするマネージャーの準備、起動をします。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 *
+	 * @param chapterId
+	 *            読み込みを行うチャプターID
+	 */
+	public LoaderResource(final NovelEngine engine, final int chapterId) {
 		this.engine = engine;
 		this.chapterId = chapterId;
 		imageQueue = new ConcurrentLinkedQueue<Integer>();
@@ -36,27 +80,63 @@ public class LoaderResource extends Loader {
 		voiceLoadThread.start();
 	}
 
-	public void loadImage(int id) {
-		if (!engine.imageManager.isLoaded(id)) {
+	/**
+	 * 指定されたIDの画像データが読み込まれていない場合はキューに追加します。
+	 *
+	 * @param id
+	 *            読み込む画像データのID
+	 */
+	public final void loadImage(final int id) {
+		if (!engine.getImageManager().isLoaded(id)) {
 			imageQueue.add(id);
 		}
 	}
 
-	public void loadWords(int id, String words) {
-
+	/**
+	 * 指定されたIDの文章データが作成されていない場合はキューに追加します。
+	 *
+	 * @param id
+	 *            作成する文章ID
+	 * @param words
+	 *            作成する文字列
+	 */
+	public final void loadWords(final int id, final String words) {
+		// TODO
+		wordsQueue.add(id);
 	}
 
-	public void loadSound(int id) {
-		if (!engine.soundManager.isLoaded(id)) {
+	/**
+	 * 指定されたIDの音楽データが読み込まれていない場合はキューに追加します。
+	 *
+	 * @param id
+	 *            読み込む音楽データのID
+	 */
+	public final void loadSound(final int id) {
+		if (!engine.getSoundManager().isLoaded(id)) {
 			soundQueue.add(id);
 		}
 	}
 
-	public void loadVoice(int id) {
+	/**
+	 * 指定されたIDの音声データが読み込まれていない場合はキューに追加します。
+	 *
+	 * @param id
+	 *            読み込む音声データのID
+	 */
+	public final void loadVoice(final int id) {
 		voiceQueue.add(id);
 	}
 
+	/**
+	 * キューに登録されている画像IDのデータを読み込み、システムで使用可能にするために変換用のキューにデータを受け渡すクラスです。<br>
+	 * また、読み込みが完了した場合は読み込み完了のフラグを変換用のキューに送ります。
+	 *
+	 * @author hide92795
+	 */
 	private class ImageLoader implements Runnable {
+		/**
+		 * 指定されたチャプターID上で使用される全ての画像データの読み込みが終わった時にtrueです。
+		 */
 		private boolean finish = false;
 
 		@Override
@@ -76,26 +156,70 @@ public class LoaderResource extends Loader {
 
 		}
 
-		private void loadImage(int id) {
+		/**
+		 * 外部ファイルから画像データを読み込み、変換用のキューにデータを受け渡します。
+		 *
+		 * @param id
+		 *            読み込む画像の画像ID
+		 */
+		private void loadImage(final int id) {
 			byte[] data = LoaderImage.load(id);
-			QueueImage q = new QueueImage(NovelEngine.theEngine, id, data);
-			engine.queue.offer(q);
+			QueueImage q = new QueueImage(NovelEngine.getEngine(), id, data);
+			engine.getQueueManager().enqueue(q);
 		}
 
 	}
 
+	/**
+	 * ゲーム上で使用する文章の画像を作成し、システムで使用可能にするために変換用のキューにデータを受け渡すクラスです。<br>
+	 * また、読み込みが完了した場合は読み込み完了のフラグを変換用のキューに送ります。
+	 *
+	 * @author hide92795
+	 */
 	private class WordsLoader implements Runnable {
+		/**
+		 * 指定されたチャプターID上で使用される全ての文章データの作成が終わった時にtrueです。
+		 */
+		private boolean finish = false;
 
 		@Override
 		public void run() {
-			// TODO 自動生成されたメソッド・スタブ
-			loadFinish(QueueLoadedMarker.MAKER_WORDS);
+			while (!finish) {
+				Integer i = wordsQueue.poll();
+				if (i != null) {
+					int id = i.intValue();
+					if (id == 0) {
+						loadFinish(QueueLoadedMarker.MAKER_WORDS);
+						finish = true;
+					} else {
+						loadWords(id);
+					}
+				}
+			}
+
 		}
 
+		/**
+		 * 外部ファイルから音楽データを読み込み、変換用のキューにデータを受け渡します。
+		 *
+		 * @param id
+		 *            読み込む音楽の音楽ID
+		 */
+		private void loadWords(final int id) {
+
+		}
 	}
 
+	/**
+	 * キューに登録されている音楽IDのデータを読み込み、システムで使用可能にするために変換用のキューにデータを受け渡すクラスです。<br>
+	 * また、読み込みが完了した場合は読み込み完了のフラグを変換用のキューに送ります。
+	 *
+	 * @author hide92795
+	 */
 	private class SoundLoader implements Runnable {
-
+		/**
+		 * 指定されたチャプターID上で使用される全ての音楽データの読み込みが終わった時にtrueです。
+		 */
 		private boolean finish = false;
 
 		@Override
@@ -108,6 +232,49 @@ public class LoaderResource extends Loader {
 						loadFinish(QueueLoadedMarker.MAKER_SOUND);
 						finish = true;
 					} else {
+						loadSound(id);
+					}
+				}
+			}
+
+		}
+
+		/**
+		 * 外部ファイルから音楽データを読み込み、変換用のキューにデータを受け渡します。
+		 *
+		 * @param id
+		 *            読み込む音楽の音楽ID
+		 */
+		private void loadSound(final int id) {
+			byte[] data = LoaderSound.load(id);
+			QueueSound q = new QueueSound(NovelEngine.getEngine(), id, data);
+			engine.getQueueManager().enqueue(q);
+		}
+	}
+
+	/**
+	 * キューに登録されている音声IDのデータを読み込み、、システムで使用可能にするために変換用のキューにデータを受け渡すクラスです。<br>
+	 * また、読み込みが完了した場合は読み込み完了のフラグを変換用のキューに送ります。
+	 *
+	 * @author hide92795
+	 */
+	private class VoiceLoader implements Runnable {
+
+		/**
+		 * 指定されたチャプターID上で使用される全ての音声データの読み込みが終わった時にtrueです。
+		 */
+		private boolean finish = false;
+
+		@Override
+		public void run() {
+			while (!finish) {
+				Integer i = voiceQueue.poll();
+				if (i != null) {
+					int id = i.intValue();
+					if (id == 0) {
+						loadFinish(QueueLoadedMarker.MAKER_VOICE);
+						finish = true;
+					} else {
 						loadImage(id);
 					}
 				}
@@ -115,26 +282,28 @@ public class LoaderResource extends Loader {
 
 		}
 
-		private void loadImage(int id) {
+		/**
+		 * 外部ファイルから音声データを読み込み、変換用のキューにデータを受け渡します。
+		 *
+		 * @param id
+		 *            読み込む音声の音声ID
+		 */
+		private void loadImage(final int id) {
 			byte[] data = LoaderSound.load(id);
-			QueueSound q = new QueueSound(NovelEngine.theEngine, id, data);
-			engine.queue.offer(q);
+			QueueSound q = new QueueSound(NovelEngine.getEngine(), id, data);
+			engine.getQueueManager().enqueue(q);
 		}
-
 	}
 
-	private class VoiceLoader implements Runnable {
-
-		@Override
-		public void run() {
-			// TODO 自動生成されたメソッド・スタブ
-			loadFinish(QueueLoadedMarker.MAKER_VOICE);
-		}
-
-	}
-
-	public void loadFinish(int maker) {
+	/**
+	 * 各種類のリソースがシステム上で使用可能になったことをマークするためのキューデータを送ります。<br>
+	 * 送られたキューデータはそのマーカーの種類が示すキューデータ群の最後に付けられ、 このマーカーが実行されるとマーカーの種類のデータが利用可能になったとみなします。
+	 *
+	 * @param maker
+	 *            マーカーの種類
+	 */
+	public final void loadFinish(final int maker) {
 		QueueLoadedMarker q = new QueueLoadedMarker(engine, chapterId, maker);
-		engine.queue.offer(q);
+		engine.getQueueManager().enqueue(q);
 	}
 }

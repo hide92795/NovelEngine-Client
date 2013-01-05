@@ -17,22 +17,37 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Loader {
+/**
+ * 外部ファイルからデータを読み取るための便利なメソッドが含まれます。
+ *
+ * @author hide92795
+ */
+public abstract class Loader {
+	// キーは今後ここへの直接指定のほか、外部ファイル指定もサポートする予定。
+	/**
+	 * 外部ファイルの復号化に使用するキーです。
+	 */
+	private static final byte[] KEY = "0123456789ABCDEF".getBytes();
 
-	public static final byte[] KEY = "0123456789ABCDEF".getBytes();
-
-	public static final int DATA_BASIC = 0;
-	public static final int DATA_MAINMENU = 1;
-	public static final int DATA_STORY = 2;
-	public static final int DATA_GUI = 3;
-	public static final int DATA_CHARACTER = 4;
-	public static final int DATA_BGIMAGE = 5;
-
+	/**
+	 * 復号化のために使用するキーを取得します。
+	 *
+	 * @return 復号化に使用するキー
+	 */
 	public static Key getKey() {
 		return new SecretKeySpec(KEY, "AES");
 	}
 
-	public static byte[] readAll(InputStream inputStream) throws IOException {
+	/**
+	 * 指定された入力ストリームのデータをすべてbyte配列に読み込みます。
+	 *
+	 * @param inputStream
+	 *            読み込み元の入力ストリーム
+	 * @return 読み込んだデータが格納されたbyte配列
+	 * @throws IOException
+	 *             何らかの入出力エラーが発生した場合
+	 */
+	public static byte[] readAll(final InputStream inputStream) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		while (true) {
@@ -45,8 +60,25 @@ public class Loader {
 		return bos.toByteArray();
 	}
 
-	public static CipherInputStream createCipherInputStream(File file) throws IOException, NoSuchAlgorithmException,
-			NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
+	/**
+	 * 指定されたファイルを復号化しながら読み込むためのストリームを取得します。
+	 *
+	 * @param file
+	 *            ストリームを開くファイル
+	 * @return 復号化しながら読み込む準備の出来たストリーム
+	 * @throws IOException
+	 *             何らかの入出力エラーが発生した場合
+	 * @throws NoSuchAlgorithmException
+	 *             暗号化に使用されているアルゴリズムがサポートされない場合
+	 * @throws NoSuchPaddingException
+	 *             指定されたパディングがサポートされない場合
+	 * @throws InvalidKeyException
+	 *             不正な鍵が使用された場合
+	 * @throws InvalidAlgorithmParameterException
+	 *             不適切なアルゴリズムパラメーターが渡された場合
+	 */
+	public static CipherInputStream createCipherInputStream(final File file) throws IOException,
+			NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
 		Key key = Loader.getKey();
 		FileInputStream fis = new FileInputStream(file);
 

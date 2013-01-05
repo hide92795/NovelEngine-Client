@@ -3,45 +3,89 @@ package hide92795.novelengine.story;
 import hide92795.novelengine.background.BackGround;
 import hide92795.novelengine.panel.PanelStory;
 
+/**
+ * バックグラウンドの画像を変更ストーリーデータです。
+ *
+ * @author hide92795
+ */
 public class StoryChangeBg extends Story {
+	/**
+	 * 変更後の画像IDです。
+	 */
 	private final int nextBgId;
+	/**
+	 * 画像を変更するレイヤーのIDです。
+	 */
 	private final byte target;
-	private final int xPos;
-	private final int yPos;
+	/**
+	 * イメージを配置する左上のX座標です。
+	 */
+	private final int x;
+	/**
+	 * イメージを配置する左上のY座標です。
+	 */
+	private final int y;
+	/**
+	 * イメージを配置する時の拡大率です。
+	 */
 	private final int magnification;
+	/**
+	 * イメージを変更するまでの待機時間です。
+	 */
 	private final int delay;
-	private boolean finish = false;
+	/**
+	 * このストーリーデータの処理が終了したかどうかを表します。
+	 */
+	private boolean finish;
+	/**
+	 * このストーリーデータの処理が始まってから経過した時間です。
+	 */
 	private int elapsedTime;
 
-	public StoryChangeBg(int bgId, byte target, int xPos, int yPos,
-			int magnification, int delay) {
+	/**
+	 * バックグラウンドの画像を変更するストーリーデータを生成します。
+	 *
+	 * @param bgId
+	 *            変更後の画像
+	 * @param target
+	 *            変更するレイヤーのID
+	 * @param x
+	 *            イメージを配置する左上のX座標
+	 * @param y
+	 *            イメージを配置する左上のY座標
+	 * @param magnification
+	 *            イメージを配置する時の拡大率
+	 * @param delay
+	 *            イメージを変更するまでの待機時間
+	 */
+	public StoryChangeBg(final int bgId, final byte target, final int x, final int y, final int magnification,
+			final int delay) {
 		this.nextBgId = bgId;
 		this.target = target;
-		this.xPos = xPos;
-		this.yPos = yPos;
+		this.x = x;
+		this.y = y;
 		this.magnification = magnification;
 		this.delay = delay;
 	}
 
 	@Override
-	public boolean isFinish() {
+	public final boolean isFinish() {
 		return finish;
 	}
 
 	@Override
-	public void init(PanelStory story) {
+	public final void init(final PanelStory story) {
 		finish = false;
 	}
 
 	@Override
-	public void update(PanelStory story, int delta) {
+	public final void update(final PanelStory story, final int delta) {
 		if (elapsedTime >= delay && !finish) {
-			// 閭梧勹螟画峩
-			BackGround background = story.engine.backGroundManager
-					.getBackGround(target);
+			// 背景変更
+			BackGround background = story.engine().getBackGroundManager().getBackGround(target);
 			background.setImageId(nextBgId);
-			background.setxPos(xPos);
-			background.setyPos(yPos);
+			background.setX(x);
+			background.setY(y);
 			background.setMagnificartion(magnification);
 
 			finish = true;

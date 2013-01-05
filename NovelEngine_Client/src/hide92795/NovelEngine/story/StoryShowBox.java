@@ -6,6 +6,13 @@ import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.panel.PanelStory;
 
+/**
+ * メッセージボックスの開閉を行うストーリーデータです。<br>
+ * 今後大幅な修正が加わります。
+ *
+ * @author hide92795
+ */
+@Deprecated
 public class StoryShowBox extends Story {
 	private boolean show;
 	protected boolean finish = false;
@@ -13,7 +20,7 @@ public class StoryShowBox extends Story {
 	private int width = 700;
 	private float now;
 	private float speed = 0.05f;
-	// 邨碁℃譎る俣
+	// 経過時間
 	private int elapsedTime;
 	private int totalTime = 400;
 	private float alpha;
@@ -35,14 +42,14 @@ public class StoryShowBox extends Story {
 			now = height;
 		} else {
 			now = 0.0f;
-			story.setShowBox(false);
+			// story.setShowBox(false);
 		}
 	}
 
 	private void skip(PanelStory story) {
 		if (show) {
 			now = 0.0f;
-			story.setShowBox(true);
+			// story.setShowBox(true);
 			finish = true;
 		} else {
 			now = height;
@@ -50,17 +57,17 @@ public class StoryShowBox extends Story {
 		}
 	}
 
-	@Override
-	public void leftClick(PanelStory story, int x, int y) {
-		skip(story);
-	}
-
-	@Override
-	public void keyPressed(PanelStory story, int eventKey) {
-		if (eventKey == Keyboard.KEY_RETURN) {
-			skip(story);
-		}
-	}
+	// @Override
+	// public void leftClick(PanelStory story, int x, int y) {
+	// skip(story);
+	// }
+	//
+	// @Override
+	// public void keyPressed(PanelStory story, int eventKey) {
+	// if (eventKey == Keyboard.KEY_RETURN) {
+	// skip(story);
+	// }
+	// }
 
 	@Override
 	public void update(PanelStory panelStory, int delta) {
@@ -76,7 +83,7 @@ public class StoryShowBox extends Story {
 			now = (float) height * (f - speed);
 			if (now <= 0f) {
 				now = 0;
-				panelStory.setShowBox(true);
+				// panelStory.setShowBox(true);
 				finish = true;
 			}
 		} else {
@@ -94,10 +101,10 @@ public class StoryShowBox extends Story {
 
 	@Override
 	public void render(NovelEngine engine) {
-		float x = engine.dataBasic.getWidth() - width;
-		float y = (float) (engine.dataBasic.getHeight() - height + now);
+		float x = engine.getDefaultWidth() - width;
+		float y = (float) (engine.getDefaultHeight() - height + now);
 
-		Texture t = engine.imageManager.getImage(123456);
+		Texture t = engine.getImageManager().getImage(123456);
 		Renderer.renderImage(t, alpha, x, y, x + t.getTextureWidth(), y + t.getTextureHeight());
 	}
 }

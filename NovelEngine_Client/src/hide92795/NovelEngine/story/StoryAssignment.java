@@ -3,34 +3,61 @@ package hide92795.novelengine.story;
 import hide92795.novelengine.Properties;
 import hide92795.novelengine.panel.PanelStory;
 
+/**
+ * 変数への代入を行うストーリーデータです。
+ *
+ * @author hide92795
+ */
 public class StoryAssignment extends Story {
+	/**
+	 * 値を代入する変数の種類です。
+	 */
 	private final byte varType;
-	private final int varName;
+	/**
+	 * 値を代入する変数の名前です。
+	 */
+	private final String varName;
+	/**
+	 * 代入する値です。
+	 */
 	private final int value;
+	/**
+	 * このストーリーデータの処理が終了したかどうかを表します。
+	 */
 	private boolean finish;
 
-	public StoryAssignment(byte varType, int varName, int value) {
+	/**
+	 * 変数に値を代入するストーリーデータを生成します。
+	 *
+	 * @param varType
+	 *            値を代入する変数の種類
+	 * @param varName
+	 *            値を代入する変数の名前
+	 * @param value
+	 *            代入する値
+	 */
+	public StoryAssignment(final byte varType, final String varName, final int value) {
 		this.varType = varType;
 		this.varName = varName;
 		this.value = value;
 	}
-	
+
 	@Override
-	public void init(PanelStory story) {
+	public final void init(final PanelStory story) {
 		finish = false;
 	}
 
 	@Override
-	public void update(PanelStory story, int delta) {
+	public final void update(final PanelStory story, final int delta) {
 		if (!finish) {
-			Properties p = story.engine.settingManager.getProperties(varType);
+			Properties p = story.engine().getSettingManager().getProperties(varType);
 			p.setProperty(varName, value);
 			finish = true;
 		}
 	}
 
 	@Override
-	public boolean isFinish() {
+	public final boolean isFinish() {
 		return finish;
 	}
 
