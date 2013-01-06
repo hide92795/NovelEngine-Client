@@ -115,6 +115,7 @@ public class ConfigurationManager {
 		setting.setProperty(Setting.SETTING_PRESTART_BACKGROUND_COLOR, -1);
 		setting.setProperty(Setting.SETTING_PRESTART_BACKGROUND_COLOR, Color.red.getRGB());
 		setting.setProperty(Setting.SETTING_SKIPPABLE, 1);
+		setting.setProperty(Setting.SETTING_DURATION_FADE_BGM, 500);
 	}
 
 	/**
@@ -131,6 +132,10 @@ public class ConfigurationManager {
 		 * 各ストーリーデータをスキップできるかを表します。
 		 */
 		public static final String SETTING_SKIPPABLE = "skippable";
+		/**
+		 * BGMの変更時のフェードに掛ける時間を表します。
+		 */
+		public static final String SETTING_DURATION_FADE_BGM = "duration_fade_bgm";
 		/**
 		 * 現在の西暦を表します。
 		 */

@@ -1,5 +1,7 @@
 package hide92795.novelengine.manager;
 
+import hide92795.novelengine.sound.SoundPlayer;
+
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 
@@ -19,7 +21,7 @@ public class SoundManager {
 	/**
 	 * サウンドIDとそれに対応するサウンドを格納するマップです。
 	 */
-	private HashMap<Integer, XSound> sounds;
+	private HashMap<Integer, SoundPlayer> sounds;
 	/**
 	 * サウンドを再生するために使う {@link soundly.Soundly Soundly} オブジェクトです。
 	 */
@@ -29,7 +31,7 @@ public class SoundManager {
 	 * {@link hide92795.novelengine.manager.SoundManager SoundManager} のオブジェクトを生成します。
 	 */
 	public SoundManager() {
-		sounds = new HashMap<Integer, XSound>();
+		sounds = new HashMap<Integer, SoundPlayer>();
 		sound = Soundly.get();
 		sound.init();
 		sound.setMusicTrackCount(2);
@@ -42,8 +44,8 @@ public class SoundManager {
 	 *            サウンドID
 	 * @return 指定されたIDのサウンド
 	 */
-	public final XSound getSound(final int id) {
-		XSound p = sounds.get(id);
+	public final SoundPlayer getSound(final int id) {
+		SoundPlayer p = sounds.get(id);
 		return p;
 	}
 
@@ -56,11 +58,11 @@ public class SoundManager {
 	 *            サウンドデータが格納された <code>byte</code> 配列
 	 */
 	public final void putSound(final int id, final byte[] sound) {
-		XSound sound2 = null;
+		SoundPlayer sound2 = null;
 		ByteArrayInputStream bis = new ByteArrayInputStream(sound);
 		try {
 			Audio audio = AudioLoader.getAudio("OGG", bis);
-			sound2 = new XSound(new AudioData(audio.getBufferID()));
+			sound2 = new SoundPlayer(new XSound(new AudioData(audio.getBufferID())));
 		} catch (Exception e) {
 			System.err.println("サウンドをロードできませんでした。");
 			e.printStackTrace();

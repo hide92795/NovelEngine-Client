@@ -1,6 +1,7 @@
 package hide92795.novelengine.story;
 
 import hide92795.novelengine.panel.PanelStory;
+import hide92795.novelengine.sound.SoundPlayer;
 
 /**
  * BGMの再生を行うストーリーデータです。
@@ -16,6 +17,10 @@ public class StoryPlayBGM extends Story {
 	 * このストーリーデータの処理が終了したかどうかを表します。
 	 */
 	private boolean finish;
+	/**
+	 * 再生するBGMを表す {@link hide92795.novelengine.sound.SoundPlayer SoundPlayer} オブジェクトです。
+	 */
+	private SoundPlayer sound;
 
 	/**
 	 * BGMの再生を行うストーリーデータを生成します。
@@ -30,13 +35,13 @@ public class StoryPlayBGM extends Story {
 	@Override
 	public final void init(final PanelStory story) {
 		finish = false;
+		sound = story.engine().getSoundManager().getSound(id);
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
 		if (!finish) {
-			// TODO
-			// story.playBGM(id);
+			sound.playAsBGM(story.engine());
 			finish = true;
 		}
 	}

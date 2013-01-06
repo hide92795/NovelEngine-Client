@@ -3,10 +3,9 @@ package hide92795.novelengine.story;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.panel.PanelStory;
+import hide92795.novelengine.sound.SoundPlayer;
 
 import org.lwjgl.input.Keyboard;
-
-import soundly.XSound;
 
 /**
  * SEを再生するストーリーデータです。
@@ -27,9 +26,9 @@ public class StoryPlaySE extends Story {
 	 */
 	private final boolean wait;
 	/**
-	 * 再生するSEを表す {@link soundly.XSound XSound} オブジェクトです。
+	 * 再生するSEを表す {@link hide92795.novelengine.sound.SoundPlayer SoundPlayer} オブジェクトです。
 	 */
-	private XSound sound;
+	private SoundPlayer sound;
 	/**
 	 * SEの再生を開始したかどうかを表します。
 	 */
@@ -58,18 +57,14 @@ public class StoryPlaySE extends Story {
 		finish = false;
 		played = false;
 		sound = story.engine().getSoundManager().getSound(seId);
-		sound.seek(0.0f);
-		sound.rewind();
-		sound.setMusic(false);
-		sound.setLooping(false);
-		sound.setVolume(1.0f);
+		sound.init();
 	}
 
 	@Override
 	public final void update(final PanelStory panelStory, final int delta) {
 		if (!finish) {
 			if (!played) {
-				sound.queue();
+				sound.playAsSE();
 				played = true;
 			}
 			if (wait) {
