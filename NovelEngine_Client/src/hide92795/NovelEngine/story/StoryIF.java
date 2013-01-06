@@ -57,10 +57,6 @@ public class StoryIF extends Story {
 	 * 演算結果が偽の場合に移動するシーンIDです。
 	 */
 	private final int falseGoto;
-	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
 
 	/**
 	 * ２つの値を比較するストーリーデータを生成します。
@@ -93,12 +89,12 @@ public class StoryIF extends Story {
 
 	@Override
 	public final void init(final PanelStory story) {
-		finish = false;
+		resetFinish();
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		if (!finish) {
+		if (!isFinish()) {
 			int left = story.engine().getSettingManager().getValue(leftVarType, leftVarName);
 			int right = story.engine().getSettingManager().getValue(rightVarType, rightVarName);
 			boolean b = evaluation(left, right);
@@ -107,7 +103,7 @@ public class StoryIF extends Story {
 			} else {
 				story.moveScene(falseGoto);
 			}
-			finish = true;
+			finish();
 		}
 	}
 
@@ -137,10 +133,4 @@ public class StoryIF extends Story {
 		}
 		return false;
 	}
-
-	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
 }

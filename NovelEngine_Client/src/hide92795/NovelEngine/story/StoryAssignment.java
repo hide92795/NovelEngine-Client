@@ -21,10 +21,6 @@ public class StoryAssignment extends Story {
 	 * 代入する値です。
 	 */
 	private final int value;
-	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
 
 	/**
 	 * 変数に値を代入するストーリーデータを生成します。
@@ -44,21 +40,15 @@ public class StoryAssignment extends Story {
 
 	@Override
 	public final void init(final PanelStory story) {
-		finish = false;
+		resetFinish();
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		if (!finish) {
+		if (!isFinish()) {
 			Properties p = story.engine().getSettingManager().getProperties(varType);
 			p.setProperty(varName, value);
-			finish = true;
+			finish();
 		}
 	}
-
-	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
 }

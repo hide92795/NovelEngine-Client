@@ -14,10 +14,6 @@ import org.lwjgl.input.Keyboard;
  */
 public class StoryPlaySE extends Story {
 	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
-	/**
 	 * 再生を行うSEのIDです。
 	 */
 	private final int seId;
@@ -48,13 +44,8 @@ public class StoryPlaySE extends Story {
 	}
 
 	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
-	@Override
 	public final void init(final PanelStory story) {
-		finish = false;
+		resetFinish();
 		played = false;
 		sound = story.engine().getSoundManager().getSound(seId);
 		sound.init();
@@ -62,7 +53,7 @@ public class StoryPlaySE extends Story {
 
 	@Override
 	public final void update(final PanelStory panelStory, final int delta) {
-		if (!finish) {
+		if (!isFinish()) {
 			if (!played) {
 				sound.playAsSE();
 				played = true;
@@ -70,10 +61,10 @@ public class StoryPlaySE extends Story {
 			if (wait) {
 				if (sound.isStopped()) {
 					sound.stop();
-					finish = true;
+					finish();
 				}
 			} else {
-				finish = true;
+				finish();
 			}
 		}
 	}

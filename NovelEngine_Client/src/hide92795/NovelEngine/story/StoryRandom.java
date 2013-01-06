@@ -22,10 +22,6 @@ public class StoryRandom extends Story {
 	 * 乱数を生成する範囲です。
 	 */
 	private final int num;
-	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
 
 	/**
 	 * ランダムな値を生成するストーリーデータを生成します。
@@ -45,22 +41,16 @@ public class StoryRandom extends Story {
 
 	@Override
 	public final void init(final PanelStory story) {
-		finish = false;
+		resetFinish();
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		if (!finish) {
+		if (!isFinish()) {
 			int randomValue = Utils.getRandom(num);
 			Properties p = story.engine().getSettingManager().getProperties(varType);
 			p.setProperty(varName, randomValue);
-			finish = true;
+			finish();
 		}
 	}
-
-	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
 }

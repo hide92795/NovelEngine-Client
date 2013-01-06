@@ -14,10 +14,6 @@ import hide92795.novelengine.panel.PanelStory;
  */
 public class StoryEffect extends Story {
 	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
-	/**
 	 * エフェクトをかけるレイヤーのIDです。
 	 */
 	private final byte target;
@@ -53,20 +49,15 @@ public class StoryEffect extends Story {
 	}
 
 	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
-	@Override
 	public final void init(final PanelStory story) {
 		backGroundEffect.init(story, target);
-		finish = false;
+		resetFinish();
 		timeElapsed = false;
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		if (!finish) {
+		if (!isFinish()) {
 			if (timeElapsed) {
 				backGroundEffect.update(this, delta);
 			} else {
@@ -90,7 +81,7 @@ public class StoryEffect extends Story {
 	 * エフェクトが終了した時に呼ばれます。
 	 */
 	public final void effectFinish() {
-		this.finish = true;
+		finish();
 	}
 
 	@Override

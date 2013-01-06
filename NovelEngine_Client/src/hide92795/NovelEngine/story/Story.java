@@ -161,11 +161,32 @@ public abstract class Story implements MouseListener, KeybordListener {
 	public static final byte COMMAND_CALCULATION = 23;
 
 	/**
+	 * このストーリーデータの処理が終了したかどうかを表します。
+	 */
+	private boolean finish;
+
+	/**
 	 * このストーリーデータの処理が終了したかどうかを返します。
 	 *
 	 * @return 処理が終了している場合は <code>true</code>
 	 */
-	public abstract boolean isFinish();
+	public final boolean isFinish() {
+		return finish;
+	}
+
+	/**
+	 * ストーリーデータの処理が終了した時に呼びます。
+	 */
+	protected final void finish() {
+		finish = true;
+	}
+
+	/**
+	 * 終了フラグを元に戻します。
+	 */
+	protected final void resetFinish() {
+		finish = false;
+	}
 
 	/**
 	 * ストーリーデータを初期化します。
@@ -173,8 +194,7 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 * @param story
 	 *            このストーリーデータが含まれるストーリーを実行している {@link hide92795.novelengine.panel.PanelStory PanelStory} オブジェクト
 	 */
-	public void init(final PanelStory story) {
-	}
+	public abstract void init(final PanelStory story);
 
 	/**
 	 * ストーリーデータを更新します。

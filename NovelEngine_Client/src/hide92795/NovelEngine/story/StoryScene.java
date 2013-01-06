@@ -1,7 +1,10 @@
 package hide92795.novelengine.story;
 
+import hide92795.novelengine.panel.PanelStory;
+
 /**
- * シーンの位置を表すストーリーデータです。
+ * シーンの位置を表すストーリーデータです。<br>
+ * このストーリーデータの終了確認が行われることはありません。
  *
  * @author hide92795
  */
@@ -21,6 +24,10 @@ public class StoryScene extends Story {
 		this.sceneId = sceneId;
 	}
 
+	@Override
+	public final void init(final PanelStory story) {
+	}
+
 	/**
 	 * このストーリーデータが表すシーンIDです。
 	 *
@@ -28,10 +35,5 @@ public class StoryScene extends Story {
 	 */
 	public final int getSceneId() {
 		return sceneId;
-	}
-
-	@Override
-	public final boolean isFinish() {
-		return true;
 	}
 }

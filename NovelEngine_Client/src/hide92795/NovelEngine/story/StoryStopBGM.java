@@ -9,26 +9,16 @@ import hide92795.novelengine.sound.SoundPlayer;
  * @author hide92795
  */
 public class StoryStopBGM extends Story {
-	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
+	@Override
+	public final void init(final PanelStory story) {
+		resetFinish();
+	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		if (!finish) {
+		if (!isFinish()) {
 			SoundPlayer.stopPrimaryBGM();
+			finish();
 		}
 	}
-
-	@Override
-	public final void init(final PanelStory story) {
-		finish = false;
-	}
-
-	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
 }

@@ -1,7 +1,10 @@
 package hide92795.novelengine.story;
 
+import hide92795.novelengine.panel.PanelStory;
+
 /**
- * ブロックを表すストーリーデータです。
+ * ブロックを表すストーリーデータです。<br>
+ * このストーリーデータの終了確認が行われることはありません。
  *
  * @author hide92795
  */
@@ -22,8 +25,7 @@ public class StoryBlock extends Story {
 	}
 
 	@Override
-	public final boolean isFinish() {
-		return true;
+	public final void init(final PanelStory story) {
 	}
 
 	/**

@@ -29,10 +29,6 @@ public class StoryChangeBgColor extends Story {
 	 * 変更する背景色のアルファ成分です
 	 */
 	private final float a;
-	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
 
 	/**
 	 * バックグラウンドの背景色を変更ストーリーデータを生成します。
@@ -61,23 +57,22 @@ public class StoryChangeBgColor extends Story {
 	}
 
 	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
-	@Override
 	public final void init(final PanelStory story) {
-		finish = false;
+		resetFinish();
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		BackGround background = story.engine().getBackGroundManager().getBackGround(target);
-		background.setRed(r);
-		background.setGreen(g);
-		background.setBlue(b);
-		background.setAlpha(a);
-		finish = true;
+		if (!isFinish()) {
+			BackGround background = story.engine().getBackGroundManager().getBackGround(target);
+			background.setRed(r);
+			background.setGreen(g);
+			background.setBlue(b);
+			background.setAlpha(a);
+
+			finish();
+		}
+
 	}
 
 }

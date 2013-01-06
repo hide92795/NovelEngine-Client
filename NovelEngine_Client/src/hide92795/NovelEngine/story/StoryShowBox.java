@@ -15,7 +15,6 @@ import hide92795.novelengine.panel.PanelStory;
 @Deprecated
 public class StoryShowBox extends Story {
 	private boolean show;
-	protected boolean finish = false;
 	private int height = 241;
 	private int width = 700;
 	private float now;
@@ -30,13 +29,8 @@ public class StoryShowBox extends Story {
 	}
 
 	@Override
-	public boolean isFinish() {
-		return finish;
-	}
-
-	@Override
 	public void init(PanelStory story) {
-		finish = false;
+		resetFinish();
 		elapsedTime = 0;
 		if (show) {
 			now = height;
@@ -50,10 +44,10 @@ public class StoryShowBox extends Story {
 		if (show) {
 			now = 0.0f;
 			// story.setShowBox(true);
-			finish = true;
+			finish();
 		} else {
 			now = height;
-			finish = true;
+			finish();
 		}
 	}
 
@@ -84,14 +78,14 @@ public class StoryShowBox extends Story {
 			if (now <= 0f) {
 				now = 0;
 				// panelStory.setShowBox(true);
-				finish = true;
+				finish();
 			}
 		} else {
 			float f = (float) elapsedTime / totalTime;
 			alpha = 1.0f - f;
 			if (f >= 1.0f) {
 				now = height;
-				finish = true;
+				finish();
 				return;
 			}
 			now = (float) height * f;

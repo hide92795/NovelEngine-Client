@@ -1,5 +1,7 @@
 package hide92795.novelengine.story;
 
+import hide92795.novelengine.panel.PanelStory;
+
 /**
  * ボタンを生成するストーリーデータです。
  *
@@ -14,8 +16,7 @@ public class StoryButton extends Story {
 	}
 
 	@Override
-	public final boolean isFinish() {
-		return false;
+	public final void init(final PanelStory story) {
+		resetFinish();
 	}
-
 }

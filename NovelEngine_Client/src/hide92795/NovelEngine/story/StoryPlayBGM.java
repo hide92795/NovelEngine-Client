@@ -14,10 +14,6 @@ public class StoryPlayBGM extends Story {
 	 */
 	private final int id;
 	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
-	/**
 	 * 再生するBGMを表す {@link hide92795.novelengine.sound.SoundPlayer SoundPlayer} オブジェクトです。
 	 */
 	private SoundPlayer sound;
@@ -34,21 +30,15 @@ public class StoryPlayBGM extends Story {
 
 	@Override
 	public final void init(final PanelStory story) {
-		finish = false;
+		resetFinish();
 		sound = story.engine().getSoundManager().getSound(id);
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		if (!finish) {
+		if (!isFinish()) {
 			sound.playAsBGM(story.engine());
-			finish = true;
+			finish();
 		}
 	}
-
-	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
 }

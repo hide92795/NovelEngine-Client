@@ -65,6 +65,8 @@ public class PanelStory extends Panel {
 			}
 		}
 		if (finishAll) {
+			// すべてが完了
+			// 処理リストをクリア
 			processList.clear();
 			Story s;
 			boolean b = false;

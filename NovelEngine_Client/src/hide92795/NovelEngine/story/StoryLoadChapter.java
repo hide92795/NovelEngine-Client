@@ -1,5 +1,6 @@
 package hide92795.novelengine.story;
 
+import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.panel.PanelStory;
 
 /**
@@ -24,13 +25,18 @@ public class StoryLoadChapter extends Story {
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
-		// TODO
-		// story.engine.loadStory(loadChapterId);
+	public final void init(final PanelStory story) {
+		resetFinish();
 	}
 
 	@Override
-	public final boolean isFinish() {
-		return true;
+	public final void update(final PanelStory story, final int delta) {
+		if (!isFinish()) {
+			DataStory dataStory = story.engine().getStoryManager().getStory(loadChapterId);
+			if (dataStory == null) {
+				story.engine().loadStory(loadChapterId);
+			}
+			finish();
+		}
 	}
 }

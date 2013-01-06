@@ -34,10 +34,6 @@ public class StoryChangeBg extends Story {
 	 */
 	private final int delay;
 	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
-	/**
 	 * このストーリーデータの処理が始まってから経過した時間です。
 	 */
 	private int elapsedTime;
@@ -69,18 +65,13 @@ public class StoryChangeBg extends Story {
 	}
 
 	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
-	@Override
 	public final void init(final PanelStory story) {
-		finish = false;
+		resetFinish();
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		if (elapsedTime >= delay && !finish) {
+		if (elapsedTime >= delay && !isFinish()) {
 			// 背景変更
 			BackGround background = story.engine().getBackGroundManager().getBackGround(target);
 			background.setImageId(nextBgId);
@@ -88,7 +79,7 @@ public class StoryChangeBg extends Story {
 			background.setY(y);
 			background.setMagnificartion(magnification);
 
-			finish = true;
+			finish();
 		}
 		elapsedTime += delta;
 	}

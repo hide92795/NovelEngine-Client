@@ -24,12 +24,11 @@ public class StoryMoveChapter extends Story {
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
-		story.engine().prestartStory(chapterId);
+	public final void init(final PanelStory story) {
 	}
 
 	@Override
-	public final boolean isFinish() {
-		return false;
+	public final void update(final PanelStory story, final int delta) {
+		story.engine().prestartStory(chapterId);
 	}
 }

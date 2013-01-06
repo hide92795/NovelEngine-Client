@@ -54,10 +54,6 @@ public class StoryCalculation extends Story {
 	 */
 	public static final byte OPERATOR_SHIFT_RIGHT_UNSIGNED = 10;
 	/**
-	 * このストーリーデータの処理が終了したかどうかを表します。
-	 */
-	private boolean finish;
-	/**
 	 * 演算結果を代入する変数の種類です。
 	 */
 	private final byte varType;
@@ -117,18 +113,18 @@ public class StoryCalculation extends Story {
 
 	@Override
 	public final void init(final PanelStory story) {
-		finish = false;
+		resetFinish();
 	}
 
 	@Override
 	public final void update(final PanelStory story, final int delta) {
-		if (!finish) {
+		if (!isFinish()) {
 			int leftValue = story.engine().getSettingManager().getValue(leftVarType, leftVarName);
 			int rightValue = story.engine().getSettingManager().getValue(rightVarType, rightVarName);
 			int value = calculate(operator, leftValue, rightValue);
 			Properties p = story.engine().getSettingManager().getProperties(varType);
 			p.setProperty(varName, value);
-			finish = true;
+			finish();
 		}
 	}
 
@@ -172,10 +168,4 @@ public class StoryCalculation extends Story {
 		}
 		return 0;
 	}
-
-	@Override
-	public final boolean isFinish() {
-		return finish;
-	}
-
 }
