@@ -3,6 +3,8 @@ package hide92795.novelengine.loader;
 import java.io.File;
 import java.io.IOException;
 import javax.crypto.CipherInputStream;
+
+import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.client.NovelEngine;
 
 /**
@@ -26,13 +28,13 @@ public class LoaderImage extends Loader {
 			cis = Loader.createCipherInputStream(new File(path, id + ".nei"));
 			data = Loader.readAll(cis);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new NovelEngineException(e, "");
 		} finally {
 			if (cis != null) {
 				try {
 					cis.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw new NovelEngineException(e, "");
 				}
 			}
 		}

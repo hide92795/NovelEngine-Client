@@ -1,10 +1,12 @@
 package hide92795.novelengine.loader;
 
+import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.queue.QueueImage;
 import hide92795.novelengine.queue.QueueLoadedMarker;
 import hide92795.novelengine.queue.QueueSound;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -12,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author hide92795
  */
-public class LoaderResource extends Loader {
+public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	/**
 	 * 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクトです。
 	 */
@@ -74,10 +76,39 @@ public class LoaderResource extends Loader {
 		wordsLoadThread = new Thread(new WordsLoader(), "WordsLoader - ChapterID:" + chapterId);
 		soundLoadThread = new Thread(new SoundLoader(), "SoundLoader - ChapterID:" + chapterId);
 		voiceLoadThread = new Thread(new VoiceLoader(), "VoiceLoader - ChapterID:" + chapterId);
+		imageLoadThread.setUncaughtExceptionHandler(this);
+		wordsLoadThread.setUncaughtExceptionHandler(this);
+		soundLoadThread.setUncaughtExceptionHandler(this);
+		voiceLoadThread.setUncaughtExceptionHandler(this);
 		imageLoadThread.start();
 		wordsLoadThread.start();
 		soundLoadThread.start();
 		voiceLoadThread.start();
+	}
+
+	@Override
+	public final void uncaughtException(final Thread t, final Throwable e) {
+		try {
+			imageLoadThread.interrupt();
+		} finally {
+		}
+		try {
+			wordsLoadThread.interrupt();
+		} finally {
+		}
+		try {
+			soundLoadThread.interrupt();
+		} finally {
+		}
+		try {
+			voiceLoadThread.interrupt();
+		} finally {
+		}
+		if (e instanceof NovelEngineException) {
+			engine.crash((NovelEngineException) e);
+		} else {
+			engine.crash(new NovelEngineException(e, String.valueOf(chapterId)));
+		}
 	}
 
 	/**
@@ -164,7 +195,7 @@ public class LoaderResource extends Loader {
 		 */
 		private void loadImage(final int id) {
 			byte[] data = LoaderImage.load(id);
-			QueueImage q = new QueueImage(NovelEngine.getEngine(), id, data);
+			QueueImage q = new QueueImage(engine, id, data);
 			engine.getQueueManager().enqueue(q);
 		}
 
@@ -247,7 +278,7 @@ public class LoaderResource extends Loader {
 		 */
 		private void loadSound(final int id) {
 			byte[] data = LoaderSound.load(id);
-			QueueSound q = new QueueSound(NovelEngine.getEngine(), id, data);
+			QueueSound q = new QueueSound(engine, id, data);
 			engine.getQueueManager().enqueue(q);
 		}
 	}
@@ -290,7 +321,7 @@ public class LoaderResource extends Loader {
 		 */
 		private void loadImage(final int id) {
 			byte[] data = LoaderSound.load(id);
-			QueueSound q = new QueueSound(NovelEngine.getEngine(), id, data);
+			QueueSound q = new QueueSound(engine, id, data);
 			engine.getQueueManager().enqueue(q);
 		}
 	}
