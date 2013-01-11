@@ -156,9 +156,9 @@ public class LoaderStory extends Loader {
 					// byte 演算子, byte 左変数タイプ ,int 左数字, byte 右変数タイプ ,int 右数字, int 真, int 偽
 					byte operator = i.next().asIntegerValue().getByte();
 					byte leftVarType = i.next().asIntegerValue().getByte();
-					String leftVarName = String.valueOf(i.next().asIntegerValue().getInt());
+					String leftVarName = i.next().asRawValue().getString();
 					byte rightVarType = i.next().asIntegerValue().getByte();
-					String rightVarName = String.valueOf(i.next().asIntegerValue().getInt());
+					String rightVarName = i.next().asRawValue().getString();
 					int trueGoto = i.next().asIntegerValue().getInt();
 					int falseGoto = i.next().asIntegerValue().getInt();
 					StoryIF story = new StoryIF(operator, leftVarType, leftVarName, rightVarType, rightVarName,
@@ -238,7 +238,7 @@ public class LoaderStory extends Loader {
 					// 設定
 					// byte type, int name, int value
 					byte type = i.next().asIntegerValue().getByte();
-					String name = String.valueOf(i.next().asIntegerValue().getInt());
+					String name = i.next().asRawValue().getString();
 					int value = i.next().asIntegerValue().getInt();
 					StoryAssignment story = new StoryAssignment(type, name, value);
 					data.addStory(story);
@@ -248,7 +248,7 @@ public class LoaderStory extends Loader {
 					// 乱数
 					// byte type, int name, int num
 					byte type = i.next().asIntegerValue().getByte();
-					String name = String.valueOf(i.next().asIntegerValue().getInt());
+					String name = i.next().asRawValue().getString();
 					int num = i.next().asIntegerValue().getInt();
 					StoryRandom story = new StoryRandom(type, name, num);
 					data.addStory(story);

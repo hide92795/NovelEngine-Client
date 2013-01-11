@@ -154,7 +154,7 @@ public class NovelEngine {
 	 */
 	public NovelEngine() {
 		theEngine = this;
-		storyManager = new StoryManager();
+		storyManager = new StoryManager(this);
 		configurationManager = new ConfigurationManager();
 		effectManager = new EffectManager();
 		imageManager = new ImageManager();
@@ -215,6 +215,7 @@ public class NovelEngine {
 			Display.setResizable(dataBasic.isArrowResize());
 			Display.setVSyncEnabled(true);
 			Display.setIcon(dataBasic.getIcons());
+			Display.setTitle(dataBasic.getGamename());
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -223,7 +224,7 @@ public class NovelEngine {
 		width = getDefaultWidth();
 		height = getDefaultHeight();
 		initGL();
-		setCurrentPanel(new PanelPrestartStory(theEngine, "start".hashCode()));
+		setCurrentPanel(new PanelPrestartStory(this, "start".hashCode()));
 		closeRequested = false;
 		while (!Display.isCloseRequested() && !closeRequested) {
 			try {
@@ -231,12 +232,14 @@ public class NovelEngine {
 				if (Display.wasResized()) {
 					dataBasic.getAspectRatio().adjust(this, Display.getWidth(), Display.getHeight());
 				}
+				updateFPS();
 				if (!hasCrash) {
 					pollInput();
 					update(delta);
 					render();
 					queueManager.execute();
 				} else {
+					update(delta);
 					render();
 				}
 			} catch (Exception e) {
@@ -346,7 +349,6 @@ public class NovelEngine {
 		if (currentPanel != null) {
 			currentPanel.update(delta);
 		}
-		updateFPS();
 	}
 
 	/**

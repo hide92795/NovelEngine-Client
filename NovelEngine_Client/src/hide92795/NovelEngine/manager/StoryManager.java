@@ -28,10 +28,19 @@ public class StoryManager {
 	private ConcurrentHashMap<Integer, DataStory> stories;
 
 	/**
-	 * {@link hide92795.novelengine.manager.StoryManager StoryManager} のオブジェクトを生成します。
+	 * 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクトです。
 	 */
-	public StoryManager() {
+	private NovelEngine engine;
+
+	/**
+	 * {@link hide92795.novelengine.manager.StoryManager StoryManager} のオブジェクトを生成します。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 */
+	public StoryManager(final NovelEngine engine) {
 		stories = new ConcurrentHashMap<Integer, DataStory>(32, 0.75f, 2);
+		this.engine = engine;
 	}
 
 	/**
