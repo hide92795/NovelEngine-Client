@@ -44,7 +44,7 @@ public class AspectRatio {
 	 */
 	public final void adjust(final NovelEngine engine, final int width, final int height) {
 		int x = 0;
-		int y = height;
+		int y = 0;
 		int w = width;
 		int h = height;
 		// 横を基準に縦の長さを求める

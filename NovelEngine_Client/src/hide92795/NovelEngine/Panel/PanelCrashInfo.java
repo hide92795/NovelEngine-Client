@@ -1,6 +1,5 @@
 package hide92795.novelengine.panel;
 
-import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
 
 /**
@@ -10,6 +9,7 @@ import hide92795.novelengine.client.NovelEngine;
  */
 public class PanelCrashInfo extends Panel {
 
+	
 	/**
 	 * パネルを生成します。
 	 *
@@ -29,7 +29,8 @@ public class PanelCrashInfo extends Panel {
 
 	@Override
 	public void render(final NovelEngine engine) {
-		Renderer.renderColor(1.0f, 0.5f, 1.0f);
+		// TODO 自動生成されたメソッド・スタブ
+
 	}
 
 	@Override

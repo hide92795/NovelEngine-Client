@@ -112,7 +112,7 @@ public class ConfigurationManager {
 			Logger.info("Global Variable File is not found!");
 			Logger.info("Create a new Global Variable File.");
 		}
-		//setting.setProperty(Setting.SETTING_PRESTART_BACKGROUND_COLOR, -1);
+		setting.setProperty(Setting.SETTING_PRESTART_BACKGROUND_COLOR, -1);
 		setting.setProperty(Setting.SETTING_PRESTART_BACKGROUND_COLOR, Color.red.getRGB());
 		setting.setProperty(Setting.SETTING_SKIPPABLE, 1);
 		setting.setProperty(Setting.SETTING_DURATION_FADE_BGM, 500);

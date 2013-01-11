@@ -48,36 +48,36 @@ public final class Logger {
 		logger_stderr = LoggerFactory.getLogger("STDERR");
 		stdout = System.out;
 		stderr = System.err;
-//		System.setOut(new PrintStream(new OutputStream() {
-//			@Override
-//			public void write(final int b) throws IOException {
-//			}
-//		}) {
-//			public void println(final String s) {
-//				logger_stdout.info(s);
-//				stdout.println(s);
-//			}
-//
-//			public void print(final String s) {
-//				logger_stdout.info(s);
-//				stdout.println(s);
-//			}
-//		});
-//		System.setErr(new PrintStream(new OutputStream() {
-//			@Override
-//			public void write(final int b) throws IOException {
-//			}
-//		}) {
-//			public void println(final String s) {
-//				logger_stderr.info(s);
-//				stderr.println(s);
-//			}
-//
-//			public void print(final String s) {
-//				logger_stderr.info(s);
-//				stderr.println(s);
-//			}
-//		});
+		System.setOut(new PrintStream(new OutputStream() {
+			@Override
+			public void write(final int b) throws IOException {
+			}
+		}) {
+			public void println(final String s) {
+				logger_stdout.info(s);
+				stdout.println(s);
+			}
+
+			public void print(final String s) {
+				logger_stdout.info(s);
+				stdout.println(s);
+			}
+		});
+		System.setErr(new PrintStream(new OutputStream() {
+			@Override
+			public void write(final int b) throws IOException {
+			}
+		}) {
+			public void println(final String s) {
+				logger_stderr.info(s);
+				stderr.println(s);
+			}
+
+			public void print(final String s) {
+				logger_stderr.info(s);
+				stderr.println(s);
+			}
+		});
 	}
 
 	/**

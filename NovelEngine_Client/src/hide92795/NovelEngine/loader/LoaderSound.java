@@ -1,6 +1,5 @@
 package hide92795.novelengine.loader;
 
-import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.client.NovelEngine;
 
 import java.io.File;
@@ -28,13 +27,13 @@ public class LoaderSound extends Loader {
 			cis = Loader.createCipherInputStream(new File(path, id + ".nea"));
 			data = Loader.readAll(cis);
 		} catch (Exception e) {
-			throw new NovelEngineException(e, "");
+			e.printStackTrace();
 		} finally {
 			if (cis != null) {
 				try {
 					cis.close();
 				} catch (IOException e) {
-					throw new NovelEngineException(e, "");
+					e.printStackTrace();
 				}
 			}
 		}

@@ -62,7 +62,8 @@ public class BackGround {
 	private float alpha = 1.0f;
 
 	/**
-	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを指定された描画範囲で作成します。<br>
+	 * {@link hide92795.novelengine.background.BackGround BackGround}
+	 * オブジェクトを指定された描画範囲で作成します。<br>
 	 * 背景色のデフォルトは白、アルファ値のデフォルトは透明(0.0f)です。
 	 *
 	 * @param figure
@@ -74,7 +75,8 @@ public class BackGround {
 	}
 
 	/**
-	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを画面全体を描画範囲として作成します。<br>
+	 * {@link hide92795.novelengine.background.BackGround BackGround}
+	 * オブジェクトを画面全体を描画範囲として作成します。<br>
 	 * 背景色のデフォルトは白、アルファ値のデフォルトは透明(0.0f)です。
 	 *
 	 */
@@ -107,11 +109,10 @@ public class BackGround {
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 		glStencilFunc(GL_EQUAL, 1, ~0);
 		// 背景
+		Renderer.renderColor(red, green, blue, alpha);
 		Texture texture = engine.getImageManager().getImage(imageId);
 		if (texture != null) {
 			Renderer.renderImage(texture, alpha, x, y);
-		} else {
-			Renderer.renderColor(red, green, blue, alpha);
 		}
 		// キャラクター
 		// for (EntityCharacter character : characters) {

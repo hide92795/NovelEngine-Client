@@ -1,13 +1,11 @@
 package hide92795.novelengine.manager;
 
 import hide92795.novelengine.Logger;
-import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.LoaderStory;
 import hide92795.novelengine.loader.item.DataStory;
 
 import java.io.File;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author hide92795
  */
-public class StoryManager implements UncaughtExceptionHandler {
+public class StoryManager {
 	/**
 	 * 一番最初に読み込まれるストーリーデータのIDを示します。
 	 */
@@ -28,19 +26,11 @@ public class StoryManager implements UncaughtExceptionHandler {
 	 * ストーリーデータを格納するためのマップです。
 	 */
 	private ConcurrentHashMap<Integer, DataStory> stories;
-	/**
-	 * 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクトです。
-	 */
-	private NovelEngine engine;
 
 	/**
 	 * {@link hide92795.novelengine.manager.StoryManager StoryManager} のオブジェクトを生成します。
-	 *
-	 * @param engine
-	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public StoryManager(final NovelEngine engine) {
-		this.engine = engine;
+	public StoryManager() {
 		stories = new ConcurrentHashMap<Integer, DataStory>(32, 0.75f, 2);
 	}
 
@@ -58,13 +48,16 @@ public class StoryManager implements UncaughtExceptionHandler {
 		Thread t = new Thread("ChapterLoader:" + file.getName()) {
 			@Override
 			public void run() {
-				Logger.info("StoryID: " + file.getName() + " Load start");
-				DataStory story = LoaderStory.load(engine, file, id);
-				stories.put(id, story);
-				Logger.info("StoryID: " + file.getName() + " Load finish");
+				try {
+					Logger.info("StoryID: " + file.getName() + " Load start");
+					DataStory story = LoaderStory.load(engine, file, id);
+					stories.put(id, story);
+					Logger.info("StoryID: " + file.getName() + " Load finish");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		};
-		t.setUncaughtExceptionHandler(this);
 		t.start();
 	}
 
@@ -92,14 +85,5 @@ public class StoryManager implements UncaughtExceptionHandler {
 			return story.isDataLoaded();
 		}
 		return false;
-	}
-
-	@Override
-	public final void uncaughtException(final Thread t, final Throwable e) {
-		if (e instanceof NovelEngineException) {
-			engine.crash((NovelEngineException) e);
-		} else {
-			engine.crash(new NovelEngineException(e, "null"));
-		}
 	}
 }

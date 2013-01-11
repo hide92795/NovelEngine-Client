@@ -1,6 +1,5 @@
 package hide92795.novelengine.loader;
 
-import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.background.BackGroundEffect;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataStory;
@@ -22,7 +21,13 @@ import hide92795.novelengine.story.StoryShowBox;
 import hide92795.novelengine.story.StoryStopBGM;
 import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.CipherInputStream;
+import javax.crypto.NoSuchPaddingException;
 import org.msgpack.MessagePack;
 import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
@@ -44,11 +49,28 @@ public class LoaderStory extends Loader {
 	 * @param id
 	 *            読み込むストーリーのチャプターID
 	 * @return 読み込まれたストーリーデータ
-	 *
-	 * @throws NovelEngineException
-	 *             何らかのエラーが発生した場合
+	 * @throws IOException
+	 *             何らかの入出力エラーが発生した場合
+	 * @throws NoSuchAlgorithmException
+	 *             暗号化に使用されているアルゴリズムがサポートされない場合
+	 * @throws NoSuchPaddingException
+	 *             指定されたパディングがサポートされない場合
+	 * @throws InvalidKeyException
+	 *             不正な鍵が使用された場合
+	 * @throws InvalidAlgorithmParameterException
+	 *             不適切なアルゴリズムパラメーターが渡された場合
+	 * @throws NoSuchMethodException
+	 *             一致するメソッドが見つからない場合
+	 * @throws InstantiationException
+	 *             基本となるコンストラクタを宣言するクラスが <code>abstract</code> クラスを表す場合
+	 * @throws IllegalAccessException
+	 *             この <code>Constructor</code> オブジェクトが言語アクセス制御を実施し、基本となるコンストラクタにアクセスできない場合
+	 * @throws InvocationTargetException
+	 *             基本となるコンストラクタが例外をスローする場合
 	 */
-	public static DataStory load(final NovelEngine engine, final File file, final int id) throws NovelEngineException {
+	public static DataStory load(final NovelEngine engine, final File file, final int id) throws InvalidKeyException,
+			NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IOException,
+			InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		LoaderResource resourceLoader = new LoaderResource(engine, id);
 		DataStory data = new DataStory(id);
 		try {
@@ -134,9 +156,9 @@ public class LoaderStory extends Loader {
 					// byte 演算子, byte 左変数タイプ ,int 左数字, byte 右変数タイプ ,int 右数字, int 真, int 偽
 					byte operator = i.next().asIntegerValue().getByte();
 					byte leftVarType = i.next().asIntegerValue().getByte();
-					String leftVarName = i.next().asRawValue().getString();
+					String leftVarName = String.valueOf(i.next().asIntegerValue().getInt());
 					byte rightVarType = i.next().asIntegerValue().getByte();
-					String rightVarName = i.next().asRawValue().getString();
+					String rightVarName = String.valueOf(i.next().asIntegerValue().getInt());
 					int trueGoto = i.next().asIntegerValue().getInt();
 					int falseGoto = i.next().asIntegerValue().getInt();
 					StoryIF story = new StoryIF(operator, leftVarType, leftVarName, rightVarType, rightVarName,
@@ -216,7 +238,7 @@ public class LoaderStory extends Loader {
 					// 設定
 					// byte type, int name, int value
 					byte type = i.next().asIntegerValue().getByte();
-					String name = i.next().asRawValue().getString();
+					String name = String.valueOf(i.next().asIntegerValue().getInt());
 					int value = i.next().asIntegerValue().getInt();
 					StoryAssignment story = new StoryAssignment(type, name, value);
 					data.addStory(story);
@@ -226,7 +248,7 @@ public class LoaderStory extends Loader {
 					// 乱数
 					// byte type, int name, int num
 					byte type = i.next().asIntegerValue().getByte();
-					String name = i.next().asRawValue().getString();
+					String name = String.valueOf(i.next().asIntegerValue().getInt());
 					int num = i.next().asIntegerValue().getInt();
 					StoryRandom story = new StoryRandom(type, name, num);
 					data.addStory(story);
@@ -237,8 +259,24 @@ public class LoaderStory extends Loader {
 				}
 			}
 
-		} catch (Exception e) {
-			throw new NovelEngineException(e, String.valueOf(id));
+		} catch (InvalidKeyException e) {
+			throw e;
+		} catch (NoSuchAlgorithmException e) {
+			throw e;
+		} catch (NoSuchPaddingException e) {
+			throw e;
+		} catch (InvalidAlgorithmParameterException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		} catch (InstantiationException e) {
+			throw e;
+		} catch (IllegalAccessException e) {
+			throw e;
+		} catch (InvocationTargetException e) {
+			throw e;
+		} catch (NoSuchMethodException e) {
+			throw e;
 		} finally {
 			// ロード完了の通知
 			resourceLoader.loadImage(0);
