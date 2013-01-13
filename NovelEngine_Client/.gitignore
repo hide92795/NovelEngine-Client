@@ -1,6 +1,7 @@
 
-doc/**
-logs/**
+/doc
+
+/logs
 
 #################
 ## Eclipse
@@ -43,5 +44,3 @@ Thumbs.db
 
 # Folder config file
 Desktop.ini
-/doc
-/logs
