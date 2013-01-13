@@ -2,7 +2,7 @@ package hide92795.novelengine.story;
 
 import org.lwjgl.input.Keyboard;
 
-import hide92795.novelengine.background.BackGroundEffect;
+import hide92795.novelengine.background.EffectBackGround;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.panel.PanelStory;
@@ -24,7 +24,7 @@ public class StoryEffect extends Story {
 	/**
 	 * このストーリーデータで実行するエフェクトです。
 	 */
-	private final BackGroundEffect backGroundEffect;
+	private final EffectBackGround effectBackGround;
 	/**
 	 * このストーリーデータの処理が始まってから経過した時間です。
 	 */
@@ -39,18 +39,18 @@ public class StoryEffect extends Story {
 	 *            エフェクトを実行するレイヤーのID
 	 * @param delay
 	 *            エフェクトを実行するまでの待機時間
-	 * @param backGroundEffect
+	 * @param effectBackGround
 	 *            実行するエフェクト
 	 */
-	public StoryEffect(final byte target, final int delay, final BackGroundEffect backGroundEffect) {
+	public StoryEffect(final byte target, final int delay, final EffectBackGround effectBackGround) {
 		this.target = target;
 		this.delay = delay;
-		this.backGroundEffect = backGroundEffect;
+		this.effectBackGround = effectBackGround;
 	}
 
 	@Override
 	public final void init(final PanelStory story) {
-		backGroundEffect.init(story, target);
+		effectBackGround.init(story, target);
 		resetFinish();
 		timeElapsed = false;
 	}
@@ -59,7 +59,7 @@ public class StoryEffect extends Story {
 	public final void update(final PanelStory story, final int delta) {
 		if (!isFinish()) {
 			if (timeElapsed) {
-				backGroundEffect.update(this, delta);
+				effectBackGround.update(this, delta);
 			} else {
 				if (elapsedTime > delay) {
 					timeElapsed = true;
@@ -73,7 +73,7 @@ public class StoryEffect extends Story {
 	@Override
 	public final void render(final NovelEngine engine) {
 		if (timeElapsed) {
-			backGroundEffect.render(engine);
+			effectBackGround.render(engine);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class StoryEffect extends Story {
 	 */
 	private void skip(final NovelEngine engine) {
 		if (canSkip(engine)) {
-			backGroundEffect.skip();
+			effectBackGround.skip();
 		}
 	}
 

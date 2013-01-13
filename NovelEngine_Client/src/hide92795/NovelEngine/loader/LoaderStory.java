@@ -1,7 +1,7 @@
 package hide92795.novelengine.loader;
 
 import hide92795.novelengine.NovelEngineException;
-import hide92795.novelengine.background.BackGroundEffect;
+import hide92795.novelengine.background.EffectBackGround;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.EffectManager.ClassData;
@@ -204,8 +204,8 @@ public class LoaderStory extends Loader {
 							c_obj[j] = val.asIntegerValue().asIntegerValue().getInt();
 						}
 					}
-					BackGroundEffect backGroundEffect = (BackGroundEffect) cd.instantiation(c_obj);
-					StoryEffect s_effect = new StoryEffect(target, delay, backGroundEffect);
+					EffectBackGround effectBackGround = (EffectBackGround) cd.instantiation(c_obj);
+					StoryEffect s_effect = new StoryEffect(target, delay, effectBackGround);
 					data.addStory(s_effect);
 					break;
 				}

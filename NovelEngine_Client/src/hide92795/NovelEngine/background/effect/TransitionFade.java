@@ -1,7 +1,7 @@
 package hide92795.novelengine.background.effect;
 
 import hide92795.novelengine.background.BackGround;
-import hide92795.novelengine.background.BackGroundEffect;
+import hide92795.novelengine.background.EffectBackGround;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.panel.PanelStory;
 import hide92795.novelengine.story.StoryEffect;
@@ -11,7 +11,7 @@ import hide92795.novelengine.story.StoryEffect;
  *
  * @author hide92795
  */
-public class TransitionFade extends BackGroundEffect {
+public class TransitionFade extends EffectBackGround {
 	/**
 	 * このエフェクトのIDを表します。
 	 */

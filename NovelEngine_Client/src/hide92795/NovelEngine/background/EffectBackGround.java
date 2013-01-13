@@ -10,7 +10,7 @@ import hide92795.novelengine.story.StoryEffect;
  *
  * @author hide92795
  */
-public abstract class BackGroundEffect extends Effectable {
+public abstract class EffectBackGround extends Effectable {
 	/**
 	 * エフェクトを初期化します。
 	 *
