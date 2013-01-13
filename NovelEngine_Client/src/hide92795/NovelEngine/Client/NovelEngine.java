@@ -17,6 +17,7 @@ import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
 import hide92795.novelengine.Logger;
+import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.Utils;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.loader.LoaderBasic;
@@ -218,7 +219,7 @@ public class NovelEngine {
 			Display.setTitle(dataBasic.getGamename());
 			Display.create();
 		} catch (LWJGLException e) {
-			e.printStackTrace();
+			crash(new NovelEngineException(e, "null"));
 		}
 		lastFPS = getTime();
 		width = getDefaultWidth();
@@ -243,9 +244,11 @@ public class NovelEngine {
 					render();
 				}
 			} catch (Exception e) {
-				Utils.printStackTraceToLogger(e);
-				nextPanel = new PanelCrashInfo(this, e);
-				hasCrash = true;
+				if (e instanceof NovelEngineException) {
+					crash((NovelEngineException) e);
+				} else {
+					crash(new NovelEngineException(e, "null"));
+				}
 			} finally {
 				panelChange();
 				Display.update();
@@ -412,6 +415,21 @@ public class NovelEngine {
 			lastFPS += 1000;
 		}
 		fps++;
+	}
+
+	/**
+	 * プログラムの実行中に続行不可の例外が投げられた場合に呼ばれます。<br>
+	 * １度目はクラッシュ用の画面の表示を試みます。<br>
+	 * それでもまたこのメソッドが呼ばれた場合はエラーログを出力してプログラムを停止させます。
+	 *
+	 * @param exception
+	 *            発生した例外
+	 */
+
+	public final synchronized void crash(final NovelEngineException exception) {
+		Utils.printStackTraceToLogger(exception);
+		setCurrentPanel(new PanelCrashInfo(this, exception));
+		hasCrash = true;
 	}
 
 	/**

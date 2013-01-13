@@ -1,5 +1,6 @@
 package hide92795.novelengine.loader;
 
+import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.background.BackGroundEffect;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataStory;
@@ -21,13 +22,7 @@ import hide92795.novelengine.story.StoryShowBox;
 import hide92795.novelengine.story.StoryStopBGM;
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.CipherInputStream;
-import javax.crypto.NoSuchPaddingException;
 import org.msgpack.MessagePack;
 import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
@@ -49,28 +44,8 @@ public class LoaderStory extends Loader {
 	 * @param id
 	 *            読み込むストーリーのチャプターID
 	 * @return 読み込まれたストーリーデータ
-	 * @throws IOException
-	 *             何らかの入出力エラーが発生した場合
-	 * @throws NoSuchAlgorithmException
-	 *             暗号化に使用されているアルゴリズムがサポートされない場合
-	 * @throws NoSuchPaddingException
-	 *             指定されたパディングがサポートされない場合
-	 * @throws InvalidKeyException
-	 *             不正な鍵が使用された場合
-	 * @throws InvalidAlgorithmParameterException
-	 *             不適切なアルゴリズムパラメーターが渡された場合
-	 * @throws NoSuchMethodException
-	 *             一致するメソッドが見つからない場合
-	 * @throws InstantiationException
-	 *             基本となるコンストラクタを宣言するクラスが <code>abstract</code> クラスを表す場合
-	 * @throws IllegalAccessException
-	 *             この <code>Constructor</code> オブジェクトが言語アクセス制御を実施し、基本となるコンストラクタにアクセスできない場合
-	 * @throws InvocationTargetException
-	 *             基本となるコンストラクタが例外をスローする場合
 	 */
-	public static DataStory load(final NovelEngine engine, final File file, final int id) throws InvalidKeyException,
-			NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IOException,
-			InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	public static DataStory load(final NovelEngine engine, final File file, final int id) {
 		LoaderResource resourceLoader = new LoaderResource(engine, id);
 		DataStory data = new DataStory(id);
 		try {
@@ -258,25 +233,8 @@ public class LoaderStory extends Loader {
 					break;
 				}
 			}
-
-		} catch (InvalidKeyException e) {
-			throw e;
-		} catch (NoSuchAlgorithmException e) {
-			throw e;
-		} catch (NoSuchPaddingException e) {
-			throw e;
-		} catch (InvalidAlgorithmParameterException e) {
-			throw e;
-		} catch (IOException e) {
-			throw e;
-		} catch (InstantiationException e) {
-			throw e;
-		} catch (IllegalAccessException e) {
-			throw e;
-		} catch (InvocationTargetException e) {
-			throw e;
-		} catch (NoSuchMethodException e) {
-			throw e;
+		} catch (Exception e) {
+			throw new NovelEngineException(e, String.valueOf(id));
 		} finally {
 			// ロード完了の通知
 			resourceLoader.loadImage(0);
