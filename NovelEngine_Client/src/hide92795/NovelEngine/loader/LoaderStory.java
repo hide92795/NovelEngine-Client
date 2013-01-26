@@ -20,9 +20,12 @@ import hide92795.novelengine.story.StoryRandom;
 import hide92795.novelengine.story.StoryScene;
 import hide92795.novelengine.story.StoryShowBox;
 import hide92795.novelengine.story.StoryStopBGM;
+
 import java.awt.Color;
 import java.io.File;
+
 import javax.crypto.CipherInputStream;
+
 import org.msgpack.MessagePack;
 import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
@@ -58,14 +61,7 @@ public class LoaderStory extends Loader {
 			// int wordsCounter = 0;
 			while (i.hasNext()) {
 				Value v = i.next();
-				byte command = 0;
-				try {
-					command = v.asIntegerValue().getByte();
-				} catch (Exception e) {
-					e.printStackTrace();
-					data.trace();
-					return null;
-				}
+				byte command = v.asIntegerValue().getByte();
 				switch (command) {
 				case Story.COMMAND_BLOCK_START: {
 					// ブロックスタート
@@ -144,6 +140,7 @@ public class LoaderStory extends Loader {
 				case Story.COMMAND_PLAY_BGM: {
 					// 再生
 					int bgmid = i.next().asIntegerValue().getInt();
+					resourceLoader.loadSound(bgmid);
 					StoryPlayBGM story = new StoryPlayBGM(bgmid);
 					data.addStory(story);
 					break;

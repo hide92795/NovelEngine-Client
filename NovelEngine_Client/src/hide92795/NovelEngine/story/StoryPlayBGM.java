@@ -1,5 +1,6 @@
 package hide92795.novelengine.story;
 
+import hide92795.novelengine.Logger;
 import hide92795.novelengine.panel.PanelStory;
 import hide92795.novelengine.sound.SoundPlayer;
 
@@ -32,6 +33,7 @@ public class StoryPlayBGM extends Story {
 	public final void init(final PanelStory story) {
 		resetFinish();
 		sound = story.engine().getSoundManager().getSound(id);
+		sound.init();
 	}
 
 	@Override

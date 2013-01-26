@@ -1,5 +1,6 @@
 package hide92795.novelengine.manager;
 
+import hide92795.novelengine.Logger;
 import hide92795.novelengine.sound.SoundPlayer;
 
 import java.io.ByteArrayInputStream;
@@ -64,7 +65,7 @@ public class SoundManager {
 			Audio audio = AudioLoader.getAudio("OGG", bis);
 			sound2 = new SoundPlayer(new XSound(new AudioData(audio.getBufferID())));
 		} catch (Exception e) {
-			System.err.println("サウンドをロードできませんでした。");
+			Logger.error("サウンドをロードできませんでした。");
 			e.printStackTrace();
 		}
 		sounds.put(id, sound2);

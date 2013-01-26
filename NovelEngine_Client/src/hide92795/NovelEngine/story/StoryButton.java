@@ -19,4 +19,8 @@ public class StoryButton extends Story {
 	public final void init(final PanelStory story) {
 		resetFinish();
 	}
+
+	class ButtonData {
+
+	}
 }
