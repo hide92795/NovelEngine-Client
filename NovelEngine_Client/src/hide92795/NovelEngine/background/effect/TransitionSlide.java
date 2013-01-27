@@ -57,8 +57,7 @@ public class TransitionSlide extends EffectBackGround {
 	 */
 	private int elapsedTime;
 	/**
-	 * フェード処理をおこうなう対象の{@link hide92795.novelengine.background.BackGround
-	 * BackGround} オブジェクトです。
+	 * フェード処理をおこうなう対象の{@link hide92795.novelengine.background.BackGround BackGround} オブジェクトです。
 	 */
 	private BackGround background;
 
@@ -66,22 +65,20 @@ public class TransitionSlide extends EffectBackGround {
 	 * 変化後の座標と変化に掛ける時間を指定してエフェクトを生成します。
 	 *
 	 * @param movedX
-	 *            変化後の{@link hide92795.novelengine.background.BackGround
-	 *            BackGround} オブジェクトのX座標
+	 *            変化後の{@link hide92795.novelengine.background.BackGround BackGround} オブジェクトのX座標
 	 * @param movedY
-	 *            変化後の{@link hide92795.novelengine.background.BackGround
-	 *            BackGround} オブジェクトのY座標
+	 *            変化後の{@link hide92795.novelengine.background.BackGround BackGround} オブジェクトのY座標
 	 * @param totalTime
 	 *            変化に掛ける時間
 	 */
-	public TransitionSlide(final int movedX, final int movedY, final int totalTime) {
+	public TransitionSlide(int movedX, int movedY, int totalTime) {
 		this.movedX = movedX;
 		this.movedY = movedY;
 		this.totalTime = totalTime;
 	}
 
 	@Override
-	public final void init(final PanelStory story, final byte target) {
+	public void init(PanelStory story, byte target) {
 		this.finish = false;
 		this.beforeX = background.getX();
 		this.beforeY = background.getY();
@@ -90,7 +87,7 @@ public class TransitionSlide extends EffectBackGround {
 	}
 
 	@Override
-	public final void update(final StoryEffect story, final int delta) {
+	public void update(StoryEffect story, int delta) {
 		if (finish) {
 			story.effectFinish();
 		} else {
@@ -108,11 +105,11 @@ public class TransitionSlide extends EffectBackGround {
 	}
 
 	@Override
-	public final void render(final NovelEngine engine) {
+	public void render(NovelEngine engine) {
 	}
 
 	@Override
-	public final void skip() {
+	public void skip() {
 		background.setX(movedX);
 		background.setY(movedY);
 		finish = true;

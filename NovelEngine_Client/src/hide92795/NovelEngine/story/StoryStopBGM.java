@@ -10,12 +10,12 @@ import hide92795.novelengine.sound.SoundPlayer;
  */
 public class StoryStopBGM extends Story {
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			SoundPlayer.stopPrimaryBGM();
 			finish();

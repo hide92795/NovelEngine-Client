@@ -25,7 +25,7 @@ public class PanelPrestartStory extends Panel {
 	 * @param chapterid
 	 *            ロード待機を行うチャプターのID
 	 */
-	public PanelPrestartStory(final NovelEngine engine, final int chapterid) {
+	public PanelPrestartStory(NovelEngine engine, int chapterid) {
 		super(engine);
 		this.chapterId = chapterid;
 	}
@@ -35,14 +35,14 @@ public class PanelPrestartStory extends Panel {
 	}
 
 	@Override
-	public final void update(final int delta) {
+	public void update(int delta) {
 		if (engine().getStoryManager().isLoaded(chapterId)) {
 			engine().startStory(chapterId);
 		}
 	}
 
 	@Override
-	public final void render(final NovelEngine engine) {
+	public void render(NovelEngine engine) {
 		Properties prop = engine.getSettingManager().getProperties(ConfigurationManager.VARIABLE_SETTING);
 		int rgb = prop.getProperty(Setting.SETTING_PRESTART_BACKGROUND_COLOR);
 		int r = (rgb & 0x00FF0000) >> 16;

@@ -23,7 +23,7 @@ public abstract class Panel implements MouseListener, KeybordListener {
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public Panel(final NovelEngine engine) {
+	public Panel(NovelEngine engine) {
 		this.engine = engine;
 	}
 
@@ -53,32 +53,32 @@ public abstract class Panel implements MouseListener, KeybordListener {
 	 *
 	 * @return 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public final NovelEngine engine() {
+	public NovelEngine engine() {
 		return engine;
 	}
 
 	@Override
-	public void onLeftClickStart(final MouseEvent event) {
+	public void onLeftClickStart(MouseEvent event) {
 	}
 
 	@Override
-	public void onRightClickStart(final MouseEvent event) {
+	public void onRightClickStart(MouseEvent event) {
 	}
 
 	@Override
-	public void onLeftClickFinish(final MouseEvent event) {
+	public void onLeftClickFinish(MouseEvent event) {
 	}
 
 	@Override
-	public void onRightClickFinish(final MouseEvent event) {
+	public void onRightClickFinish(MouseEvent event) {
 	}
 
 	@Override
-	public void onKeyPressed(final NovelEngine engine, final int key) {
+	public void onKeyPressed(NovelEngine engine, int key) {
 	}
 
 	@Override
-	public void onKeyReleased(final NovelEngine engine, final int key) {
+	public void onKeyReleased(NovelEngine engine, int key) {
 	}
 
 }

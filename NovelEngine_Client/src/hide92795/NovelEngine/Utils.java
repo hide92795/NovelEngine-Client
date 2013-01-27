@@ -26,7 +26,7 @@ public final class Utils {
 	 *            乱数の上限数
 	 * @return 生成された乱数
 	 */
-	public static int getRandom(final int num) {
+	public static int getRandom(int num) {
 		return random.nextInt(num);
 	}
 
@@ -36,7 +36,7 @@ public final class Utils {
 	 * @param e
 	 *            発生した例外
 	 */
-	public static void printStackTraceToLogger(final Exception e) {
+	public static void printStackTraceToLogger(Exception e) {
 		Logger.error(e);
 		StackTraceElement[] trace = e.getStackTrace();
 		for (int i = 0; i < trace.length; i++) {
@@ -53,12 +53,14 @@ public final class Utils {
 	/**
 	 * 元の例外をスローさせた原因となる{@link java.lang.Throwable Throwable}を出力します。
 	 *
+	 * @see <a href="http://stackoverflow.com/questions/6691150"> http://stackoverflow.com/questions/6691150 </a>
+	 *
 	 * @param t
 	 *            例外の原因
 	 * @param causedTrace
 	 *            元の例外の要素
 	 */
-	private static void printStackTraceToLoggerAsCause(final Throwable t, final StackTraceElement[] causedTrace) {
+	private static void printStackTraceToLoggerAsCause(Throwable t, StackTraceElement[] causedTrace) {
 		StackTraceElement[] trace2 = t.getStackTrace();
 		int m = trace2.length - 1, n = causedTrace.length - 1;
 		while (m >= 0 && n >= 0 && trace2[m].equals(causedTrace[n])) {

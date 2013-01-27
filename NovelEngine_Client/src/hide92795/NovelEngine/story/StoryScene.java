@@ -20,12 +20,12 @@ public class StoryScene extends Story {
 	 * @param sceneId
 	 *            シーンID
 	 */
-	public StoryScene(final int sceneId) {
+	public StoryScene(int sceneId) {
 		this.sceneId = sceneId;
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class StoryScene extends Story {
 	 *
 	 * @return シーンID
 	 */
-	public final int getSceneId() {
+	public int getSceneId() {
 		return sceneId;
 	}
 }

@@ -44,7 +44,7 @@ public class StoryChangeBgColor extends Story {
 	 * @param a
 	 *            変更する背景色のアルファ成分
 	 */
-	public StoryChangeBgColor(final byte target, final int r, final int g, final int b, final int a) {
+	public StoryChangeBgColor(byte target, int r, int g, int b, int a) {
 		this.target = target;
 		this.r = (float) r / 255;
 		this.g = (float) g / 255;
@@ -57,12 +57,12 @@ public class StoryChangeBgColor extends Story {
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			BackGround background = story.engine().getBackGroundManager().getBackGround(target);
 			background.setRed(r);

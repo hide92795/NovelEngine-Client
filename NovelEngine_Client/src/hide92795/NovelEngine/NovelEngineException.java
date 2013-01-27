@@ -19,7 +19,7 @@ public class NovelEngineException extends RuntimeException {
 	 * @param chapterId
 	 *            このエラーが発生したチャプターID
 	 */
-	public NovelEngineException(final Throwable cause, final String chapterId) {
+	public NovelEngineException(Throwable cause, String chapterId) {
 		super(cause);
 	}
 
@@ -33,7 +33,7 @@ public class NovelEngineException extends RuntimeException {
 	 * @param chapterId
 	 *            このエラーが発生したチャプターID
 	 */
-	public NovelEngineException(final String message, final Throwable cause, final String chapterId) {
+	public NovelEngineException(String message, Throwable cause, String chapterId) {
 		super(message, cause);
 	}
 

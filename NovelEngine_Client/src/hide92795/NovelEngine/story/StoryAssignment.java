@@ -32,19 +32,19 @@ public class StoryAssignment extends Story {
 	 * @param value
 	 *            代入する値
 	 */
-	public StoryAssignment(final byte varType, final String varName, final int value) {
+	public StoryAssignment(byte varType, String varName, int value) {
 		this.varType = varType;
 		this.varName = varName;
 		this.value = value;
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			Properties p = story.engine().getSettingManager().getProperties(varType);
 			p.setProperty(varName, value);

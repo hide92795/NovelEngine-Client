@@ -54,7 +54,7 @@ public class EffectManager {
 	 * @param packageName
 	 *            検索を行うパッケージ名
 	 */
-	private void create(final HashMap<Integer, ClassData> map, final String packageName) {
+	private void create(HashMap<Integer, ClassData> map, String packageName) {
 		List<String> list = search(packageName);
 		for (String className : list) {
 			Class<? extends Effectable> c = null;
@@ -85,7 +85,7 @@ public class EffectManager {
 	 *            検索を行う対象のパッケージ名
 	 * @return クラス名を格納したリスト
 	 */
-	private List<String> search(final String targetPackageName) {
+	private List<String> search(String targetPackageName) {
 		List<String> ret = new ArrayList<String>();
 		// パッケージ名一覧を取得する
 		Set<?> set = bcp.getPackagesSet();
@@ -106,7 +106,7 @@ public class EffectManager {
 	 * @param packageName
 	 *            検索を行うパッケージ名
 	 */
-	private void search(final List<String> ret, final String name, final String packageName) {
+	private void search(List<String> ret, String name, String packageName) {
 		// パッケージ内のクラス名を一覧する
 		Set<?> set = bcp.getClassesForPackage(packageName);
 		Iterator<?> i = set.iterator();
@@ -129,7 +129,7 @@ public class EffectManager {
 	 *            取得するエフェクトのID
 	 * @return 対象のエフェクトのクラスデータ
 	 */
-	public final ClassData getBackgroundEffect(final int id) {
+	public ClassData getBackgroundEffect(int id) {
 		return backgroundEffecter.get(id);
 	}
 
@@ -156,7 +156,7 @@ public class EffectManager {
 		 * @param constructor
 		 *            エフェクトの生成のコンストラクターに必要な引数リスト
 		 */
-		public ClassData(final Class<? extends Effectable> targetClass, final Class<?>[] constructor) {
+		public ClassData(Class<? extends Effectable> targetClass, Class<?>[] constructor) {
 			this.targetClass = targetClass;
 			this.constructor = constructor;
 		}
@@ -177,8 +177,8 @@ public class EffectManager {
 		 * @throws IllegalAccessException
 		 *             この <code>Constructor</code> オブジェクトが言語アクセス制御を実施し、基本となるコンストラクタにアクセスできない場合
 		 */
-		public final Effectable instantiation(final Object[] argument) throws InstantiationException,
-				IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		public Effectable instantiation(Object[] argument) throws InstantiationException, IllegalAccessException,
+				InvocationTargetException, NoSuchMethodException {
 			return targetClass.getConstructor(constructor).newInstance(argument);
 		}
 
@@ -187,7 +187,7 @@ public class EffectManager {
 		 *
 		 * @return エフェクトの生成に必要な引数のクラスのリスト
 		 */
-		public final Object[] getArgumentList() {
+		public Object[] getArgumentList() {
 			return constructor;
 		}
 	}

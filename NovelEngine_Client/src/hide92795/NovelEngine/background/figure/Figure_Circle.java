@@ -9,8 +9,7 @@ import hide92795.novelengine.background.Figure;
 import hide92795.novelengine.client.NovelEngine;
 
 /**
- * 指定した点を中心とし、指定した半径及び分割数による円形を描画範囲とする
- * {@link hide92795.novelengine.background.Figure Figure} です。
+ * 指定した点を中心とし、指定した半径及び分割数による円形を描画範囲とする {@link hide92795.novelengine.background.Figure Figure} です。
  *
  * @author hide92795
  */
@@ -33,8 +32,7 @@ public class Figure_Circle extends Figure {
 	private int oy;
 
 	/**
-	 * 指定した点を中心とし、指定した半径及び分割数による円形を描画範囲とする
-	 * {@link hide92795.novelengine.background.Figure Figure}オブジェクトを生成します。
+	 * 指定した点を中心とし、指定した半径及び分割数による円形を描画範囲とする {@link hide92795.novelengine.background.Figure Figure}オブジェクトを生成します。
 	 *
 	 * @param division
 	 *            円の分割数
@@ -45,7 +43,7 @@ public class Figure_Circle extends Figure {
 	 * @param oy
 	 *            円の中心のY座標
 	 */
-	public Figure_Circle(final int division, final int radius, final int ox, final int oy) {
+	public Figure_Circle(int division, int radius, int ox, int oy) {
 		this.division = division;
 		this.radius = radius;
 		this.ox = ox;
@@ -53,7 +51,7 @@ public class Figure_Circle extends Figure {
 	}
 
 	@Override
-	public final void renderStencil(final NovelEngine engine) {
+	public void renderStencil(NovelEngine engine) {
 		glBegin(GL_TRIANGLE_FAN);
 		glVertex2i(ox, oy);
 		for (int i = 0; i <= division; i++) {

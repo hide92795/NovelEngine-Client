@@ -8,8 +8,7 @@ import hide92795.novelengine.background.Figure;
 import hide92795.novelengine.client.NovelEngine;
 
 /**
- * 指定した４つの点を頂点にもつ四角形を描画範囲とする {@link hide92795.novelengine.background.Figure
- * Figure} です。
+ * 指定した４つの点を頂点にもつ四角形を描画範囲とする {@link hide92795.novelengine.background.Figure Figure} です。
  *
  * @author hide92795
  */
@@ -32,8 +31,7 @@ public class Figure_Quadrangle extends Figure {
 	private int[] p4;
 
 	/**
-	 * 指定した４つの点を頂点にもつ四角形を描画範囲とする{@link hide92795.novelengine.background.Figure
-	 * Figure}オブジェクトを生成します。
+	 * 指定した４つの点を頂点にもつ四角形を描画範囲とする{@link hide92795.novelengine.background.Figure Figure}オブジェクトを生成します。
 	 *
 	 * @param p1
 	 *            １つ目の点
@@ -44,7 +42,7 @@ public class Figure_Quadrangle extends Figure {
 	 * @param p4
 	 *            ４つ目の点
 	 */
-	public Figure_Quadrangle(final int[] p1, final int[] p2, final int[] p3, final int[] p4) {
+	public Figure_Quadrangle(int[] p1, int[] p2, int[] p3, int[] p4) {
 		this.p1 = p1;
 		this.p2 = p2;
 		this.p3 = p3;
@@ -52,7 +50,7 @@ public class Figure_Quadrangle extends Figure {
 	}
 
 	@Override
-	public final void renderStencil(final NovelEngine engine) {
+	public void renderStencil(NovelEngine engine) {
 		glBegin(GL_QUADS);
 		{
 			glVertex2d(p1[0], p1[1]);

@@ -27,7 +27,7 @@ public class QueueSound extends QueueData {
 	 * @param sound
 	 *            音楽データを格納している <code>byte</code> 配列
 	 */
-	public QueueSound(final NovelEngine engine, final int id, final byte[] sound) {
+	public QueueSound(NovelEngine engine, int id, byte[] sound) {
 		super(engine);
 		this.id = id;
 		this.sound = sound;
@@ -35,7 +35,7 @@ public class QueueSound extends QueueData {
 	}
 
 	@Override
-	public final void execute() {
+	public void execute() {
 		engine().getSoundManager().putSound(id, sound);
 	}
 }

@@ -19,16 +19,16 @@ public class StoryMoveChapter extends Story {
 	 * @param chapterId
 	 *            移動先のチャプターID
 	 */
-	public StoryMoveChapter(final int chapterId) {
+	public StoryMoveChapter(int chapterId) {
 		this.chapterId = chapterId;
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		story.engine().prestartStory(chapterId);
 	}
 }

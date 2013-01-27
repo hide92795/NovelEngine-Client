@@ -17,7 +17,7 @@ public class EveryLaunchTriggeringPolicy<E> extends TriggeringPolicyBase<E> {
 	private boolean launch = false;
 
 	@Override
-	public final boolean isTriggeringEvent(final File activeFile, final E event) {
+	public boolean isTriggeringEvent(File activeFile, E event) {
 		if (!launch) {
 			launch = true;
 			return true;

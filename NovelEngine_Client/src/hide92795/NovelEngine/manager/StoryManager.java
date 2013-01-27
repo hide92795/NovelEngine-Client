@@ -2,7 +2,6 @@ package hide92795.novelengine.manager;
 
 import hide92795.novelengine.Logger;
 import hide92795.novelengine.NovelEngineException;
-import hide92795.novelengine.Utils;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.LoaderStory;
 import hide92795.novelengine.loader.item.DataStory;
@@ -41,7 +40,7 @@ public class StoryManager implements UncaughtExceptionHandler {
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public StoryManager(final NovelEngine engine) {
+	public StoryManager(NovelEngine engine) {
 		stories = new ConcurrentHashMap<Integer, DataStory>(32, 0.75f, 2);
 		this.engine = engine;
 	}
@@ -56,7 +55,7 @@ public class StoryManager implements UncaughtExceptionHandler {
 	 * @param id
 	 *            ストーリーID
 	 */
-	public final void loadStory(final NovelEngine engine, final File file, final int id) {
+	public void loadStory(final NovelEngine engine, final File file, final int id) {
 		Thread t = new Thread("ChapterLoader:" + file.getName()) {
 			@Override
 			public void run() {
@@ -77,7 +76,7 @@ public class StoryManager implements UncaughtExceptionHandler {
 	 *            ストーリーID
 	 * @return 指定されたIDのストーリー
 	 */
-	public final DataStory getStory(final int id) {
+	public DataStory getStory(int id) {
 		return stories.get(id);
 	}
 
@@ -88,7 +87,7 @@ public class StoryManager implements UncaughtExceptionHandler {
 	 *            確認するストーリーID
 	 * @return ロードが完了している場合は <code>true</code>
 	 */
-	public final boolean isLoaded(final int id) {
+	public boolean isLoaded(int id) {
 		DataStory story = getStory(id);
 		if (story != null) {
 			return story.isDataLoaded();
@@ -97,7 +96,7 @@ public class StoryManager implements UncaughtExceptionHandler {
 	}
 
 	@Override
-	public final void uncaughtException(final Thread t, final Throwable e) {
+	public void uncaughtException(Thread t, Throwable e) {
 		if (e instanceof NovelEngineException) {
 			engine.crash((NovelEngineException) e);
 		} else {

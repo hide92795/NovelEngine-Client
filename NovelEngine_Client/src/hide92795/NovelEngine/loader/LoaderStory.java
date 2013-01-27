@@ -33,13 +33,13 @@ import org.msgpack.unpacker.UnpackerIterator;
 
 /**
  * ストーリーデータを外部ファイルから読み込むクラスです。
- *
+ * 
  * @author hide92795
  */
 public class LoaderStory extends Loader {
 	/**
 	 * ストーリーデータを外部ファイルから読み込み、必要なリソースをローダーに登録します。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 * @param file
@@ -48,7 +48,7 @@ public class LoaderStory extends Loader {
 	 *            読み込むストーリーのチャプターID
 	 * @return 読み込まれたストーリーデータ
 	 */
-	public static DataStory load(final NovelEngine engine, final File file, final int id) {
+	public static DataStory load(NovelEngine engine, File file, int id) {
 		LoaderResource resourceLoader = new LoaderResource(engine, id);
 		DataStory data = new DataStory(id);
 		try {

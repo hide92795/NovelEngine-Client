@@ -26,14 +26,14 @@ public class SoundPlayer {
 	 * @param sound
 	 *            再生するサウンド
 	 */
-	public SoundPlayer(final XSound sound) {
+	public SoundPlayer(XSound sound) {
 		this.sound = sound;
 	}
 
 	/**
 	 * サウンドを初期化し、再度再生できるようにします。
 	 */
-	public final void init() {
+	public void init() {
 		sound.seek(0.0f);
 		sound.rewind();
 	}
@@ -41,7 +41,7 @@ public class SoundPlayer {
 	/**
 	 * サウンドをSEとして再生します。
 	 */
-	public final void playAsSE() {
+	public void playAsSE() {
 		sound.setMusic(false);
 		sound.setLooping(false);
 		sound.setVolume(1.0f);
@@ -54,25 +54,25 @@ public class SoundPlayer {
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public final void playAsBGM(final NovelEngine engine) {
+	public void playAsBGM(NovelEngine engine) {
 		int duration = engine.getSettingManager().getValue(ConfigurationManager.VARIABLE_SETTING,
 				Setting.SETTING_DURATION_FADE_BGM);
 		sound.setVolume(0f);
 		sound.setMusic(true);
 		sound.setLooping(true);
 
-		if (SoundPlayer.primaryBGM != null) {
-			SoundPlayer.primaryBGM.sound.fade(duration, 0f, true);
+		if (primaryBGM != null) {
+			primaryBGM.sound.fade(duration, 0f, true);
 		}
 		sound.fade(duration, 1f, false);
 		sound.queue();
-		SoundPlayer.primaryBGM = this;
+		primaryBGM = this;
 	}
 
 	/**
 	 * サウンドを停止します。
 	 */
-	public final void stop() {
+	public void stop() {
 		sound.stop();
 	}
 
@@ -81,14 +81,14 @@ public class SoundPlayer {
 	 *
 	 * @return サウンドの再生が停止している場合は <code>true</code>
 	 */
-	public final boolean isStopped() {
+	public boolean isStopped() {
 		return sound.isStopped();
 	}
 
 	/**
 	 * 現在再生されているBGMを停止します。
 	 */
-	public static final void stopPrimaryBGM() {
+	public static void stopPrimaryBGM() {
 		primaryBGM.stop();
 	}
 }

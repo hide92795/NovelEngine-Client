@@ -58,7 +58,7 @@ public class DataStory {
 	 * @param chapterId
 	 *            チャプターID
 	 */
-	public DataStory(final int chapterId) {
+	public DataStory(int chapterId) {
 		this.chapterId = chapterId;
 		scenes = new HashMap<Integer, Integer>();
 		commandLine = new LinkedList<Story>();
@@ -70,7 +70,7 @@ public class DataStory {
 	 *
 	 * @return チャプターID
 	 */
-	public final int getChapterId() {
+	public int getChapterId() {
 		return chapterId;
 	}
 
@@ -81,7 +81,7 @@ public class DataStory {
 	 * @param story
 	 *            追加するストーリーデータ
 	 */
-	public final void addStory(final Story story) {
+	public void addStory(Story story) {
 		if (story instanceof StoryScene) {
 			scenes.put(((StoryScene) story).getSceneId(), commandLine.size());
 		}
@@ -91,7 +91,7 @@ public class DataStory {
 	/**
 	 * ストーリーの現在の位置を最初に戻します。
 	 */
-	public final void reset() {
+	public void reset() {
 		pos = 0;
 	}
 
@@ -100,7 +100,7 @@ public class DataStory {
 	 *
 	 * @return 次のストーリーデータ
 	 */
-	public final Story next() {
+	public Story next() {
 		Story s = commandLine.get(pos);
 		pos++;
 		return s;
@@ -112,7 +112,7 @@ public class DataStory {
 	 * @param sceneId
 	 *            移動先のシーンID
 	 */
-	public final void moveScene(final int sceneId) {
+	public void moveScene(int sceneId) {
 		Integer integer = scenes.get(sceneId);
 		this.pos = integer.intValue();
 	}
@@ -122,14 +122,14 @@ public class DataStory {
 	 *
 	 * @return 読み込みが終わっているか
 	 */
-	public final boolean isDataLoaded() {
+	public boolean isDataLoaded() {
 		return dataLoaded.get();
 	}
 
 	/**
 	 * 画像データのテクスチャ登録が完了したことをマークします。
 	 */
-	public final void imageLoaded() {
+	public void imageLoaded() {
 		this.imageLoaded = true;
 		checkLoaded();
 	}
@@ -137,7 +137,7 @@ public class DataStory {
 	/**
 	 * 文字データのテクスチャ登録が完了したことをマークします。
 	 */
-	public final void wordsLoaded() {
+	public void wordsLoaded() {
 		this.wordsLoaded = true;
 		checkLoaded();
 	}
@@ -145,7 +145,7 @@ public class DataStory {
 	/**
 	 * BGM・SEのサウンド登録が完了したことをマークします。
 	 */
-	public final void soundLoaded() {
+	public void soundLoaded() {
 		this.soundLoaded = true;
 		checkLoaded();
 	}
@@ -153,7 +153,7 @@ public class DataStory {
 	/**
 	 * ボイスデータのサウンド登録が完了したことをマークします。
 	 */
-	public final void voiceLoaded() {
+	public void voiceLoaded() {
 		this.voiceLoaded = true;
 		checkLoaded();
 	}
@@ -170,7 +170,7 @@ public class DataStory {
 	/**
 	 * ストーリー内に保存されたストーリーデータの一覧を出力します。
 	 */
-	public final void trace() {
+	public void trace() {
 		for (Story story : commandLine) {
 			System.out.println(story.getClass());
 		}

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author hide92795
  */
-public final class Logger {
+public class Logger {
 	/**
 	 * このクラスはユーティリティクラスのためオブジェクト化できません。
 	 */
@@ -50,30 +50,30 @@ public final class Logger {
 		stderr = System.err;
 		System.setOut(new PrintStream(new OutputStream() {
 			@Override
-			public void write(final int b) throws IOException {
+			public void write(int b) throws IOException {
 			}
 		}) {
-			public void println(final String s) {
+			public void println(String s) {
 				logger_stdout.info(s);
 				stdout.println(s);
 			}
 
-			public void print(final String s) {
+			public void print(String s) {
 				logger_stdout.info(s);
 				stdout.println(s);
 			}
 		});
 		System.setErr(new PrintStream(new OutputStream() {
 			@Override
-			public void write(final int b) throws IOException {
+			public void write(int b) throws IOException {
 			}
 		}) {
-			public void println(final String s) {
+			public void println(String s) {
 				logger_stderr.info(s);
 				stderr.println(s);
 			}
 
-			public void print(final String s) {
+			public void print(String s) {
 				logger_stderr.info(s);
 				stderr.println(s);
 			}
@@ -86,7 +86,7 @@ public final class Logger {
 	 * @param msg
 	 *            出力するメッセージ
 	 */
-	public static void info(final Object msg) {
+	public static void info(Object msg) {
 		logger.info(msg.toString());
 	}
 
@@ -96,7 +96,7 @@ public final class Logger {
 	 * @param msg
 	 *            出力するメッセージ
 	 */
-	public static void error(final Object msg) {
+	public static void error(Object msg) {
 		logger.error(msg.toString());
 	}
 
@@ -106,7 +106,7 @@ public final class Logger {
 	 * @param msg
 	 *            出力するメッセージ
 	 */
-	public static void warn(final Object msg) {
+	public static void warn(Object msg) {
 		logger.warn(msg.toString());
 	}
 
@@ -116,7 +116,7 @@ public final class Logger {
 	 * @param msg
 	 *            出力するメッセージ
 	 */
-	public static void debug(final Object msg) {
+	public static void debug(Object msg) {
 		logger.debug(msg.toString());
 	}
 
@@ -126,7 +126,7 @@ public final class Logger {
 	 * @param msg
 	 *            出力するメッセージ
 	 */
-	public static void stdout(final Object msg) {
+	public static void stdout(Object msg) {
 		stdout.println(msg);
 	}
 
@@ -136,7 +136,7 @@ public final class Logger {
 	 * @param msg
 	 *            出力するメッセージ
 	 */
-	public static void stderr(final Object msg) {
+	public static void stderr(Object msg) {
 		stderr.println(msg);
 	}
 

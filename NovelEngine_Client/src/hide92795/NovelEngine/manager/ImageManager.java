@@ -33,7 +33,7 @@ public class ImageManager {
 	 *            イメージID
 	 * @return 指定されたIDのイメージ
 	 */
-	public final Texture getImage(final int id) {
+	public Texture getImage(int id) {
 		Texture t = images.get(id);
 		return t;
 	}
@@ -46,7 +46,7 @@ public class ImageManager {
 	 * @param image
 	 *            イメージデータが格納された <code>byte</code> 配列
 	 */
-	public final void putTexture(final int id, final byte[] image) {
+	public void putTexture(int id, byte[] image) {
 		Texture t = null;
 		ByteArrayInputStream bis = new ByteArrayInputStream(image);
 		try {
@@ -66,7 +66,7 @@ public class ImageManager {
 	 * @param image
 	 *            イメージデータが格納された <code>BufferedImage</code>
 	 */
-	public final void putTexture(final int id, final BufferedImage image) {
+	public void putTexture(int id, BufferedImage image) {
 		Texture t = null;
 		try {
 			t = BufferedImageUtil.getTexture(String.valueOf(id), image);
@@ -84,7 +84,7 @@ public class ImageManager {
 	 *            検索するイメージID
 	 * @return 登録されている場合は <code>true</code>
 	 */
-	public final boolean isLoaded(final int id) {
+	public boolean isLoaded(int id) {
 		return images.containsKey(id);
 	}
 }

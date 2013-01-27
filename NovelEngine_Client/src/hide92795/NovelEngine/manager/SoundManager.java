@@ -45,7 +45,7 @@ public class SoundManager {
 	 *            サウンドID
 	 * @return 指定されたIDのサウンド
 	 */
-	public final SoundPlayer getSound(final int id) {
+	public SoundPlayer getSound(int id) {
 		SoundPlayer p = sounds.get(id);
 		return p;
 	}
@@ -58,7 +58,7 @@ public class SoundManager {
 	 * @param sound
 	 *            サウンドデータが格納された <code>byte</code> 配列
 	 */
-	public final void putSound(final int id, final byte[] sound) {
+	public void putSound(int id, byte[] sound) {
 		SoundPlayer sound2 = null;
 		ByteArrayInputStream bis = new ByteArrayInputStream(sound);
 		try {
@@ -77,7 +77,7 @@ public class SoundManager {
 	 * @param delta
 	 *            前回のupdateとの時間差
 	 */
-	public final void update(final int delta) {
+	public void update(int delta) {
 		sound.update(delta);
 	}
 
@@ -88,7 +88,7 @@ public class SoundManager {
 	 *            検索するサウンドID
 	 * @return 登録されている場合は <code>true</code>
 	 */
-	public final boolean isLoaded(final int id) {
+	public boolean isLoaded(int id) {
 		return sounds.containsKey(id);
 	}
 }

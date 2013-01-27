@@ -64,15 +64,14 @@ public class Button extends Gui {
 	 * @see MouseListener
 	 *
 	 */
-	public Button(final int x, final int y, final int width, final int height, final boolean[] clickable,
-			final int textureNormalId, final int textureOnMouseId) {
+	public Button(int x, int y, int width, int height, boolean[] clickable, int textureNormalId, int textureOnMouseId) {
 		super(x, y, width, height, clickable);
 		this.textureNormalId = textureNormalId;
 		this.textureOnMouseId = textureOnMouseId;
 	}
 
 	@Override
-	public final void update(final Panel panel, final int delta) {
+	public void update(Panel panel, int delta) {
 		int x = panel.engine().getMouseX();
 		int y = panel.engine().getMouseY();
 		boolean drawOnMouseTexture = false;
@@ -104,13 +103,13 @@ public class Button extends Gui {
 	}
 
 	@Override
-	public final void render(final NovelEngine engine) {
+	public void render(NovelEngine engine) {
 		Texture texture = engine.getImageManager().getImage(renderTexture);
 		Renderer.renderImage(texture, 1.0f, getX(), getY());
 	}
 
 	@Override
-	public final void onLeftClickStart(final MouseEvent event) {
+	public void onLeftClickStart(MouseEvent event) {
 		// クリック開始地点が有効か
 		if (isClickableAt(event.getX(), event.getY())) {
 			validClickStart = true;
@@ -121,7 +120,7 @@ public class Button extends Gui {
 	}
 
 	@Override
-	public final void onLeftClickFinish(final MouseEvent event) {
+	public void onLeftClickFinish(MouseEvent event) {
 		// クリック開始が有効かつ終了地点が有効
 		if (validClickStart && isClickableAt(event.getX(), event.getY())) {
 			listener.onLeftClickFinish(event);
@@ -134,7 +133,7 @@ public class Button extends Gui {
 	 * @param listener
 	 *            通知を受け取る {@link hide92795.novelengine.gui.listener.MouseListener}
 	 */
-	public final void setListener(final MouseListener listener) {
+	public void setListener(MouseListener listener) {
 		this.listener = listener;
 	}
 }

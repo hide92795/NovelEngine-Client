@@ -44,7 +44,7 @@ public class DataBasic {
 	 *
 	 * @return 実行中のゲームの名前
 	 */
-	public final String getGamename() {
+	public String getGamename() {
 		return gamename;
 	}
 
@@ -54,7 +54,7 @@ public class DataBasic {
 	 * @param gamename
 	 *            設定するゲーム名
 	 */
-	public final void setGamename(final String gamename) {
+	public void setGamename(String gamename) {
 		this.gamename = gamename;
 	}
 
@@ -63,7 +63,7 @@ public class DataBasic {
 	 *
 	 * @return 実行中のゲームのバージョン
 	 */
-	public final String getVersion() {
+	public String getVersion() {
 		return version;
 	}
 
@@ -73,7 +73,7 @@ public class DataBasic {
 	 * @param version
 	 *            設定するゲームのバージョン
 	 */
-	public final void setVersion(final String version) {
+	public void setVersion(String version) {
 		this.version = version;
 	}
 
@@ -82,7 +82,7 @@ public class DataBasic {
 	 *
 	 * @return ゲームのデフォルトの画面横幅
 	 */
-	public final int getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
@@ -92,7 +92,7 @@ public class DataBasic {
 	 * @param width
 	 *            ゲームのデフォルトの画面横幅
 	 */
-	public final void setWidth(final int width) {
+	public void setWidth(int width) {
 		this.width = width;
 	}
 
@@ -101,7 +101,7 @@ public class DataBasic {
 	 *
 	 * @return ゲームのデフォルトの画面縦幅
 	 */
-	public final int getHeight() {
+	public int getHeight() {
 		return height;
 	}
 
@@ -111,7 +111,7 @@ public class DataBasic {
 	 * @param height
 	 *            ゲームのデフォルトの画面縦幅
 	 */
-	public final void setHeight(final int height) {
+	public void setHeight(int height) {
 		this.height = height;
 	}
 
@@ -120,7 +120,7 @@ public class DataBasic {
 	 *
 	 * @return ユーザーが変更できる場合はtrue
 	 */
-	public final boolean isArrowResize() {
+	public boolean isArrowResize() {
 		return arrowResize;
 	}
 
@@ -130,7 +130,7 @@ public class DataBasic {
 	 * @param arrowResize
 	 *            ユーザーが変更できる場合はtrue
 	 */
-	public final void setArrowResize(final boolean arrowResize) {
+	public void setArrowResize(boolean arrowResize) {
 		this.arrowResize = arrowResize;
 	}
 
@@ -139,7 +139,7 @@ public class DataBasic {
 	 *
 	 * @return 表示するアイコンを格納した配列
 	 */
-	public final ByteBuffer[] getIcons() {
+	public ByteBuffer[] getIcons() {
 		return icons;
 	}
 
@@ -149,7 +149,7 @@ public class DataBasic {
 	 * @param icons
 	 *            表示するアイコンを格納した配列
 	 */
-	public final void setIcons(final ByteBuffer[] icons) {
+	public void setIcons(ByteBuffer[] icons) {
 		this.icons = icons;
 	}
 
@@ -158,7 +158,7 @@ public class DataBasic {
 	 *
 	 * @return アスペクト比を保つための {@link hide92795.novelengine.AspectRatio AspectRatio} オブジェクト
 	 */
-	public final AspectRatio getAspectRatio() {
+	public AspectRatio getAspectRatio() {
 		return aspectRatio;
 	}
 
@@ -170,7 +170,7 @@ public class DataBasic {
 	 * @param height
 	 *            縦幅の比
 	 */
-	public final void setAspectRatio(final int width, final int height) {
+	public void setAspectRatio(int width, int height) {
 		this.aspectRatio = new AspectRatio(width, height);
 	}
 }

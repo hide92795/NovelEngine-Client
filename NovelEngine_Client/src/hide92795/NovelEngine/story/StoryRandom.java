@@ -33,19 +33,19 @@ public class StoryRandom extends Story {
 	 * @param num
 	 *            乱数を生成する範囲
 	 */
-	public StoryRandom(final byte varType, final String varName, final int num) {
+	public StoryRandom(byte varType, String varName, int num) {
 		this.varType = varType;
 		this.varName = varName;
 		this.num = num;
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			int randomValue = Utils.getRandom(num);
 			Properties p = story.engine().getSettingManager().getProperties(varType);

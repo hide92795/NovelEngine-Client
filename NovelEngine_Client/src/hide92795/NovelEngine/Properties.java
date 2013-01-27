@@ -36,7 +36,7 @@ public class Properties extends HashMap<String, Integer> {
 	 * @param value
 	 *            キーに対して設定する値
 	 */
-	public final void setProperty(final String key, final int value) {
+	public void setProperty(String key, int value) {
 		put(key, value);
 	}
 
@@ -47,7 +47,7 @@ public class Properties extends HashMap<String, Integer> {
 	 *            取得する値のキー
 	 * @return キーに対して登録されている値。キーに対して値が登録されていない場合は0
 	 */
-	public final int getProperty(final String key) {
+	public int getProperty(String key) {
 		Integer value = get(key);
 		if (value == null) {
 			return 0;
@@ -64,7 +64,7 @@ public class Properties extends HashMap<String, Integer> {
 	 * @throws Exception
 	 *             保存の最中に何らかのエラーが発生した場合
 	 */
-	public final void store(final File file) throws Exception {
+	public void store(File file) throws Exception {
 		Key key = Loader.getKey();
 		Cipher cipher = Cipher.getInstance("AES/PCBC/PKCS5Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -89,7 +89,7 @@ public class Properties extends HashMap<String, Integer> {
 	 * @throws Exception
 	 *             読み込みの最中に何らかのエラーが発生した場合
 	 */
-	public final void load(final File file) throws Exception {
+	public void load(File file) throws Exception {
 		CipherInputStream cis = null;
 		try {
 			cis = Loader.createCipherInputStream(file);
@@ -115,7 +115,7 @@ public class Properties extends HashMap<String, Integer> {
 	 * @param p
 	 *            キー及び値が保持されている{@link org.msgpack.unpacker.Unpacker Unpacker} オブジェクト
 	 */
-	private void load(final Unpacker p) {
+	private void load(Unpacker p) {
 		for (UnpackerIterator iterator = p.iterator(); iterator.hasNext();) {
 			Value v = (Value) iterator.next();
 			String key = v.asRawValue().getString();

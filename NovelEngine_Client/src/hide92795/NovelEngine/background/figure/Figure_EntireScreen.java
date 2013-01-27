@@ -14,7 +14,7 @@ import hide92795.novelengine.client.NovelEngine;
  */
 public class Figure_EntireScreen extends Figure {
 	@Override
-	public final void renderStencil(final NovelEngine engine) {
+	public void renderStencil(NovelEngine engine) {
 		int width = engine.getDefaultWidth();
 		int height = engine.getDefaultHeight();
 		glBegin(GL_QUADS);

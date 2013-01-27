@@ -21,13 +21,11 @@ public class TransitionFade extends EffectBackGround {
 	 */
 	public static final Class<?>[] CONSTRUCTOR = { int.class, int.class };
 	/**
-	 * フェード前の{@link hide92795.novelengine.background.BackGround BackGround}
-	 * オブジェクトのアルファ値です。
+	 * フェード前の{@link hide92795.novelengine.background.BackGround BackGround} オブジェクトのアルファ値です。
 	 */
 	private int firstAlpha;
 	/**
-	 * フェード後に{@link hide92795.novelengine.background.BackGround BackGround}
-	 * オブジェクトに設定するアルファ値です。
+	 * フェード後に{@link hide92795.novelengine.background.BackGround BackGround} オブジェクトに設定するアルファ値です。
 	 */
 	private int endAlpha;
 	/**
@@ -39,8 +37,7 @@ public class TransitionFade extends EffectBackGround {
 	 */
 	private int elapsedTime;
 	/**
-	 * フェード処理をおこうなう対象の{@link hide92795.novelengine.background.BackGround
-	 * BackGround} オブジェクトです。
+	 * フェード処理をおこうなう対象の{@link hide92795.novelengine.background.BackGround BackGround} オブジェクトです。
 	 */
 	private BackGround background;
 	/**
@@ -60,13 +57,13 @@ public class TransitionFade extends EffectBackGround {
 	 * @param totalTime
 	 *            変化に掛ける時間
 	 */
-	public TransitionFade(final int endAlpha, final int totalTime) {
+	public TransitionFade(int endAlpha, int totalTime) {
 		this.endAlpha = endAlpha;
 		this.totalTime = totalTime;
 	}
 
 	@Override
-	public final void init(final PanelStory story, final byte target) {
+	public void init(PanelStory story, byte target) {
 		finish = false;
 		elapsedTime = 0;
 		background = story.engine().getBackGroundManager().getBackGround(target);
@@ -76,7 +73,7 @@ public class TransitionFade extends EffectBackGround {
 	}
 
 	@Override
-	public final void update(final StoryEffect story, final int delta) {
+	public void update(StoryEffect story, int delta) {
 		if (finish) {
 			story.effectFinish();
 		} else {
@@ -94,11 +91,11 @@ public class TransitionFade extends EffectBackGround {
 	}
 
 	@Override
-	public final void render(final NovelEngine engine) {
+	public void render(NovelEngine engine) {
 	}
 
 	@Override
-	public final void skip() {
+	public void skip() {
 		background.setAlpha((float) endAlpha / 255);
 		finish = true;
 	}

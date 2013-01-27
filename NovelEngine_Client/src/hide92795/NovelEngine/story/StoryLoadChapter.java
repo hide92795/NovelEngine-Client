@@ -20,17 +20,17 @@ public class StoryLoadChapter extends Story {
 	 * @param chapterId
 	 *            ロードを行うチャプターのID
 	 */
-	public StoryLoadChapter(final int chapterId) {
+	public StoryLoadChapter(int chapterId) {
 		this.loadChapterId = chapterId;
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			DataStory dataStory = story.engine().getStoryManager().getStory(loadChapterId);
 			if (dataStory == null) {

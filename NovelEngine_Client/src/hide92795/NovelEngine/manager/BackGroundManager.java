@@ -40,7 +40,7 @@ public class BackGroundManager {
 	 *            取得する {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトのID
 	 * @return 対象の {@link hide92795.novelengine.background.BackGround BackGround} オブジェクト
 	 */
-	public final BackGround getBackGround(final byte target) {
+	public BackGround getBackGround(byte target) {
 		BackGround bg = backgrounds.get(target);
 		if (bg == null) {
 			bg = new BackGround();
@@ -55,7 +55,7 @@ public class BackGroundManager {
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public final void render(final NovelEngine engine) {
+	public void render(NovelEngine engine) {
 		Set<Byte> s = backgrounds.keySet();
 		for (byte i : s) {
 			resetStencil(engine);
@@ -72,7 +72,7 @@ public class BackGroundManager {
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	private void resetStencil(final NovelEngine engine) {
+	private void resetStencil(NovelEngine engine) {
 		glColorMask(false, false, false, false);
 		glDepthMask(false);
 		glStencilFunc(GL_ALWAYS, 0, ~0);
@@ -94,7 +94,7 @@ public class BackGroundManager {
 	 */
 	public class DataComparator implements Comparator<Byte> {
 		@Override
-		public final int compare(final Byte o1, final Byte o2) {
+		public int compare(Byte o1, Byte o2) {
 			if (o1.byteValue() > o1.byteValue()) {
 				return -1;
 			} else if (o1.byteValue() == o1.byteValue()) {

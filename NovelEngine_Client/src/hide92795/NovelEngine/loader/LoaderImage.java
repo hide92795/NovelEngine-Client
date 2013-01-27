@@ -20,7 +20,7 @@ public class LoaderImage extends Loader {
 	 *            読み込む対象の画像ID
 	 * @return 読み込んだデータが格納されたbyte配列
 	 */
-	public static byte[] load(final int id) {
+	public static byte[] load(int id) {
 		CipherInputStream cis = null;
 		byte[] data = null;
 		try {

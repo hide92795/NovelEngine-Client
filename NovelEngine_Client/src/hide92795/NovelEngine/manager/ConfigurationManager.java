@@ -72,7 +72,7 @@ public class ConfigurationManager {
 	 *            プロパティの種類
 	 * @return 対象のプロパティ
 	 */
-	public final Properties getProperties(final byte type) {
+	public Properties getProperties(byte type) {
 		switch (type) {
 		case VARIABLE_SETTING:
 			return setting;
@@ -91,7 +91,7 @@ public class ConfigurationManager {
 	 *            取得する変数の名前
 	 * @return 取得した変数の値
 	 */
-	public final int getValue(final byte type, final String name) {
+	public int getValue(byte type, String name) {
 		if (type == ConfigurationManager.VARIABLE_RAW) {
 			return Integer.parseInt(name);
 		} else {

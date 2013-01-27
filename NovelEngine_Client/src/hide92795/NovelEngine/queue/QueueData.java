@@ -19,7 +19,7 @@ public abstract class QueueData {
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public QueueData(final NovelEngine engine) {
+	public QueueData(NovelEngine engine) {
 		this.engine = engine;
 	}
 
@@ -33,7 +33,7 @@ public abstract class QueueData {
 	 *
 	 * @return engine 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public final NovelEngine engine() {
+	public NovelEngine engine() {
 		return engine;
 	}
 }

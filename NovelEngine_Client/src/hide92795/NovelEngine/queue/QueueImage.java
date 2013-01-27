@@ -33,7 +33,7 @@ public class QueueImage extends QueueData {
 	 * @param image
 	 *            イメージデータを格納している <code>byte</code> 配列
 	 */
-	public QueueImage(final NovelEngine engine, final int id, final byte[] image) {
+	public QueueImage(NovelEngine engine, int id, byte[] image) {
 		super(engine);
 		this.id = id;
 		this.image = image;
@@ -49,14 +49,14 @@ public class QueueImage extends QueueData {
 	 * @param image
 	 *            イメージデータを格納している {@link java.awt.image.BufferedImage BufferedImage}
 	 */
-	public QueueImage(final NovelEngine engine, final int id, final BufferedImage image) {
+	public QueueImage(NovelEngine engine, int id, BufferedImage image) {
 		super(engine);
 		this.id = id;
 		this.buf = image;
 	}
 
 	@Override
-	public final void execute() {
+	public void execute() {
 		if (buf == null) {
 			engine().getImageManager().putTexture(id, image);
 		} else {

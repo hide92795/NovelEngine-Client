@@ -54,8 +54,7 @@ public class StoryChangeBg extends Story {
 	 * @param delay
 	 *            イメージを変更するまでの待機時間
 	 */
-	public StoryChangeBg(final int bgId, final byte target, final int x, final int y, final int magnification,
-			final int delay) {
+	public StoryChangeBg(int bgId, byte target, int x, int y, int magnification, int delay) {
 		this.nextBgId = bgId;
 		this.target = target;
 		this.x = x;
@@ -65,12 +64,12 @@ public class StoryChangeBg extends Story {
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		if (elapsedTime >= delay && !isFinish()) {
 			// 背景変更
 			BackGround background = story.engine().getBackGroundManager().getBackGround(target);

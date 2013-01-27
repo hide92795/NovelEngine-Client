@@ -76,8 +76,8 @@ public class StoryIF extends Story {
 	 * @param falseGoto
 	 *            演算結果が偽の場合に移動するシーンID
 	 */
-	public StoryIF(final byte operator, final byte leftVarType, final String leftVarName, final byte rightVarType,
-			final String rightVarName, final int trueGoto, final int falseGoto) {
+	public StoryIF(byte operator, byte leftVarType, String leftVarName, byte rightVarType, String rightVarName,
+			int trueGoto, int falseGoto) {
 		this.operator = operator;
 		this.leftVarType = leftVarType;
 		this.leftVarName = leftVarName;
@@ -88,12 +88,12 @@ public class StoryIF extends Story {
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			int left = story.engine().getSettingManager().getValue(leftVarType, leftVarName);
 			int right = story.engine().getSettingManager().getValue(rightVarType, rightVarName);
@@ -116,7 +116,7 @@ public class StoryIF extends Story {
 	 *            演算子の右側の変数
 	 * @return 比較結果
 	 */
-	private boolean evaluation(final int left, final int right) {
+	private boolean evaluation(int left, int right) {
 		switch (operator) {
 		case IF_EQUAL:
 			return left == right;

@@ -47,7 +47,7 @@ public abstract class Loader {
 	 * @throws IOException
 	 *             何らかの入出力エラーが発生した場合
 	 */
-	public static byte[] readAll(final InputStream inputStream) throws IOException {
+	public static byte[] readAll(InputStream inputStream) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		while (true) {
@@ -77,8 +77,8 @@ public abstract class Loader {
 	 * @throws InvalidAlgorithmParameterException
 	 *             不適切なアルゴリズムパラメーターが渡された場合
 	 */
-	public static CipherInputStream createCipherInputStream(final File file) throws IOException,
-			NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
+	public static CipherInputStream createCipherInputStream(File file) throws IOException, NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
 		Key key = Loader.getKey();
 		FileInputStream fis = new FileInputStream(file);
 

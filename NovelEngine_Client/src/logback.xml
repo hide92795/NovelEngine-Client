@@ -10,17 +10,11 @@
 			<minIndex>1</minIndex>
 			<maxIndex>10</maxIndex>
 		</rollingPolicy>
-		<triggeringPolicy
-			class="hide92795.novelengine.logback.EveryLaunchTriggeringPolicy">
+		<triggeringPolicy class="hide92795.novelengine.logback.EveryLaunchTriggeringPolicy">
 		</triggeringPolicy>
 		<encoder>
 			<charset>UTF-8</charset>
-			<pattern>%date %-5level [%logger{0}] - %msg%n</pattern>
-		</encoder>
-	</appender>
-	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<pattern>%-5level [%logger{0}]- %msg%n</pattern>
+			<pattern>%date %-5level | %-11logger{0} | - %msg%n</pattern>
 		</encoder>
 	</appender>
 	<root level="TRACE">

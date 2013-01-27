@@ -14,19 +14,19 @@ public abstract class Gui implements KeybordListener, Clickable {
 	/**
 	 * GUIオブジェクトを配置する点のX座標です。
 	 */
-	private final int x;
+	private int x;
 	/**
 	 * GUIオブジェクトを配置する点のY座標です。
 	 */
-	private final int y;
+	private int y;
 	/**
 	 * GUIオブジェクトの横幅です。
 	 */
-	private final int width;
+	private int width;
 	/**
 	 * GUIオブジェクトの縦幅です。
 	 */
-	private final int height;
+	private int height;
 	/**
 	 * クリック可能な領域を表すbooleanの配列です。width * height個の配列で、クリック可能ならtrueを対象の要素に格納します。
 	 *
@@ -58,7 +58,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 * @param clickable
 	 *            クリック可能なエリア
 	 */
-	public Gui(final int x, final int y, final int width, final int height, final boolean[] clickable) {
+	public Gui(int x, int y, int width, int height, boolean[] clickable) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -93,7 +93,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 *            クリックされたウィンドウ内のY座標
 	 * @return クリック位置がGuiの範囲内かつクリック可能な領域ならtrue
 	 */
-	public final boolean isClickableAt(final int x, final int y) {
+	public boolean isClickableAt(int x, int y) {
 		// クリック可能範囲か
 		if (getX() < x && x < getX() + getWidth() && getY() < y && y < getY() + getHeight()) {
 			int inGuiX = x - getX();
@@ -105,27 +105,27 @@ public abstract class Gui implements KeybordListener, Clickable {
 	}
 
 	@Override
-	public void onLeftClickStart(final MouseEvent event) {
+	public void onLeftClickStart(MouseEvent event) {
 	}
 
 	@Override
-	public void onRightClickStart(final MouseEvent event) {
+	public void onRightClickStart(MouseEvent event) {
 	}
 
 	@Override
-	public void onLeftClickFinish(final MouseEvent event) {
+	public void onLeftClickFinish(MouseEvent event) {
 	}
 
 	@Override
-	public void onRightClickFinish(final MouseEvent event) {
+	public void onRightClickFinish(MouseEvent event) {
 	}
 
 	@Override
-	public void onKeyPressed(final NovelEngine engine, final int key) {
+	public void onKeyPressed(NovelEngine engine, int key) {
 	}
 
 	@Override
-	public void onKeyReleased(final NovelEngine engine, final int key) {
+	public void onKeyReleased(NovelEngine engine, int key) {
 	}
 
 	/**
@@ -133,7 +133,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 *
 	 * @return GuiオブジェクトのX座標
 	 */
-	public final int getX() {
+	public int getX() {
 		return x;
 	}
 
@@ -142,7 +142,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 *
 	 * @return GuiオブジェクトのY座標
 	 */
-	public final int getY() {
+	public int getY() {
 		return y;
 	}
 
@@ -151,7 +151,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 *
 	 * @return Guiオブジェクトの横幅
 	 */
-	public final int getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
@@ -160,7 +160,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 *
 	 * @return Guiオブジェクトの縦幅
 	 */
-	public final int getHeight() {
+	public int getHeight() {
 		return height;
 	}
 
@@ -169,7 +169,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 *
 	 * @return このGuiオブジェクトが有効ならtrue
 	 */
-	public final boolean isEnabled() {
+	public boolean isEnabled() {
 		return enabled;
 	}
 
@@ -179,7 +179,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 * @param enabled
 	 *            このGuiオブジェクトを有効にするならtrue、無効にするならfalse
 	 */
-	public final void setEnabled(final boolean enabled) {
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -188,7 +188,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 *
 	 * @return このGuiオブジェクトが描画されるならtrue
 	 */
-	public final boolean isVisible() {
+	public boolean isVisible() {
 		return visible;
 	}
 
@@ -198,7 +198,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 * @param visible
 	 *            このGuiオブジェクトを描画するならtrue、しないならfalse
 	 */
-	public final void setVisible(final boolean visible) {
+	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
 }

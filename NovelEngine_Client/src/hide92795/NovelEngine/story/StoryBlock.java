@@ -20,12 +20,12 @@ public class StoryBlock extends Story {
 	 * @param start
 	 *            このブロックが開始ブロックかどうか
 	 */
-	public StoryBlock(final boolean start) {
+	public StoryBlock(boolean start) {
 		this.startBlock = start;
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class StoryBlock extends Story {
 	 *
 	 * @return このブロックが開始ブロックの場合は <code>true</code>
 	 */
-	public final boolean isStartBlock() {
+	public boolean isStartBlock() {
 		return startBlock;
 	}
 }

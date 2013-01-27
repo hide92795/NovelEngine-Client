@@ -33,7 +33,7 @@ import org.newdawn.slick.opengl.Texture;
  *
  * @author hide92795
  */
-public final class Renderer {
+public class Renderer {
 	/**
 	 * このクラスはユーティリティクラスのためオブジェクト化できません。
 	 */
@@ -46,7 +46,7 @@ public final class Renderer {
 	 * @param texture
 	 *            描画するテクスチャ
 	 */
-	public static void renderImage(final Texture texture) {
+	public static void renderImage(Texture texture) {
 		renderImage(texture, 1.0f);
 	}
 
@@ -58,7 +58,7 @@ public final class Renderer {
 	 * @param alpha
 	 *            アルファ値
 	 */
-	public static void renderImage(final Texture texture, final float alpha) {
+	public static void renderImage(Texture texture, float alpha) {
 		renderImage(texture, alpha, 0.0f, 0.0f);
 	}
 
@@ -74,7 +74,7 @@ public final class Renderer {
 	 * @param y
 	 *            画像を描画する左上の点のY座標
 	 */
-	public static void renderImage(final Texture texture, final float alpha, final float x, final float y) {
+	public static void renderImage(Texture texture, float alpha, float x, float y) {
 		renderImage(texture, alpha, x, y, 1.0f);
 	}
 
@@ -92,8 +92,7 @@ public final class Renderer {
 	 * @param magnificartion
 	 *            拡大率
 	 */
-	public static void renderImage(final Texture texture, final float alpha, final float x, final float y,
-			final float magnificartion) {
+	public static void renderImage(Texture texture, float alpha, float x, float y, float magnificartion) {
 		renderImage(texture, alpha, x, y, x + texture.getTextureWidth() * magnificartion,
 				y + texture.getTextureHeight() * magnificartion);
 	}
@@ -114,8 +113,7 @@ public final class Renderer {
 	 * @param y1
 	 *            画像を描画する右下の点のY座標
 	 */
-	public static void renderImage(final Texture texture, final float alpha, final float x, final float y,
-			final float x1, final float y1) {
+	public static void renderImage(Texture texture, float alpha, float x, float y, float x1, float y1) {
 		texture.bind();
 		glColor4d(1.0f, 1.0f, 1.0f, alpha);
 		glEnable(GL_TEXTURE_2D);
@@ -143,7 +141,7 @@ public final class Renderer {
 	 * @param blue
 	 *            青成分(0.0f～1.0fの範囲内)
 	 */
-	public static void renderColor(final float red, final float green, final float blue) {
+	public static void renderColor(float red, float green, float blue) {
 		renderColor(red, green, blue, 1.0f);
 	}
 
@@ -159,7 +157,7 @@ public final class Renderer {
 	 * @param alpha
 	 *            アルファ値(0.0f～1.0fの範囲内)
 	 */
-	public static void renderColor(final float red, final float green, final float blue, final float alpha) {
+	public static void renderColor(float red, float green, float blue, float alpha) {
 		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.getEngine().getDefaultWidth(), NovelEngine.getEngine()
 				.getDefaultHeight());
 	}
@@ -184,8 +182,7 @@ public final class Renderer {
 	 * @param y1
 	 *            塗りつぶす範囲の右下の点のY座標
 	 */
-	public static void renderColor(final float red, final float green, final float blue, final float alpha,
-			final float x, final float y, final float x1, final float y1) {
+	public static void renderColor(float red, float green, float blue, float alpha, float x, float y, float x1, float y1) {
 		glColor4d(red, green, blue, alpha);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
@@ -208,7 +205,7 @@ public final class Renderer {
 	 * @param blue
 	 *            青成分(0～255の範囲内)
 	 */
-	public static void renderColor(final byte red, final byte green, final byte blue) {
+	public static void renderColor(byte red, byte green, byte blue) {
 		renderColor(red, green, blue, (byte) 0xFF);
 	}
 
@@ -224,7 +221,7 @@ public final class Renderer {
 	 * @param alpha
 	 *            アルファ値(0～255の範囲内)
 	 */
-	public static void renderColor(final byte red, final byte green, final byte blue, final byte alpha) {
+	public static void renderColor(byte red, byte green, byte blue, byte alpha) {
 		renderColor(red, green, blue, alpha, 0, 0, NovelEngine.getEngine().getDefaultWidth(), NovelEngine.getEngine()
 				.getDefaultHeight());
 	}
@@ -249,8 +246,7 @@ public final class Renderer {
 	 * @param y1
 	 *            塗りつぶす範囲の右下の点のY座標
 	 */
-	public static void renderColor(final byte red, final byte green, final byte blue, final byte alpha, final float x,
-			final float y, final float x1, final float y1) {
+	public static void renderColor(byte red, byte green, byte blue, byte alpha, float x, float y, float x1, float y1) {
 		glColor4ub(red, green, blue, alpha);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);

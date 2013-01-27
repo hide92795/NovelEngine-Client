@@ -40,7 +40,7 @@ public class PanelStory extends Panel {
 	 * @param story
 	 *            画面の描画に使用するストーリーデータ
 	 */
-	public PanelStory(final NovelEngine engine, final DataStory story) {
+	public PanelStory(NovelEngine engine, DataStory story) {
 		super(engine);
 		this.story = story;
 		this.processList = new LinkedList<Story>();
@@ -54,7 +54,7 @@ public class PanelStory extends Panel {
 	}
 
 	@Override
-	public final void update(final int delta) {
+	public void update(int delta) {
 		boolean finishAll = true;
 		Iterator<Story> i = processList.iterator();
 		// 完了確認
@@ -103,7 +103,7 @@ public class PanelStory extends Panel {
 	}
 
 	@Override
-	public final void render(final NovelEngine engine) {
+	public void render(NovelEngine engine) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		engine.getBackGroundManager().render(engine);
 		// renderBox();
@@ -136,12 +136,12 @@ public class PanelStory extends Panel {
 	 * @param sceneId
 	 *            移動先のシーンID
 	 */
-	public final void moveScene(final int sceneId) {
+	public void moveScene(int sceneId) {
 		story.moveScene(sceneId);
 	}
 
 	@Override
-	public final void onLeftClickStart(final MouseEvent event) {
+	public void onLeftClickStart(MouseEvent event) {
 		Iterator<Gui> iterator_g = guiList.iterator();
 		while (iterator_g.hasNext()) {
 			Gui gui = iterator_g.next();
@@ -163,7 +163,7 @@ public class PanelStory extends Panel {
 	}
 
 	@Override
-	public final void onLeftClickFinish(final MouseEvent event) {
+	public void onLeftClickFinish(MouseEvent event) {
 		Iterator<Gui> iterator_g = guiList.iterator();
 		while (iterator_g.hasNext()) {
 			Gui gui = iterator_g.next();
@@ -185,7 +185,7 @@ public class PanelStory extends Panel {
 	}
 
 	@Override
-	public final void onKeyPressed(final NovelEngine engine, final int eventKey) {
+	public void onKeyPressed(NovelEngine engine, int eventKey) {
 		Iterator<Gui> iterator_g = guiList.iterator();
 		while (iterator_g.hasNext()) {
 			Gui gui = iterator_g.next();
@@ -198,15 +198,15 @@ public class PanelStory extends Panel {
 		}
 	}
 
-	// public final boolean isShowBox() {
+	// public boolean isShowBox() {
 	// return showBox;
 	// }
 	//
-	// public final void setShowBox(boolean showBox) {
+	// public void setShowBox(boolean showBox) {
 	// this.showBox = showBox;
 	// }
 	//
-	// public final void playBGM(int id) {
+	// public void playBGM(int id) {
 	// if (bgm != null) {
 	// bgm.stop();
 	// }
@@ -216,7 +216,7 @@ public class PanelStory extends Panel {
 	// }
 	// }
 	//
-	// public final void stopBGM() {
+	// public void stopBGM() {
 	// if (bgm != null) {
 	// bgm.stop();
 	// }

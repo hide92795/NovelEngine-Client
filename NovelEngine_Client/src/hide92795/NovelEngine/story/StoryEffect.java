@@ -42,21 +42,21 @@ public class StoryEffect extends Story {
 	 * @param effectBackGround
 	 *            実行するエフェクト
 	 */
-	public StoryEffect(final byte target, final int delay, final EffectBackGround effectBackGround) {
+	public StoryEffect(byte target, int delay, EffectBackGround effectBackGround) {
 		this.target = target;
 		this.delay = delay;
 		this.effectBackGround = effectBackGround;
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		effectBackGround.init(story, target);
 		resetFinish();
 		timeElapsed = false;
 	}
 
 	@Override
-	public final void update(final PanelStory story, final int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			if (timeElapsed) {
 				effectBackGround.update(this, delta);
@@ -71,7 +71,7 @@ public class StoryEffect extends Story {
 	}
 
 	@Override
-	public final void render(final NovelEngine engine) {
+	public void render(NovelEngine engine) {
 		if (timeElapsed) {
 			effectBackGround.render(engine);
 		}
@@ -80,19 +80,19 @@ public class StoryEffect extends Story {
 	/**
 	 * エフェクトが終了した時に呼ばれます。
 	 */
-	public final void effectFinish() {
+	public void effectFinish() {
 		finish();
 	}
 
 	@Override
-	public final void onKeyPressed(final NovelEngine engine, final int eventKey) {
+	public void onKeyPressed(NovelEngine engine, int eventKey) {
 		if (eventKey == Keyboard.KEY_RETURN) {
 			skip(engine);
 		}
 	}
 
 	@Override
-	public final void onLeftClickStart(final MouseEvent event) {
+	public void onLeftClickStart(MouseEvent event) {
 		skip(event.engine());
 	}
 
@@ -102,7 +102,7 @@ public class StoryEffect extends Story {
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	private void skip(final NovelEngine engine) {
+	private void skip(NovelEngine engine) {
 		if (canSkip(engine)) {
 			effectBackGround.skip();
 		}

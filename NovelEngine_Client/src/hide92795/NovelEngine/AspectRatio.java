@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * 画面のアスペクト比を管理するクラスです。
- * 
+ *
  * @author hide92795
  */
 public class AspectRatio {
@@ -21,20 +21,20 @@ public class AspectRatio {
 
 	/**
 	 * 指定したアスペクト比でオブジェクトを生成します。
-	 * 
+	 *
 	 * @param width
 	 *            横のアスペクト比
 	 * @param height
 	 *            縦のアスペクト比
 	 */
-	public AspectRatio(final int width, final int height) {
+	public AspectRatio(int width, int height) {
 		this.ratioWidth = width;
 		this.ratioHeight = height;
 	}
 
 	/**
 	 * ウィンドウのViewportをアスペクト比に合わせて調整します。
-	 * 
+	 *
 	 * @param engine
 	 *            実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 * @param width
@@ -42,7 +42,7 @@ public class AspectRatio {
 	 * @param height
 	 *            リサイズ後のウィンドウの縦幅
 	 */
-	public final void adjust(final NovelEngine engine, final int width, final int height) {
+	public void adjust(NovelEngine engine, int width, int height) {
 		int x = 0;
 		int y = 0;
 		int w = width;

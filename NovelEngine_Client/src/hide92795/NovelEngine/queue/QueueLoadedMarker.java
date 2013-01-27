@@ -44,14 +44,14 @@ public class QueueLoadedMarker extends QueueData {
 	 * @param maker
 	 *            このキューデータが完了通知を行うリソースの種類
 	 */
-	public QueueLoadedMarker(final NovelEngine engine, final int chapterId, final int maker) {
+	public QueueLoadedMarker(NovelEngine engine, int chapterId, int maker) {
 		super(engine);
 		this.chapterId = chapterId;
 		this.maker = maker;
 	}
 
 	@Override
-	public final void execute() {
+	public void execute() {
 		DataStory story = engine().getStoryManager().getStory(chapterId);
 		if (story != null) {
 			switch (maker) {

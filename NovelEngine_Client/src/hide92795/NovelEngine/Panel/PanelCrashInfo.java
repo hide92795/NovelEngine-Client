@@ -18,7 +18,7 @@ public class PanelCrashInfo extends Panel {
 	 * @param exception
 	 *            発生した例外
 	 */
-	public PanelCrashInfo(final NovelEngine engine, final Exception exception) {
+	public PanelCrashInfo(NovelEngine engine, Exception exception) {
 		super(engine);
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
@@ -28,13 +28,11 @@ public class PanelCrashInfo extends Panel {
 	}
 
 	@Override
-	public final void render(final NovelEngine engine) {
+	public void render(NovelEngine engine) {
 		Renderer.renderColor(1.0f, 0.5f, 1.0f);
 	}
 
 	@Override
-	public void update(final int delta) {
-		// TODO 自動生成されたメソッド・スタブ
-
+	public void update(int delta) {
 	}
 }

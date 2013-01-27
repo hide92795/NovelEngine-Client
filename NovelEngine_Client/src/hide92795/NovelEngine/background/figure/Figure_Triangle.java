@@ -8,8 +8,7 @@ import hide92795.novelengine.background.Figure;
 import hide92795.novelengine.client.NovelEngine;
 
 /**
- * 指定した３つの点を頂点にもつ三角形を描画範囲とする {@link hide92795.novelengine.background.Figure
- * Figure} です。
+ * 指定した３つの点を頂点にもつ三角形を描画範囲とする {@link hide92795.novelengine.background.Figure Figure} です。
  *
  * @author hide92795
  */
@@ -28,8 +27,7 @@ public class Figure_Triangle extends Figure {
 	private int[] p3;
 
 	/**
-	 * 指定した３つの点を頂点にもつ三角形を描画範囲とする{@link hide92795.novelengine.background.Figure
-	 * Figure}オブジェクトを生成します。
+	 * 指定した３つの点を頂点にもつ三角形を描画範囲とする{@link hide92795.novelengine.background.Figure Figure}オブジェクトを生成します。
 	 *
 	 * @param p1
 	 *            １つ目の点
@@ -38,14 +36,14 @@ public class Figure_Triangle extends Figure {
 	 * @param p3
 	 *            ３つ目の点
 	 */
-	public Figure_Triangle(final int[] p1, final int[] p2, final int[] p3) {
+	public Figure_Triangle(int[] p1, int[] p2, int[] p3) {
 		this.p1 = p1;
 		this.p2 = p2;
 		this.p3 = p3;
 	}
 
 	@Override
-	public final void renderStencil(final NovelEngine engine) {
+	public void renderStencil(NovelEngine engine) {
 		glBegin(GL_TRIANGLES);
 		{
 			glVertex2d(p1[0], p1[1]);

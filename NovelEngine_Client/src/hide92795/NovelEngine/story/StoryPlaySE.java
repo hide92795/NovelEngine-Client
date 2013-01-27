@@ -38,13 +38,13 @@ public class StoryPlaySE extends Story {
 	 * @param wait
 	 *            SEの再生終了を待つかどうか
 	 */
-	public StoryPlaySE(final int seId, final boolean wait) {
+	public StoryPlaySE(int seId, boolean wait) {
 		this.seId = seId;
 		this.wait = wait;
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 		played = false;
 		sound = story.engine().getSoundManager().getSound(seId);
@@ -52,7 +52,7 @@ public class StoryPlaySE extends Story {
 	}
 
 	@Override
-	public final void update(final PanelStory panelStory, final int delta) {
+	public void update(PanelStory panelStory, int delta) {
 		if (!isFinish()) {
 			if (!played) {
 				sound.playAsSE();
@@ -70,14 +70,14 @@ public class StoryPlaySE extends Story {
 	}
 
 	@Override
-	public final void onKeyPressed(final NovelEngine engine, final int eventKey) {
+	public void onKeyPressed(NovelEngine engine, int eventKey) {
 		if (eventKey == Keyboard.KEY_RETURN) {
 			skip(engine);
 		}
 	}
 
 	@Override
-	public final void onLeftClickStart(final MouseEvent event) {
+	public void onLeftClickStart(MouseEvent event) {
 		skip(event.engine());
 	}
 
@@ -87,7 +87,7 @@ public class StoryPlaySE extends Story {
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	private void skip(final NovelEngine engine) {
+	private void skip(NovelEngine engine) {
 		if (canSkip(engine)) {
 			sound.stop();
 		}

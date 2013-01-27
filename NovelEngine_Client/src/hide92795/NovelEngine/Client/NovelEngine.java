@@ -171,7 +171,7 @@ public class NovelEngine {
 	 * @param arg
 	 *            起動時に与えられた引数
 	 */
-	public static void main(final String[] arg) {
+	public static void main(String[] arg) {
 		Logger.init();
 		Logger.info("NovelEngine launched!");
 		NovelEngine engine = new NovelEngine();
@@ -347,7 +347,7 @@ public class NovelEngine {
 	 * @param delta
 	 *            前回のupdateとの時間差
 	 */
-	private void update(final int delta) {
+	private void update(int delta) {
 		soundManager.update(delta);
 		if (currentPanel != null) {
 			currentPanel.update(delta);
@@ -426,7 +426,7 @@ public class NovelEngine {
 	 *            発生した例外
 	 */
 
-	public final synchronized void crash(final NovelEngineException exception) {
+	public synchronized void crash(NovelEngineException exception) {
 		Utils.printStackTraceToLogger(exception);
 		setCurrentPanel(new PanelCrashInfo(this, exception));
 		hasCrash = true;
@@ -439,7 +439,7 @@ public class NovelEngine {
 	 * @param chapterId
 	 *            読み込み先のチャプターID
 	 */
-	public final void loadStory(final int chapterId) {
+	public void loadStory(int chapterId) {
 		File current = NovelEngine.getCurrentDir();
 		File file;
 		if (chapterId == StoryManager.CHAPTER_START) {
@@ -460,7 +460,7 @@ public class NovelEngine {
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
-	public final void prestartStory(final int id) {
+	public void prestartStory(int id) {
 		setCurrentPanel(new PanelPrestartStory(this, id));
 	}
 
@@ -472,7 +472,7 @@ public class NovelEngine {
 	 * @param panel
 	 *            次に処理を行う{@link hide92795.novelengine.panel.Panel Panel}オブジェクト
 	 */
-	public final void setCurrentPanel(final Panel panel) {
+	public void setCurrentPanel(Panel panel) {
 		nextPanel = panel;
 	}
 
@@ -484,7 +484,7 @@ public class NovelEngine {
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
-	public final void startStory(final int id) {
+	public void startStory(int id) {
 		DataStory story = storyManager.getStory(id);
 		story.reset();
 		setCurrentPanel(new PanelStory(this, story));
@@ -495,7 +495,7 @@ public class NovelEngine {
 	 *
 	 * @return 実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 */
-	public static final NovelEngine getEngine() {
+	public static NovelEngine getEngine() {
 		return theEngine;
 	}
 
@@ -504,7 +504,7 @@ public class NovelEngine {
 	 *
 	 * @return キューマネージャー
 	 */
-	public final QueueManager getQueueManager() {
+	public QueueManager getQueueManager() {
 		return queueManager;
 	}
 
@@ -513,7 +513,7 @@ public class NovelEngine {
 	 *
 	 * @return イメージマネージャー
 	 */
-	public final ImageManager getImageManager() {
+	public ImageManager getImageManager() {
 		return imageManager;
 	}
 
@@ -522,7 +522,7 @@ public class NovelEngine {
 	 *
 	 * @return サウンドマネージャー
 	 */
-	public final SoundManager getSoundManager() {
+	public SoundManager getSoundManager() {
 		return soundManager;
 	}
 
@@ -531,7 +531,7 @@ public class NovelEngine {
 	 *
 	 * @return ストーリーマネージャー
 	 */
-	public final StoryManager getStoryManager() {
+	public StoryManager getStoryManager() {
 		return storyManager;
 	}
 
@@ -540,7 +540,7 @@ public class NovelEngine {
 	 *
 	 * @return バックグラウンドマネージャー
 	 */
-	public final BackGroundManager getBackGroundManager() {
+	public BackGroundManager getBackGroundManager() {
 		return backGroundManager;
 	}
 
@@ -549,7 +549,7 @@ public class NovelEngine {
 	 *
 	 * @return エフェクトマネージャー
 	 */
-	public final EffectManager getEffectManager() {
+	public EffectManager getEffectManager() {
 		return effectManager;
 	}
 
@@ -558,7 +558,7 @@ public class NovelEngine {
 	 *
 	 * @return コンフィグマネージャー
 	 */
-	public final ConfigurationManager getSettingManager() {
+	public ConfigurationManager getSettingManager() {
 		return configurationManager;
 	}
 
@@ -567,7 +567,7 @@ public class NovelEngine {
 	 *
 	 * @return デフォルトの画面の横幅
 	 */
-	public final int getDefaultWidth() {
+	public int getDefaultWidth() {
 		return dataBasic.getWidth();
 	}
 
@@ -576,7 +576,7 @@ public class NovelEngine {
 	 *
 	 * @return デフォルトの画面の縦幅
 	 */
-	public final int getDefaultHeight() {
+	public int getDefaultHeight() {
 		return dataBasic.getHeight();
 	}
 
@@ -585,7 +585,7 @@ public class NovelEngine {
 	 *
 	 * @return 現在のマウスのX座標
 	 */
-	public final int getMouseX() {
+	public int getMouseX() {
 		int x = Math.round((Mouse.getX() - this.x) / magnification);
 		return x;
 	}
@@ -595,7 +595,7 @@ public class NovelEngine {
 	 *
 	 * @return 現在のマウスのY 座標
 	 */
-	public final int getMouseY() {
+	public int getMouseY() {
 		int y = Math.round((Display.getHeight() - (Mouse.getY() + 1) - this.y) / magnification);
 		return y;
 	}
@@ -605,7 +605,7 @@ public class NovelEngine {
 	 *
 	 * @return 有効な描画範囲の左上のX座標
 	 */
-	public final int getX() {
+	public int getX() {
 		return x;
 	}
 
@@ -615,7 +615,7 @@ public class NovelEngine {
 	 * @param x
 	 *            描画範囲として設定された範囲の左上のX座標
 	 */
-	public final void setX(final int x) {
+	public void setX(int x) {
 		this.x = x;
 	}
 
@@ -624,7 +624,7 @@ public class NovelEngine {
 	 *
 	 * @return y 有効な描画範囲の左上のY座標
 	 */
-	public final int getY() {
+	public int getY() {
 		return y;
 	}
 
@@ -634,7 +634,7 @@ public class NovelEngine {
 	 * @param y
 	 *            描画範囲として設定された範囲の左上のY座標
 	 */
-	public final void setY(final int y) {
+	public void setY(int y) {
 		this.y = y;
 	}
 
@@ -643,7 +643,7 @@ public class NovelEngine {
 	 *
 	 * @return 現在の画面内の描画範囲の横幅
 	 */
-	public final int getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
@@ -653,7 +653,7 @@ public class NovelEngine {
 	 * @param width
 	 *            新しい画面内の描画範囲の横幅
 	 */
-	public final void setWidth(final int width) {
+	public void setWidth(int width) {
 		this.width = width;
 	}
 
@@ -662,7 +662,7 @@ public class NovelEngine {
 	 *
 	 * @return 現在の画面内の描画範囲の縦幅
 	 */
-	public final int getHeight() {
+	public int getHeight() {
 		return height;
 	}
 
@@ -672,7 +672,7 @@ public class NovelEngine {
 	 * @param height
 	 *            新しい画面内の描画範囲の縦幅
 	 */
-	public final void setHeight(final int height) {
+	public void setHeight(int height) {
 		this.height = height;
 	}
 
@@ -681,7 +681,7 @@ public class NovelEngine {
 	 *
 	 * @return 画面の大きさの拡大縮小率
 	 */
-	public final float getMagnification() {
+	public float getMagnification() {
 		return magnification;
 	}
 
@@ -691,7 +691,7 @@ public class NovelEngine {
 	 * @param magnification
 	 *            新しい画面の大きさの拡大縮小率
 	 */
-	public final void setMagnification(final float magnification) {
+	public void setMagnification(float magnification) {
 		this.magnification = magnification;
 	}
 }

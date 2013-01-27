@@ -16,11 +16,7 @@ public class StoryButton extends Story {
 	}
 
 	@Override
-	public final void init(final PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
-	}
-
-	class ButtonData {
-
 	}
 }

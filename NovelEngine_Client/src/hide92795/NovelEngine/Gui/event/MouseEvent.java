@@ -11,15 +11,15 @@ public class MouseEvent {
 	/**
 	 * 実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクトを表します。
 	 */
-	private final NovelEngine engine;
+	private NovelEngine engine;
 	/**
 	 * イベントが発生した地点のX座標
 	 */
-	private final int x;
+	private int x;
 	/**
 	 * イベントが発生した地点のY座標
 	 */
-	private final int y;
+	private int y;
 	/**
 	 * このイベントが既に処理されたかを表します。
 	 */
@@ -35,7 +35,7 @@ public class MouseEvent {
 	 * @param y
 	 *            イベントのY座標
 	 */
-	public MouseEvent(final NovelEngine engine, final int x, final int y) {
+	public MouseEvent(NovelEngine engine, int x, int y) {
 		this.engine = engine;
 		this.x = x;
 		this.y = y;
@@ -46,7 +46,7 @@ public class MouseEvent {
 	 *
 	 * @return 実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 */
-	public final NovelEngine engine() {
+	public NovelEngine engine() {
 		return engine;
 	}
 
@@ -55,7 +55,7 @@ public class MouseEvent {
 	 *
 	 * @return イベントが発生した地点のY座標
 	 */
-	public final int getX() {
+	public int getX() {
 		return x;
 	}
 
@@ -64,7 +64,7 @@ public class MouseEvent {
 	 *
 	 * @return イベントが発生した地点のX座標
 	 */
-	public final int getY() {
+	public int getY() {
 		return y;
 	}
 
@@ -73,14 +73,14 @@ public class MouseEvent {
 	 *
 	 * @return このイベントが既に処理されているかどうか
 	 */
-	public final boolean isConsumed() {
+	public boolean isConsumed() {
 		return consumed;
 	}
 
 	/**
 	 * このイベントが処理されたものとしてマークします。
 	 */
-	public final void consume() {
+	public void consume() {
 		this.consumed = true;
 	}
 

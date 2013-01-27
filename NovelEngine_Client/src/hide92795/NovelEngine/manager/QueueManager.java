@@ -29,14 +29,14 @@ public class QueueManager {
 	 * @param q
 	 *            追加するキューデータ
 	 */
-	public final void enqueue(final QueueData q) {
+	public void enqueue(QueueData q) {
 		queue.offer(q);
 	}
 
 	/**
 	 * キューからキューデータを1つ取り出し、処理します。
 	 */
-	public final void execute() {
+	public void execute() {
 		if (!queue.isEmpty()) {
 			QueueData q = queue.poll();
 			if (q == null) {
