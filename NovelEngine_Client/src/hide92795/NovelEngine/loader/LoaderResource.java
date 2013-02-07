@@ -7,7 +7,7 @@ import hide92795.novelengine.queue.QueueLoadedMarker;
 import hide92795.novelengine.queue.QueueSound;
 
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.HashSet;
 
 /**
  * 各種リソースの読み込みを非同期で行うために読み込み専用スレッドにキューの登録、実行を行うクラスです。
@@ -26,19 +26,19 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	/**
 	 * 画像データの読み込みキューデータを格納するキューです。
 	 */
-	private ConcurrentLinkedQueue<Integer> imageQueue;
+	private HashSet<Integer> imageQueue;
 	/**
 	 * 文章データの読み込みキューデータを格納するキューです。
 	 */
-	private ConcurrentLinkedQueue<Integer> wordsQueue;
+	private HashSet<Integer> wordsQueue;
 	/**
 	 * 音楽データの読み込みキューデータを格納するキューです。
 	 */
-	private ConcurrentLinkedQueue<Integer> soundQueue;
+	private HashSet<Integer> soundQueue;
 	/**
 	 * 音声データの読み込みキューデータを格納するキューです。
 	 */
-	private ConcurrentLinkedQueue<Integer> voiceQueue;
+	private HashSet<Integer> voiceQueue;
 	/**
 	 * 画像データの読み込みキューを実行するスレッドです。
 	 */
@@ -57,7 +57,7 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	private Thread voiceLoadThread;
 
 	/**
-	 * 指定されたチャプターのリソース読み込みをするマネージャーの準備、起動をします。
+	 * 指定されたチャプターのリソース読み込みをするマネージャーの準備をします。
 	 *
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
@@ -68,10 +68,10 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	public LoaderResource(NovelEngine engine, int chapterId) {
 		this.engine = engine;
 		this.chapterId = chapterId;
-		imageQueue = new ConcurrentLinkedQueue<Integer>();
-		wordsQueue = new ConcurrentLinkedQueue<Integer>();
-		soundQueue = new ConcurrentLinkedQueue<Integer>();
-		voiceQueue = new ConcurrentLinkedQueue<Integer>();
+		imageQueue = new HashSet<Integer>();
+		wordsQueue = new HashSet<Integer>();
+		soundQueue = new HashSet<Integer>();
+		voiceQueue = new HashSet<Integer>();
 		imageLoadThread = new Thread(new ImageLoader(), "ImageLoader - ChapterID:" + chapterId);
 		wordsLoadThread = new Thread(new WordsLoader(), "WordsLoader - ChapterID:" + chapterId);
 		soundLoadThread = new Thread(new SoundLoader(), "SoundLoader - ChapterID:" + chapterId);
@@ -80,6 +80,12 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 		wordsLoadThread.setUncaughtExceptionHandler(this);
 		soundLoadThread.setUncaughtExceptionHandler(this);
 		voiceLoadThread.setUncaughtExceptionHandler(this);
+	}
+
+	/**
+	 * 読み込みスレッドを起動し、ロードを行います。
+	 */
+	public void start() {
 		imageLoadThread.start();
 		wordsLoadThread.start();
 		soundLoadThread.start();
@@ -88,10 +94,6 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
-		loadImage(0);
-		loadWords(0, null);
-		loadSound(0);
-		loadVoice(0);
 		if (e instanceof NovelEngineException) {
 			engine.crash((NovelEngineException) e);
 		} else {
@@ -121,6 +123,7 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	 */
 	public void loadWords(int id, String words) {
 		// TODO
+		// id words のHashMapを使うのが一番いいか？
 		wordsQueue.add(id);
 	}
 
@@ -153,26 +156,13 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	 * @author hide92795
 	 */
 	private class ImageLoader implements Runnable {
-		/**
-		 * 指定されたチャプターID上で使用される全ての画像データの読み込みが終わった時にtrueです。
-		 */
-		private boolean finish = false;
 
 		@Override
 		public void run() {
-			while (!finish) {
-				Integer i = imageQueue.poll();
-				if (i != null) {
-					int id = i.intValue();
-					if (id == 0) {
-						loadFinish(QueueLoadedMarker.MAKER_IMAGE);
-						finish = true;
-					} else {
-						loadImage(id);
-					}
-				}
+			for (int id : imageQueue) {
+				loadImage(id);
 			}
-
+			loadFinish(QueueLoadedMarker.MAKER_IMAGE);
 		}
 
 		/**
@@ -196,26 +186,12 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	 * @author hide92795
 	 */
 	private class WordsLoader implements Runnable {
-		/**
-		 * 指定されたチャプターID上で使用される全ての文章データの作成が終わった時にtrueです。
-		 */
-		private boolean finish = false;
-
 		@Override
 		public void run() {
-			while (!finish) {
-				Integer i = wordsQueue.poll();
-				if (i != null) {
-					int id = i.intValue();
-					if (id == 0) {
-						loadFinish(QueueLoadedMarker.MAKER_WORDS);
-						finish = true;
-					} else {
-						loadWords(id);
-					}
-				}
+			for (int id : wordsQueue) {
+				loadWords(id);
 			}
-
+			loadFinish(QueueLoadedMarker.MAKER_WORDS);
 		}
 
 		/**
@@ -236,26 +212,12 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	 * @author hide92795
 	 */
 	private class SoundLoader implements Runnable {
-		/**
-		 * 指定されたチャプターID上で使用される全ての音楽データの読み込みが終わった時にtrueです。
-		 */
-		private boolean finish = false;
-
 		@Override
 		public void run() {
-			while (!finish) {
-				Integer i = soundQueue.poll();
-				if (i != null) {
-					int id = i.intValue();
-					if (id == 0) {
-						loadFinish(QueueLoadedMarker.MAKER_SOUND);
-						finish = true;
-					} else {
-						loadSound(id);
-					}
-				}
+			for (int id : soundQueue) {
+				loadSound(id);
 			}
-
+			loadFinish(QueueLoadedMarker.MAKER_SOUND);
 		}
 
 		/**
@@ -278,27 +240,12 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	 * @author hide92795
 	 */
 	private class VoiceLoader implements Runnable {
-
-		/**
-		 * 指定されたチャプターID上で使用される全ての音声データの読み込みが終わった時にtrueです。
-		 */
-		private boolean finish = false;
-
 		@Override
 		public void run() {
-			while (!finish) {
-				Integer i = voiceQueue.poll();
-				if (i != null) {
-					int id = i.intValue();
-					if (id == 0) {
-						loadFinish(QueueLoadedMarker.MAKER_VOICE);
-						finish = true;
-					} else {
-						loadImage(id);
-					}
-				}
+			for (int id : voiceQueue) {
+				loadVoice(id);
 			}
-
+			loadFinish(QueueLoadedMarker.MAKER_VOICE);
 		}
 
 		/**
@@ -307,7 +254,7 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 		 * @param id
 		 *            読み込む音声の音声ID
 		 */
-		private void loadImage(int id) {
+		private void loadVoice(int id) {
 			byte[] data = LoaderSound.load(id);
 			QueueSound q = new QueueSound(engine, id, data);
 			engine.getQueueManager().enqueue(q);
@@ -321,7 +268,7 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	 * @param maker
 	 *            マーカーの種類
 	 */
-	public void loadFinish(int maker) {
+	private void loadFinish(int maker) {
 		QueueLoadedMarker q = new QueueLoadedMarker(engine, chapterId, maker);
 		engine.getQueueManager().enqueue(q);
 	}

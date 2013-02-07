@@ -1,15 +1,18 @@
 package hide92795.novelengine.panel;
 
 import static org.lwjgl.opengl.GL11.glClearColor;
+import hide92795.novelengine.UniqueNumberProvider;
 import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.gui.Gui;
+import hide92795.novelengine.gui.entity.EntityGui;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryBlock;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * ゲーム上でストーリーデータを読み込んで表示を行うクラスです。
@@ -26,9 +29,13 @@ public class PanelStory extends Panel {
 	 */
 	private LinkedList<Story> processList;
 	/**
-	 * 現在画面に描画されている {@link hide92795.novelengine.gui.Gui Gui} オブジェクトのリストです。
+	 * 現在画面に描画されている {@link hide92795.novelengine.gui.entity.EntityGui EntityGui} オブジェクトを管理するマップです。
 	 */
-	private LinkedList<Gui> guiList;
+	private HashMap<Integer, EntityGui> guiList;
+	/**
+	 * GUIのIDを提供するプロバイダーです。
+	 */
+	private UniqueNumberProvider guiIdProvider;
 
 	// private boolean showBox = false;
 	// private Audio bgm;
@@ -44,7 +51,8 @@ public class PanelStory extends Panel {
 		super(engine);
 		this.story = story;
 		this.processList = new LinkedList<Story>();
-		this.guiList = new LinkedList<Gui>();
+		this.guiList = new HashMap<Integer, EntityGui>();
+		this.guiIdProvider = new UniqueNumberProvider();
 	}
 
 	@Override
@@ -95,10 +103,10 @@ public class PanelStory extends Panel {
 			Story story = iterator_s.next();
 			story.update(this, delta);
 		}
-		Iterator<Gui> iterator_g = guiList.iterator();
-		while (iterator_g.hasNext()) {
-			Gui gui = iterator_g.next();
-			gui.update(this, delta);
+		Set<Integer> set_g = guiList.keySet();
+		for (Integer id : set_g) {
+			EntityGui entityGui = guiList.get(id);
+			entityGui.update(this, delta);
 		}
 	}
 
@@ -112,10 +120,10 @@ public class PanelStory extends Panel {
 			Story story = iterator_s.next();
 			story.render(engine);
 		}
-		Iterator<Gui> iterator_g = guiList.iterator();
-		while (iterator_g.hasNext()) {
-			Gui gui = iterator_g.next();
-			gui.render(engine);
+		Set<Integer> set_g = guiList.keySet();
+		for (Integer id : set_g) {
+			EntityGui entityGui = guiList.get(id);
+			entityGui.render(engine);
 		}
 	}
 
@@ -142,11 +150,11 @@ public class PanelStory extends Panel {
 
 	@Override
 	public void onLeftClickStart(MouseEvent event) {
-		Iterator<Gui> iterator_g = guiList.iterator();
-		while (iterator_g.hasNext()) {
-			Gui gui = iterator_g.next();
-			if (gui.isClickableAt(event.getX(), event.getY())) {
-				gui.onLeftClickStart(event);
+		Set<Integer> set_g = guiList.keySet();
+		for (Integer id : set_g) {
+			EntityGui entityGui = guiList.get(id);
+			if (entityGui.isClickableAt(event.getX(), event.getY())) {
+				entityGui.onLeftClickStart(event);
 			}
 			if (event.isConsumed()) {
 				return;
@@ -164,11 +172,11 @@ public class PanelStory extends Panel {
 
 	@Override
 	public void onLeftClickFinish(MouseEvent event) {
-		Iterator<Gui> iterator_g = guiList.iterator();
-		while (iterator_g.hasNext()) {
-			Gui gui = iterator_g.next();
-			if (gui.isClickableAt(event.getX(), event.getY())) {
-				gui.onLeftClickFinish(event);
+		Set<Integer> set_g = guiList.keySet();
+		for (Integer id : set_g) {
+			EntityGui entityGui = guiList.get(id);
+			if (entityGui.isClickableAt(event.getX(), event.getY())) {
+				entityGui.onLeftClickFinish(event);
 			}
 			if (event.isConsumed()) {
 				return;
@@ -186,16 +194,41 @@ public class PanelStory extends Panel {
 
 	@Override
 	public void onKeyPressed(NovelEngine engine, int eventKey) {
-		Iterator<Gui> iterator_g = guiList.iterator();
-		while (iterator_g.hasNext()) {
-			Gui gui = iterator_g.next();
-			gui.render(engine);
+		Set<Integer> set_g = guiList.keySet();
+		for (Integer id : set_g) {
+			EntityGui entityGui = guiList.get(id);
+			entityGui.render(engine);
 		}
 		Iterator<Story> iterator_s = processList.iterator();
 		while (iterator_s.hasNext()) {
 			Story story = iterator_s.next();
 			story.onKeyPressed(engine, eventKey);
 		}
+	}
+
+	/**
+	 * パネルにGUIを登録します。
+	 *
+	 * @param gui
+	 *            登録するGUI
+	 * @return 削除用に使用する番号
+	 */
+	public int addGui(EntityGui gui) {
+		int id = guiIdProvider.get();
+		guiList.put(id, gui);
+		return 0;
+	}
+
+	/**
+	 * パネルからGUIを削除します。<br>
+	 * 削除に使用するIDは登録した際の戻り値です。
+	 *
+	 * @param id
+	 *            削除するGUIのID
+	 */
+	public void removeGui(int id) {
+		guiList.remove(id);
+		guiIdProvider.release(id);
 	}
 
 	// public boolean isShowBox() {

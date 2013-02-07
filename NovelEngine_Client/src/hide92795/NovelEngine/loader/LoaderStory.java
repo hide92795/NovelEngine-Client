@@ -3,14 +3,17 @@ package hide92795.novelengine.loader;
 import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.background.EffectBackGround;
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.gui.entity.EntityButton;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.EffectManager.ClassData;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryAssignment;
 import hide92795.novelengine.story.StoryBlock;
+import hide92795.novelengine.story.StoryButton;
 import hide92795.novelengine.story.StoryChangeBg;
 import hide92795.novelengine.story.StoryChangeBgColor;
 import hide92795.novelengine.story.StoryEffect;
+import hide92795.novelengine.story.StoryExit;
 import hide92795.novelengine.story.StoryIF;
 import hide92795.novelengine.story.StoryLoadChapter;
 import hide92795.novelengine.story.StoryMoveChapter;
@@ -23,9 +26,8 @@ import hide92795.novelengine.story.StoryStopBGM;
 
 import java.awt.Color;
 import java.io.File;
-
+import java.io.IOException;
 import javax.crypto.CipherInputStream;
-
 import org.msgpack.MessagePack;
 import org.msgpack.type.Value;
 import org.msgpack.unpacker.Unpacker;
@@ -33,13 +35,13 @@ import org.msgpack.unpacker.UnpackerIterator;
 
 /**
  * ストーリーデータを外部ファイルから読み込むクラスです。
- * 
+ *
  * @author hide92795
  */
 public class LoaderStory extends Loader {
 	/**
 	 * ストーリーデータを外部ファイルから読み込み、必要なリソースをローダーに登録します。
-	 * 
+	 *
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 * @param file
@@ -51,8 +53,9 @@ public class LoaderStory extends Loader {
 	public static DataStory load(NovelEngine engine, File file, int id) {
 		LoaderResource resourceLoader = new LoaderResource(engine, id);
 		DataStory data = new DataStory(id);
+		CipherInputStream cis = null;
 		try {
-			CipherInputStream cis = Loader.createCipherInputStream(file);
+			cis = Loader.createCipherInputStream(file);
 
 			MessagePack msgpack = new MessagePack();
 			Unpacker unpacker = msgpack.createUnpacker(cis);
@@ -119,9 +122,21 @@ public class LoaderStory extends Loader {
 				case Story.COMMAND_SHOW_WORDS:
 					// セリフ
 					break;
-				case Story.COMMAND_MAKE_BUTTON:
+				case Story.COMMAND_MAKE_BUTTON: {
 					// ボタン作成
+					int num = i.next().asIntegerValue().getInt();
+					int positionId = i.next().asIntegerValue().getInt();
+					EntityButton[] buttons = new EntityButton[num];
+					for (int j = 0; j < num; j++) {
+						int buttonId = i.next().asIntegerValue().getInt();
+						int jumpSceneId = i.next().asIntegerValue().getInt();
+						EntityButton button = new EntityButton(buttonId, jumpSceneId);
+						buttons[j] = button;
+					}
+					StoryButton story = new StoryButton(positionId, buttons);
+					data.addStory(story);
 					break;
+				}
 				case Story.COMMAND_IF: {
 					// もし
 					// byte 演算子, byte 左変数タイプ ,int 左数字, byte 右変数タイプ ,int 右数字, int 真, int 偽
@@ -226,6 +241,13 @@ public class LoaderStory extends Loader {
 					data.addStory(story);
 					break;
 				}
+				case Story.COMMAND_EXIT: {
+					// 終了
+					// boolean confirm
+					boolean confirm = i.next().asBooleanValue().getBoolean();
+					StoryExit story = new StoryExit(confirm);
+					data.addStory(story);
+				}
 				default:
 					break;
 				}
@@ -233,11 +255,12 @@ public class LoaderStory extends Loader {
 		} catch (Exception e) {
 			throw new NovelEngineException(e, String.valueOf(id));
 		} finally {
-			// ロード完了の通知
-			resourceLoader.loadImage(0);
-			resourceLoader.loadWords(0, null);
-			resourceLoader.loadSound(0);
-			resourceLoader.loadVoice(0);
+			resourceLoader.start();
+			try {
+				cis.close();
+			} catch (IOException e) {
+				throw new NovelEngineException(e, String.valueOf(id));
+			}
 		}
 		return data;
 	}

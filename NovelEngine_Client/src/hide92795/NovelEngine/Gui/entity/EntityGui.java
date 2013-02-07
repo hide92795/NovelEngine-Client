@@ -1,6 +1,7 @@
-package hide92795.novelengine.gui;
+package hide92795.novelengine.gui.entity;
 
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.gui.Clickable;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.gui.listener.KeybordListener;
 import hide92795.novelengine.panel.Panel;
@@ -10,7 +11,7 @@ import hide92795.novelengine.panel.Panel;
  *
  * @author hide92795
  */
-public abstract class Gui implements KeybordListener, Clickable {
+public abstract class EntityGui implements KeybordListener, Clickable {
 	/**
 	 * GUIオブジェクトを配置する点のX座標です。
 	 */
@@ -19,20 +20,6 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 * GUIオブジェクトを配置する点のY座標です。
 	 */
 	private int y;
-	/**
-	 * GUIオブジェクトの横幅です。
-	 */
-	private int width;
-	/**
-	 * GUIオブジェクトの縦幅です。
-	 */
-	private int height;
-	/**
-	 * クリック可能な領域を表すbooleanの配列です。width * height個の配列で、クリック可能ならtrueを対象の要素に格納します。
-	 *
-	 * @see #isClickableAt(int, int)
-	 */
-	private boolean[] clickable;
 
 	/**
 	 * このGuiオブジェクトがクリック可能かを表します
@@ -45,26 +32,12 @@ public abstract class Gui implements KeybordListener, Clickable {
 	private boolean visible;
 
 	/**
-	 * 指定された引数でGuiオブジェクトを生成します。
+	 * このGUIオブジェクトを初期化します。
 	 *
-	 * @param x
-	 *            このGuiオブジェクトのX座標
-	 * @param y
-	 *            このGuiオブジェクトのY座標
-	 * @param width
-	 *            このGuiオブジェクトの横幅
-	 * @param height
-	 *            このGuiオブジェクトの縦幅
-	 * @param clickable
-	 *            クリック可能なエリア
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public Gui(int x, int y, int width, int height, boolean[] clickable) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.clickable = clickable;
-	}
+	public abstract void init(NovelEngine engine);
 
 	/**
 	 * GUIオブジェクトを更新します。
@@ -93,16 +66,7 @@ public abstract class Gui implements KeybordListener, Clickable {
 	 *            クリックされたウィンドウ内のY座標
 	 * @return クリック位置がGuiの範囲内かつクリック可能な領域ならtrue
 	 */
-	public boolean isClickableAt(int x, int y) {
-		// クリック可能範囲か
-		if (getX() < x && x < getX() + getWidth() && getY() < y && y < getY() + getHeight()) {
-			int inGuiX = x - getX();
-			int inGuiY = y - getY();
-			int offset = inGuiX + (inGuiY * width);
-			return clickable[offset];
-		}
-		return false;
-	}
+	public abstract boolean isClickableAt(int x, int y);
 
 	@Override
 	public void onLeftClickStart(MouseEvent event) {
@@ -138,6 +102,16 @@ public abstract class Gui implements KeybordListener, Clickable {
 	}
 
 	/**
+	 * このGuiオブジェクトのX座標を設定します。
+	 *
+	 * @param x
+	 *            GuiオブジェクトのX 座標
+	 */
+	public final void setX(int x) {
+		this.x = x;
+	}
+
+	/**
 	 * このGuiオブジェクトのY座標を返します
 	 *
 	 * @return GuiオブジェクトのY座標
@@ -147,21 +121,13 @@ public abstract class Gui implements KeybordListener, Clickable {
 	}
 
 	/**
-	 * このGuiオブジェクトの横幅を返します
+	 * このGuiオブジェクトのY座標を設定します。
 	 *
-	 * @return Guiオブジェクトの横幅
+	 * @param y
+	 *            GuiオブジェクトのY座標
 	 */
-	public int getWidth() {
-		return width;
-	}
-
-	/**
-	 * このGuiオブジェクトの縦幅を返します
-	 *
-	 * @return Guiオブジェクトの縦幅
-	 */
-	public int getHeight() {
-		return height;
+	public final void setY(int y) {
+		this.y = y;
 	}
 
 	/**

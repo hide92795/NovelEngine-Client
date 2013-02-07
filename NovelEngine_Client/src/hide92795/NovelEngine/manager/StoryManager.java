@@ -61,12 +61,22 @@ public class StoryManager implements UncaughtExceptionHandler {
 			public void run() {
 				Logger.info("StoryID: " + file.getName() + " Load start");
 				DataStory story = LoaderStory.load(engine, file, id);
-				stories.put(id, story);
+				addStory(story);
 				Logger.info("StoryID: " + file.getName() + " Load finish");
 			}
 		};
 		t.setUncaughtExceptionHandler(this);
 		t.start();
+	}
+
+	/**
+	 * ストーリーを登録します。
+	 *
+	 * @param story
+	 *            ストーリー
+	 */
+	public void addStory(DataStory story) {
+		stories.put(story.getChapterId(), story);
 	}
 
 	/**

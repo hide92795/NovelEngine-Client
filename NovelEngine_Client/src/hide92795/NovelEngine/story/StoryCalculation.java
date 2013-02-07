@@ -100,8 +100,8 @@ public class StoryCalculation extends Story {
 	 * @param rightVarName
 	 *            演算子の右側の変数の名前
 	 */
-	public StoryCalculation( byte varType,  String varName,  byte operator,  byte leftVarType,
-			 String leftVarName,  byte rightVarType,  String rightVarName) {
+	public StoryCalculation(byte varType, String varName, byte operator, byte leftVarType, String leftVarName,
+			byte rightVarType, String rightVarName) {
 		this.varType = varType;
 		this.varName = varName;
 		this.operator = operator;
@@ -112,12 +112,12 @@ public class StoryCalculation extends Story {
 	}
 
 	@Override
-	public  void init( PanelStory story) {
+	public void init(PanelStory story) {
 		resetFinish();
 	}
 
 	@Override
-	public  void update( PanelStory story,  int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			int leftValue = story.engine().getSettingManager().getValue(leftVarType, leftVarName);
 			int rightValue = story.engine().getSettingManager().getValue(rightVarType, rightVarName);
@@ -139,7 +139,7 @@ public class StoryCalculation extends Story {
 	 *            演算子の右側の値
 	 * @return 計算結果
 	 */
-	private int calculate( byte operator,  int leftValue,  int rightValue) {
+	private int calculate(byte operator, int leftValue, int rightValue) {
 		switch (operator) {
 		case OPERATOR_PLUS:
 			return leftValue + rightValue;

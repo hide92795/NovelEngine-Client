@@ -21,11 +21,13 @@ import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.Utils;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.loader.LoaderBasic;
+import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.loader.item.DataBasic;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.BackGroundManager;
 import hide92795.novelengine.manager.ConfigurationManager;
 import hide92795.novelengine.manager.EffectManager;
+import hide92795.novelengine.manager.GuiManager;
 import hide92795.novelengine.manager.ImageManager;
 import hide92795.novelengine.manager.QueueManager;
 import hide92795.novelengine.manager.SoundManager;
@@ -34,6 +36,9 @@ import hide92795.novelengine.panel.Panel;
 import hide92795.novelengine.panel.PanelCrashInfo;
 import hide92795.novelengine.panel.PanelPrestartStory;
 import hide92795.novelengine.panel.PanelStory;
+import hide92795.novelengine.story.StoryBlock;
+import hide92795.novelengine.story.StoryLoadChapter;
+import hide92795.novelengine.story.StoryMoveChapter;
 
 import java.io.File;
 import java.net.URI;
@@ -146,6 +151,10 @@ public class NovelEngine {
 	 */
 	private final ConfigurationManager configurationManager;
 	/**
+	 * 操作可能な各種GUIを管理するGUIマネージャーです。
+	 */
+	private final GuiManager guiManager;
+	/**
 	 * 現在実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクトです。
 	 */
 	private static NovelEngine theEngine;
@@ -162,6 +171,7 @@ public class NovelEngine {
 		soundManager = new SoundManager();
 		queueManager = new QueueManager();
 		backGroundManager = new BackGroundManager();
+		guiManager = new GuiManager(this);
 		initResource();
 	}
 
@@ -185,10 +195,26 @@ public class NovelEngine {
 		try {
 			dataBasic = LoaderBasic.load();
 			loadStory("start".hashCode());
+			createBootStory();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	/**
+	 * 起動時に実行するストーリデータのロード及びGuiデータの読み込みを行います。
+	 */
+	private void createBootStory() {
+		DataStory data = new DataStory(-1);
+		data.addStory(new StoryBlock(true));
+		// data.addStory(new StoryLoadChapter(StoryManager.CHAPTER_START));
+		data.addStory(new StoryMoveChapter(StoryManager.CHAPTER_START));
+		data.addStory(new StoryBlock(false));
+		storyManager.addStory(data);
+		LoaderResource loader = new LoaderResource(this, -1);
+		guiManager.loadResource(loader);
+		loader.start();
 	}
 
 	/**
@@ -225,7 +251,7 @@ public class NovelEngine {
 		width = getDefaultWidth();
 		height = getDefaultHeight();
 		initGL();
-		setCurrentPanel(new PanelPrestartStory(this, "start".hashCode()));
+		setCurrentPanel(new PanelPrestartStory(this, -1));
 		closeRequested = false;
 		while (!Display.isCloseRequested() && !closeRequested) {
 			try {
@@ -491,6 +517,13 @@ public class NovelEngine {
 	}
 
 	/**
+	 * エンジンを終了します。<br>
+	 */
+	public void exit() {
+		closeRequested = true;
+	}
+
+	/**
 	 * 現在実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクトを返します。
 	 *
 	 * @return 実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
@@ -560,6 +593,15 @@ public class NovelEngine {
 	 */
 	public ConfigurationManager getSettingManager() {
 		return configurationManager;
+	}
+
+	/**
+	 * 操作可能な各種GUIを管理するコンフィグマネージャーを返します。
+	 *
+	 * @return コンフィグマネージャー
+	 */
+	public GuiManager getGuiManager() {
+		return guiManager;
 	}
 
 	/**

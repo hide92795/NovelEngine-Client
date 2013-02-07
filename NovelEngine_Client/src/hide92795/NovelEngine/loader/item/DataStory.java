@@ -1,5 +1,6 @@
 package hide92795.novelengine.loader.item;
 
+import hide92795.novelengine.Logger;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryScene;
 

@@ -35,6 +35,8 @@ public class StoryEffect extends Story {
 	private boolean timeElapsed;
 
 	/**
+	 * エフェクトを実行するストーリーデータを生成します。
+	 *
 	 * @param target
 	 *            エフェクトを実行するレイヤーのID
 	 * @param delay

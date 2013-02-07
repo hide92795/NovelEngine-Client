@@ -159,7 +159,12 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 * @see StoryCalculation
 	 */
 	public static final byte COMMAND_CALCULATION = 23;
-
+	/**
+	 * ゲームを終了するストーリーデータを表します。
+	 *
+	 * @see StoryExit
+	 */
+	public static final byte COMMAND_EXIT = 24;
 	/**
 	 * このストーリーデータの処理が終了したかどうかを表します。
 	 */
