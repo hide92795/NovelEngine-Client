@@ -10,17 +10,35 @@ import hide92795.novelengine.panel.PanelStory;
  */
 public class StoryBlock extends Story {
 	/**
+	 * 開始ブロックを表すストーリーデータです。
+	 */
+	public static final StoryBlock BLOCKSTART;
+	/**
+	 * 終了ブロックを表すストーリーデータです。
+	 */
+	public static final StoryBlock BLOCKEND;
+
+	static {
+		BLOCKSTART = new StoryBlock(true);
+		BLOCKEND = new StoryBlock(false);
+	}
+
+	/**
 	 * このブロックが開始ブロックかどうかを表します。
 	 */
 	private final boolean startBlock;
 
 	/**
-	 * ブロックを表すストーリーデータを生成します。
+	 * ブロックを表すストーリーデータを生成します。<br>
+	 * このストーリーデータはマーカーとしての機能を行うだけなので必要以上に生成されるべきではありません。
 	 *
 	 * @param start
 	 *            このブロックが開始ブロックかどうか
+	 *
+	 * @see StoryBlock#BLOCKSTART
+	 * @see StoryBlock#BLOCKEND
 	 */
-	public StoryBlock(boolean start) {
+	private StoryBlock(boolean start) {
 		this.startBlock = start;
 	}
 

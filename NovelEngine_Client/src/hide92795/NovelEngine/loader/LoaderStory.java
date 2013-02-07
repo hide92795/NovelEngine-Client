@@ -68,14 +68,12 @@ public class LoaderStory extends Loader {
 				switch (command) {
 				case Story.COMMAND_BLOCK_START: {
 					// ブロックスタート
-					StoryBlock story = new StoryBlock(true);
-					data.addStory(story);
+					data.addStory(StoryBlock.BLOCKSTART);
 					break;
 				}
 				case Story.COMMAND_BLOCK_END: {
 					// ブロックエンド
-					StoryBlock story = new StoryBlock(false);
-					data.addStory(story);
+					data.addStory(StoryBlock.BLOCKEND);
 					break;
 				}
 				case Story.COMMAND_SET_SCENEID: {

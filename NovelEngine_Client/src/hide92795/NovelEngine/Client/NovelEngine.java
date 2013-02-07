@@ -207,10 +207,10 @@ public class NovelEngine {
 	 */
 	private void createBootStory() {
 		DataStory data = new DataStory(-1);
-		data.addStory(new StoryBlock(true));
+		data.addStory(StoryBlock.BLOCKSTART);
 		// data.addStory(new StoryLoadChapter(StoryManager.CHAPTER_START));
 		data.addStory(new StoryMoveChapter(StoryManager.CHAPTER_START));
-		data.addStory(new StoryBlock(false));
+		data.addStory(StoryBlock.BLOCKEND);
 		storyManager.addStory(data);
 		LoaderResource loader = new LoaderResource(this, -1);
 		guiManager.loadResource(loader);
