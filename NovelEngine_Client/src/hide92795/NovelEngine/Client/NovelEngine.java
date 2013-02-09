@@ -37,14 +37,15 @@ import hide92795.novelengine.panel.PanelCrashInfo;
 import hide92795.novelengine.panel.PanelPrestartStory;
 import hide92795.novelengine.panel.PanelStory;
 import hide92795.novelengine.story.StoryBlock;
-import hide92795.novelengine.story.StoryLoadChapter;
 import hide92795.novelengine.story.StoryMoveChapter;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -184,8 +185,35 @@ public class NovelEngine {
 	public static void main(String[] arg) {
 		Logger.init();
 		Logger.info("NovelEngine launched!");
+		initNativeLibrary();
 		NovelEngine engine = new NovelEngine();
 		engine.start();
+	}
+
+	/**
+	 * 実行に必要なネイティブライブラリをパスに追加します。
+	 */
+	private static void initNativeLibrary() {
+		File path = new File(getCurrentDir(), "lib\\native");
+		int platform = LWJGLUtil.getPlatform();
+		switch (platform) {
+		case LWJGLUtil.PLATFORM_WINDOWS:
+			path = new File(path, "windows");
+			break;
+		case LWJGLUtil.PLATFORM_MACOSX:
+			path = new File(path, "macosx");
+			break;
+		case LWJGLUtil.PLATFORM_LINUX:
+			path = new File(path, "linux");
+			break;
+		default:
+			break;
+		}
+		try {
+			System.setProperty("org.lwjgl.librarypath", path.getCanonicalPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

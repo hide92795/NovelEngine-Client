@@ -1,0 +1,7 @@
+Copyright (C) 2013- hide92795 All rights reserved.
+
+This program is licensed under the terms of
+the GUN Lesser General Public License Version 3.0
+as published by the Free Software Foundation.
+
+This program has been modified to BeanShell.
