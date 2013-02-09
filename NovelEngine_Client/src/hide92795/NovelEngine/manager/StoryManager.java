@@ -17,13 +17,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class StoryManager implements UncaughtExceptionHandler {
 	/**
+	 * 起動時に各種リソースを読み込むためのストーリーデータのIDを示します。
+	 */
+	public static final int CHAPTER_BOOT = -1;
+	/**
 	 * 一番最初に読み込まれるストーリーデータのIDを示します。
 	 */
-	public static final int CHAPTER_START = "start".hashCode();
+	public static final int CHAPTER_START = -2;
 	/**
 	 * メニューとして読み込まれるストーリーデータのIDを示します。
 	 */
-	public static final int CHAPTER_MENU = "menu".hashCode();
+	public static final int CHAPTER_MENU = -3;
 	/**
 	 * ストーリーデータを格納するためのマップです。
 	 */

@@ -222,7 +222,7 @@ public class NovelEngine {
 	private void initResource() {
 		try {
 			dataBasic = LoaderBasic.load();
-			loadStory("start".hashCode());
+			loadStory(StoryManager.CHAPTER_START);
 			createBootStory();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -234,13 +234,12 @@ public class NovelEngine {
 	 * 起動時に実行するストーリデータのロード及びGuiデータの読み込みを行います。
 	 */
 	private void createBootStory() {
-		DataStory data = new DataStory(-1);
+		DataStory data = new DataStory(StoryManager.CHAPTER_BOOT);
 		data.addStory(StoryBlock.BLOCKSTART);
-		// data.addStory(new StoryLoadChapter(StoryManager.CHAPTER_START));
 		data.addStory(new StoryMoveChapter(StoryManager.CHAPTER_START));
 		data.addStory(StoryBlock.BLOCKEND);
 		storyManager.addStory(data);
-		LoaderResource loader = new LoaderResource(this, -1);
+		LoaderResource loader = new LoaderResource(this, StoryManager.CHAPTER_BOOT);
 		guiManager.loadResource(loader);
 		loader.start();
 	}
@@ -279,7 +278,7 @@ public class NovelEngine {
 		width = getDefaultWidth();
 		height = getDefaultHeight();
 		initGL();
-		setCurrentPanel(new PanelPrestartStory(this, -1));
+		setCurrentPanel(new PanelPrestartStory(this, StoryManager.CHAPTER_BOOT));
 		closeRequested = false;
 		while (!Display.isCloseRequested() && !closeRequested) {
 			try {
