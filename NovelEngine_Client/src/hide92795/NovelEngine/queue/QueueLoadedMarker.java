@@ -18,10 +18,6 @@ public class QueueLoadedMarker extends QueueData {
 	 */
 	public static final int MAKER_WORDS = 1;
 	/**
-	 * 音楽データを表す定数です。
-	 */
-	public static final int MAKER_SOUND = 2;
-	/**
 	 * 音声データを表す定数です。
 	 */
 	public static final int MAKER_VOICE = 3;
@@ -60,9 +56,6 @@ public class QueueLoadedMarker extends QueueData {
 				break;
 			case MAKER_WORDS:
 				story.wordsLoaded();
-				break;
-			case MAKER_SOUND:
-				story.soundLoaded();
 				break;
 			case MAKER_VOICE:
 				story.voiceLoaded();

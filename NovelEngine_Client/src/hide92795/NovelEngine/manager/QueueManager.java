@@ -38,12 +38,14 @@ public class QueueManager {
 	 */
 	public void execute() {
 		if (!queue.isEmpty()) {
+			long l1 = System.nanoTime();
 			QueueData q = queue.poll();
 			if (q == null) {
 				return;
 			}
 			q.execute();
-			Logger.debug("Queue was done!");
+			long l2 = System.nanoTime();
+			Logger.debug("Queue was done! : " + q.getClass() + " at " + (l2 - l1));
 		}
 	}
 

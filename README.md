@@ -12,6 +12,9 @@ NovelEngine FileCreater --- このソフトウェアで実行出来る形式のゲームデータファイ
 --------
 [LWJGL](http://www.lwjgl.org/) by Lightweight Java Game Library Project (LWJGL License)  
 [Slick-Util](http://www.slick2d.org/) by Slick 2D (BSD License)  
+[SoundSystem](http://www.paulscode.com/) by Paul Lamb (SoundSystem License)  
+[LWJGL OpenAL library plug-in](http://www.paulscode.com/) by Paul Lamb (SoundSystem LibraryLWJGLOpenAL License)  
+[JOrbis codec plug-in](http://www.paulscode.com/) by Paul Lamb (SoundSystem CodecJOrbis Class License)  
 [JOrbis](http://www.jcraft.com/jorbis/) by JCraft (LGPL v2.1)  
 [JOgg](http://www.jcraft.com/jorbis/) by JCraft (LGPL v2.1)  
 [MessagePack](http://msgpack.org/) by FURUHASHI Sadayuki and Muga Nishizawa (Apache License v2.0)  
@@ -22,7 +25,6 @@ NovelEngine FileCreater --- このソフトウェアで実行出来る形式のゲームデータファイ
 [PackageSearcher](https://github.com/hide92795/PackageSearcher) by hide92795 (LGPL v3.0)  
 [LogBack](http://logback.qos.ch/) by QOS.ch (LGPL v2.1)  
 [SLF4J](https://www.slf4j.org/) by QOS.ch (MIT License)  
-[Soundly](https://code.google.com/p/slick-soundly/) by davedes (GPL v3.0)  
 
 リバースエンジニアリングについて
 ----------

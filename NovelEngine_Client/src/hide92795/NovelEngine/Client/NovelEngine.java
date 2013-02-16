@@ -169,7 +169,7 @@ public class NovelEngine {
 		configurationManager = new ConfigurationManager();
 		effectManager = new EffectManager();
 		imageManager = new ImageManager();
-		soundManager = new SoundManager();
+		soundManager = new SoundManager(this);
 		queueManager = new QueueManager();
 		backGroundManager = new BackGroundManager();
 		guiManager = new GuiManager(this);
@@ -309,6 +309,7 @@ public class NovelEngine {
 			}
 		}
 		Display.destroy();
+		soundManager.clean();
 		AL.destroy();
 		Logger.info("NovelEngine shutdowned!");
 		System.exit(0);
@@ -401,7 +402,6 @@ public class NovelEngine {
 	 *            前回のupdateとの時間差
 	 */
 	private void update(int delta) {
-		soundManager.update(delta);
 		if (currentPanel != null) {
 			currentPanel.update(delta);
 		}

@@ -1,7 +1,12 @@
 package hide92795.novelengine.story;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import hide92795.novelengine.NovelEngineException;
+import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.panel.PanelStory;
-import hide92795.novelengine.sound.SoundPlayer;
 
 /**
  * BGMの再生を行うストーリーデータです。
@@ -10,13 +15,9 @@ import hide92795.novelengine.sound.SoundPlayer;
  */
 public class StoryPlayBGM extends Story {
 	/**
-	 * 再生を行う音楽のIDです。
+	 * 再生するサウンドのURLです。
 	 */
-	private final int id;
-	/**
-	 * 再生するBGMを表す {@link hide92795.novelengine.sound.SoundPlayer SoundPlayer} オブジェクトです。
-	 */
-	private SoundPlayer sound;
+	private URL url;
 
 	/**
 	 * BGMの再生を行うストーリーデータを生成します。
@@ -25,20 +26,25 @@ public class StoryPlayBGM extends Story {
 	 *            再生を行う音楽のID
 	 */
 	public StoryPlayBGM(int id) {
-		this.id = id;
+		String filename = id + ".nea";
+		File path = new File(NovelEngine.getCurrentDir(), "sound");
+		File file = new File(path, filename);
+		try {
+			url = file.toURI().toURL();
+		} catch (MalformedURLException e) {
+			throw new NovelEngineException(e, "StoryPlayBGM#CONSTRUCTOR");
+		}
 	}
 
 	@Override
 	public void init(PanelStory story) {
 		resetFinish();
-		sound = story.engine().getSoundManager().getSound(id);
-		sound.init();
 	}
 
 	@Override
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
-			sound.playAsBGM(story.engine());
+			story.engine().getSoundManager().playAsBGM(url, ".nea");
 			finish();
 		}
 	}

@@ -1,7 +1,6 @@
 package hide92795.novelengine.story;
 
 import hide92795.novelengine.panel.PanelStory;
-import hide92795.novelengine.sound.SoundPlayer;
 
 /**
  * BGMの再生を行うストーリーデータです。
@@ -17,7 +16,7 @@ public class StoryStopBGM extends Story {
 	@Override
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
-			SoundPlayer.stopPrimaryBGM();
+			story.engine().getSoundManager().stop("BGM");
 			finish();
 		}
 	}

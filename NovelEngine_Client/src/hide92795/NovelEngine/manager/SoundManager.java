@@ -1,17 +1,16 @@
 package hide92795.novelengine.manager;
 
-import hide92795.novelengine.Logger;
-import hide92795.novelengine.sound.SoundPlayer;
+import hide92795.novelengine.NovelEngineException;
+import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.manager.ConfigurationManager.Setting;
+import hide92795.novelengine.soundsystem.XCodecJOrbis;
 
-import java.io.ByteArrayInputStream;
-import java.util.HashMap;
+import java.net.URL;
 
-import org.newdawn.slick.openal.Audio;
-import org.newdawn.slick.openal.AudioLoader;
-
-import soundly.AudioData;
-import soundly.Soundly;
-import soundly.XSound;
+import paulscode.sound.SoundSystem;
+import paulscode.sound.SoundSystemConfig;
+import paulscode.sound.SoundSystemException;
+import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
 /**
  * サウンドデータを管理するためのマネージャーです。
@@ -20,75 +19,89 @@ import soundly.XSound;
  */
 public class SoundManager {
 	/**
-	 * サウンドIDとそれに対応するサウンドを格納するマップです。
+	 * サウンドを再生するために使う {@link paulscode.sound.SoundSystem SoundSystem} オブジェクトです。
 	 */
-	private HashMap<Integer, SoundPlayer> sounds;
+	private SoundSystem sound;
 	/**
-	 * サウンドを再生するために使う {@link soundly.Soundly Soundly} オブジェクトです。
+	 * 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクトです。
 	 */
-	private Soundly sound;
+	private NovelEngine engine;
 
 	/**
 	 * {@link hide92795.novelengine.manager.SoundManager SoundManager} のオブジェクトを生成します。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public SoundManager() {
-		sounds = new HashMap<Integer, SoundPlayer>();
-		sound = Soundly.get();
-		sound.init();
-		sound.setMusicTrackCount(2);
+	public SoundManager(NovelEngine engine) {
+		this.engine = engine;
+		initSoundSystem();
+		sound = new SoundSystem();
 	}
 
 	/**
-	 * 指定されたIDのサウンドを取得します。
-	 *
-	 * @param id
-	 *            サウンドID
-	 * @return 指定されたIDのサウンド
+	 * サウンドシステムを初期化します。
 	 */
-	public SoundPlayer getSound(int id) {
-		SoundPlayer p = sounds.get(id);
-		return p;
-	}
-
-	/**
-	 * サウンドを登録します。
-	 *
-	 * @param id
-	 *            サウンドID
-	 * @param sound
-	 *            サウンドデータが格納された <code>byte</code> 配列
-	 */
-	public void putSound(int id, byte[] sound) {
-		SoundPlayer sound2 = null;
-		ByteArrayInputStream bis = new ByteArrayInputStream(sound);
+	private void initSoundSystem() {
 		try {
-			Audio audio = AudioLoader.getAudio("OGG", bis);
-			sound2 = new SoundPlayer(new XSound(new AudioData(audio.getBufferID())));
-		} catch (Exception e) {
-			Logger.error("サウンドをロードできませんでした。");
-			e.printStackTrace();
+			SoundSystemConfig.addLibrary(LibraryLWJGLOpenAL.class);
+			SoundSystemConfig.setCodec("nea", XCodecJOrbis.class);
+		} catch (SoundSystemException e) {
+			throw new NovelEngineException(e, "SoundManager#initSoundSystem");
 		}
-		sounds.put(id, sound2);
 	}
 
 	/**
-	 * 再生中のサウンドを更新します。
-	 *
-	 * @param delta
-	 *            前回のupdateとの時間差
+	 * ロードしたサウンドを解放します。
 	 */
-	public void update(int delta) {
-		sound.update(delta);
+	public void clean() {
+		sound.cleanup();
 	}
 
 	/**
-	 * 指定されたサウンドIDのサウンドが登録されているかを返します。
+	 * サウンドをBGMとして再生します。
 	 *
-	 * @param id
-	 *            検索するサウンドID
-	 * @return 登録されている場合は <code>true</code>
+	 * @param url
+	 *            再生するサウンドのURL
+	 * @param identifier
+	 *            ファイルの拡張子
 	 */
-	public boolean isLoaded(int id) {
-		return sounds.containsKey(id);
+	public void playAsBGM(URL url, String identifier) {
+		int enable_fade = engine.getSettingManager().getValue(ConfigurationManager.VARIABLE_SETTING,
+				Setting.SETTING_ENABLE_FADE_BGM);
+		if (enable_fade == 1) {
+			int duration_fade = engine.getSettingManager().getValue(ConfigurationManager.VARIABLE_SETTING,
+					Setting.SETTING_DURATION_FADE_BGM);
+			if (sound.playing("BGM")) {
+				sound.fadeOut("BGM", url, identifier, duration_fade);
+				return;
+			}
+		}
+		sound.backgroundMusic("BGM", url, identifier, true);
+
+	}
+
+	/**
+	 * サウンドをSEとして再生します。
+	 *
+	 * @param url
+	 *            再生するサウンドのURL
+	 * @param identifier
+	 *            ファイルの拡張子
+	 * @return このサウンドを管理するための名前
+	 */
+	public String playAsSE(URL url, String identifier) {
+		String sourcename = sound.quickPlay(false, url, identifier, false, 0, 0, 0, 0, 0);
+		return sourcename;
+	}
+
+	/**
+	 * 指定された名前のサウンドを停止します。
+	 *
+	 * @param sourcename
+	 *            サウンドを管理するための名前
+	 */
+	public void stop(String sourcename) {
+		sound.stop(sourcename);
 	}
 }

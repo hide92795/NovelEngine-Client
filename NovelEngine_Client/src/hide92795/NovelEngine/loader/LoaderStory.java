@@ -23,6 +23,7 @@ import hide92795.novelengine.story.StoryRandom;
 import hide92795.novelengine.story.StoryScene;
 import hide92795.novelengine.story.StoryShowBox;
 import hide92795.novelengine.story.StoryStopBGM;
+import hide92795.novelengine.story.StoryWait;
 
 import java.awt.Color;
 import java.io.File;
@@ -151,9 +152,8 @@ public class LoaderStory extends Loader {
 					break;
 				}
 				case Story.COMMAND_PLAY_BGM: {
-					// 再生
+					// BGM再生
 					int bgmid = i.next().asIntegerValue().getInt();
-					resourceLoader.loadSound(bgmid);
 					StoryPlayBGM story = new StoryPlayBGM(bgmid);
 					data.addStory(story);
 					break;
@@ -167,9 +167,7 @@ public class LoaderStory extends Loader {
 				case Story.COMMAND_PLAY_SE: {
 					// SE再生
 					int seId = i.next().asIntegerValue().getInt();
-					boolean wait = i.next().asBooleanValue().getBoolean();
-					resourceLoader.loadSound(seId);
-					StoryPlaySE s = new StoryPlaySE(seId, wait);
+					StoryPlaySE s = new StoryPlaySE(seId);
 					data.addStory(s);
 					break;
 				}
@@ -244,6 +242,13 @@ public class LoaderStory extends Loader {
 					// boolean confirm
 					boolean confirm = i.next().asBooleanValue().getBoolean();
 					StoryExit story = new StoryExit(confirm);
+					data.addStory(story);
+				}
+				case Story.COMMAND_WAIT: {
+					// 待機
+					// int waitTimeMs
+					int waitTimeMs = i.next().asIntegerValue().getInt();
+					StoryWait story = new StoryWait(waitTimeMs);
 					data.addStory(story);
 				}
 				default:

@@ -1,6 +1,5 @@
 package hide92795.novelengine.loader;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -91,7 +90,7 @@ public abstract class Loader {
 		IvParameterSpec ivspec = new IvParameterSpec(iv);
 		cipher.init(Cipher.DECRYPT_MODE, key, ivspec);
 
-		CipherInputStream cis = new CipherInputStream(new BufferedInputStream(fis), cipher);
+		CipherInputStream cis = new CipherInputStream(fis, cipher);
 
 		return cis;
 	}

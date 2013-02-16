@@ -1,6 +1,5 @@
 package hide92795.novelengine.loader.item;
 
-import hide92795.novelengine.Logger;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryScene;
 
@@ -44,10 +43,6 @@ public class DataStory {
 	 * 文章データのリソースデータが使用可能になったかどうかを表します。
 	 */
 	private boolean wordsLoaded;
-	/**
-	 * 音楽データのリソースデータが使用可能になったかどうかを表します。
-	 */
-	private boolean soundLoaded;
 	/**
 	 * 音声データのリソースデータが使用可能になったかどうかを表します。
 	 */
@@ -144,14 +139,6 @@ public class DataStory {
 	}
 
 	/**
-	 * BGM・SEのサウンド登録が完了したことをマークします。
-	 */
-	public void soundLoaded() {
-		this.soundLoaded = true;
-		checkLoaded();
-	}
-
-	/**
 	 * ボイスデータのサウンド登録が完了したことをマークします。
 	 */
 	public void voiceLoaded() {
@@ -163,7 +150,7 @@ public class DataStory {
 	 * 画像・文字・BGM,SE・ボイスデータ全てのロードが終わったか確認します。
 	 */
 	private void checkLoaded() {
-		if (imageLoaded && wordsLoaded && soundLoaded && voiceLoaded) {
+		if (imageLoaded && wordsLoaded && voiceLoaded) {
 			dataLoaded.getAndSet(true);
 		}
 	}

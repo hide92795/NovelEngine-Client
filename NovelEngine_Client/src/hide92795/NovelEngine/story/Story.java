@@ -136,9 +136,9 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 */
 	public static final byte COMMAND_SET_VARIABLE = 19;
 	/**
-	 * 背景色をするストーリーデータを表します。
+	 * 背景色を変更するストーリーデータを表します。
 	 *
-	 * @see
+	 * @see StoryChangeBgColor
 	 */
 	public static final byte COMMAND_SET_BACKGROUND_COLOR = 20;
 	/**
@@ -165,6 +165,12 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 * @see StoryExit
 	 */
 	public static final byte COMMAND_EXIT = 24;
+	/**
+	 * 指定時間待機するストーリーデータを表します。
+	 *
+	 * @see StoryWait
+	 */
+	public static final byte COMMAND_WAIT = 25;
 	/**
 	 * このストーリーデータの処理が終了したかどうかを表します。
 	 */

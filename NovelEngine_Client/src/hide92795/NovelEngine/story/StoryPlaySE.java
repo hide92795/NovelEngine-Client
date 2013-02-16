@@ -1,9 +1,13 @@
 package hide92795.novelengine.story;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.panel.PanelStory;
-import hide92795.novelengine.sound.SoundPlayer;
 
 import org.lwjgl.input.Keyboard;
 
@@ -14,58 +18,42 @@ import org.lwjgl.input.Keyboard;
  */
 public class StoryPlaySE extends Story {
 	/**
-	 * 再生を行うSEのIDです。
+	 * 再生するサウンドのURLです。
 	 */
-	private final int seId;
+	private URL url;
 	/**
-	 * SEの再生終了を待つかどうかを表します。
+	 * このサウンドを管理するための名前です。
 	 */
-	private final boolean wait;
-	/**
-	 * 再生するSEを表す {@link hide92795.novelengine.sound.SoundPlayer SoundPlayer} オブジェクトです。
-	 */
-	private SoundPlayer sound;
-	/**
-	 * SEの再生を開始したかどうかを表します。
-	 */
-	private boolean played;
+	private String sourcename;
 
 	/**
 	 * SEを再生するストーリーデータを生成します。
 	 *
-	 * @param seId
+	 * @param id
 	 *            再生を行うSEのID
-	 * @param wait
-	 *            SEの再生終了を待つかどうか
 	 */
-	public StoryPlaySE(int seId, boolean wait) {
-		this.seId = seId;
-		this.wait = wait;
+	public StoryPlaySE(int id) {
+		String filename = id + ".nea";
+		File path = new File(NovelEngine.getCurrentDir(), "sound");
+		File file = new File(path, filename);
+		try {
+			this.url = file.toURI().toURL();
+		} catch (MalformedURLException e) {
+			throw new NovelEngineException(e, "StoryPlaySE#CONSTRUCTOR");
+		}
 	}
 
 	@Override
 	public void init(PanelStory story) {
 		resetFinish();
-		played = false;
-		sound = story.engine().getSoundManager().getSound(seId);
-		sound.init();
+		sourcename = null;
 	}
 
 	@Override
-	public void update(PanelStory panelStory, int delta) {
+	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
-			if (!played) {
-				sound.playAsSE();
-				played = true;
-			}
-			if (wait) {
-				if (sound.isStopped()) {
-					sound.stop();
-					finish();
-				}
-			} else {
-				finish();
-			}
+			sourcename = story.engine().getSoundManager().playAsSE(url, ".nea");
+			finish();
 		}
 	}
 
@@ -88,8 +76,8 @@ public class StoryPlaySE extends Story {
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
 	private void skip(NovelEngine engine) {
-		if (canSkip(engine)) {
-			sound.stop();
+		if (canSkip(engine) && sourcename != null) {
+			engine.getSoundManager().stop(sourcename);
 		}
 	}
 }
