@@ -1,8 +1,0 @@
-横幅				：width
-縦幅				：height
-X座標				：x
-Y座標				：y
-赤					：red
-緑					：green
-青					：blue
-アルファ値			：alpha

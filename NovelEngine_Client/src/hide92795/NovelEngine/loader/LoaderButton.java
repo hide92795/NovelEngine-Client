@@ -33,7 +33,7 @@ public class LoaderButton extends Loader {
 	 */
 	public static void load(LoaderResource loader, HashMap<Integer, DataButton> buttons,
 			HashMap<Integer, PositionSet> positions) {
-		File path = new File(NovelEngine.getCurrentDir(), "gui");
+		File path = new File(NovelEngine.getCurrentDir(), "object");
 		CipherInputStream cis = null;
 		try {
 			cis = Loader.createCipherInputStream(new File(path, "button.neo"));

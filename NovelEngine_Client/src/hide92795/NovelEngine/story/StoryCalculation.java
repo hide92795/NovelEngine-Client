@@ -119,10 +119,10 @@ public class StoryCalculation extends Story {
 	@Override
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
-			int leftValue = story.engine().getSettingManager().getValue(leftVarType, leftVarName);
-			int rightValue = story.engine().getSettingManager().getValue(rightVarType, rightVarName);
+			int leftValue = story.engine().getConfigurationManager().getValue(leftVarType, leftVarName);
+			int rightValue = story.engine().getConfigurationManager().getValue(rightVarType, rightVarName);
 			int value = calculate(operator, leftValue, rightValue);
-			Properties p = story.engine().getSettingManager().getProperties(varType);
+			Properties p = story.engine().getConfigurationManager().getProperties(varType);
 			p.setProperty(varName, value);
 			finish();
 		}

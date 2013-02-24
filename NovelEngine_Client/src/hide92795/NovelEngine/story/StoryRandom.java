@@ -48,7 +48,7 @@ public class StoryRandom extends Story {
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			int randomValue = Utils.getRandom(num);
-			Properties p = story.engine().getSettingManager().getProperties(varType);
+			Properties p = story.engine().getConfigurationManager().getProperties(varType);
 			p.setProperty(varName, randomValue);
 			finish();
 		}

@@ -26,7 +26,7 @@ public class LoaderGui extends Loader {
 	 *            GUIデータを保管するマップ
 	 */
 	public static void load(HashMap<Integer, boolean[]> clickable) {
-		File path = new File(NovelEngine.getCurrentDir(), "gui");
+		File path = new File(NovelEngine.getCurrentDir(), "object");
 		CipherInputStream cis = null;
 		try {
 			cis = Loader.createCipherInputStream(new File(path, "gui.neo"));

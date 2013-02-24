@@ -67,10 +67,10 @@ public class SoundManager {
 	 *            ファイルの拡張子
 	 */
 	public void playAsBGM(URL url, String identifier) {
-		int enable_fade = engine.getSettingManager().getValue(ConfigurationManager.VARIABLE_SETTING,
+		int enable_fade = engine.getConfigurationManager().getValue(ConfigurationManager.VARIABLE_SETTING,
 				Setting.SETTING_ENABLE_FADE_BGM);
 		if (enable_fade == 1) {
-			int duration_fade = engine.getSettingManager().getValue(ConfigurationManager.VARIABLE_SETTING,
+			int duration_fade = engine.getConfigurationManager().getValue(ConfigurationManager.VARIABLE_SETTING,
 					Setting.SETTING_DURATION_FADE_BGM);
 			if (sound.playing("BGM")) {
 				sound.fadeOut("BGM", url, identifier, duration_fade);

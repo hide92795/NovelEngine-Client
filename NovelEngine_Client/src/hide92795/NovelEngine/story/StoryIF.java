@@ -95,8 +95,8 @@ public class StoryIF extends Story {
 	@Override
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
-			int left = story.engine().getSettingManager().getValue(leftVarType, leftVarName);
-			int right = story.engine().getSettingManager().getValue(rightVarType, rightVarName);
+			int left = story.engine().getConfigurationManager().getValue(leftVarType, leftVarName);
+			int right = story.engine().getConfigurationManager().getValue(rightVarType, rightVarName);
 			boolean b = evaluation(left, right);
 			if (b) {
 				story.moveScene(trueGoto);

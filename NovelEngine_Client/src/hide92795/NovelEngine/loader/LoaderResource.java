@@ -101,6 +101,18 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	}
 
 	/**
+	 * 配列に格納されているIDの画像データが読み込まれていない場合はキューに追加します。
+	 *
+	 * @param ids
+	 *            読み込む画像データのIDの配列
+	 */
+	public void loadImages(int[] ids) {
+		for (int id : ids) {
+			loadImage(id);
+		}
+	}
+
+	/**
 	 * 指定されたIDの文章データが作成されていない場合はキューに追加します。
 	 *
 	 * @param id

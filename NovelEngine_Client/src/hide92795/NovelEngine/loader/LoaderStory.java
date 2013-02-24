@@ -12,6 +12,7 @@ import hide92795.novelengine.story.StoryBlock;
 import hide92795.novelengine.story.StoryButton;
 import hide92795.novelengine.story.StoryChangeBg;
 import hide92795.novelengine.story.StoryChangeBgColor;
+import hide92795.novelengine.story.StoryChangeCharacter;
 import hide92795.novelengine.story.StoryEffect;
 import hide92795.novelengine.story.StoryExit;
 import hide92795.novelengine.story.StoryIF;
@@ -112,9 +113,21 @@ public class LoaderStory extends Loader {
 					data.addStory(story);
 					break;
 				}
-				case Story.COMMAND_CHANGE_CHARACTER:
+				case Story.COMMAND_CHANGE_CHARACTER: {
 					// キャラ変更
+					int characterId = i.next().asIntegerValue().getInt();
+					byte target = i.next().asIntegerValue().getByte();
+					int delay = i.next().asIntegerValue().getInt();
+					int positionId = i.next().asIntegerValue().getInt();
+					int faceId = i.next().asIntegerValue().getInt();
+					int[] faceImages = engine.getCharacterManager().getCharacter(characterId).getFace(faceId)
+							.getFaceDiff();
+					resourceLoader.loadImages(faceImages);
+					StoryChangeCharacter story = new StoryChangeCharacter(characterId, target, delay, positionId,
+							faceId);
+					data.addStory(story);
 					break;
+				}
 				case Story.COMMAND_SHOW_CG:
 					// CG表示
 					break;

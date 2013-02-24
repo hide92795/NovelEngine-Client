@@ -46,7 +46,7 @@ public class StoryAssignment extends Story {
 	@Override
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
-			Properties p = story.engine().getSettingManager().getProperties(varType);
+			Properties p = story.engine().getConfigurationManager().getProperties(varType);
 			p.setProperty(varName, value);
 			finish();
 		}

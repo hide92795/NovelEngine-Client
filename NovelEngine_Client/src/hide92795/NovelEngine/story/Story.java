@@ -236,7 +236,7 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 * @return ストーリーデータをスキップ可能な場合は <code>true</code>
 	 */
 	public final boolean canSkip(final NovelEngine engine) {
-		Properties properties = engine.getSettingManager().getProperties(ConfigurationManager.VARIABLE_SETTING);
+		Properties properties = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_SETTING);
 		int i = properties.getProperty(Setting.SETTING_SKIPPABLE);
 		return i == 1;
 	}

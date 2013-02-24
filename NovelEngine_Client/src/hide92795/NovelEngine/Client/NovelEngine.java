@@ -25,6 +25,7 @@ import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.loader.item.DataBasic;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.BackGroundManager;
+import hide92795.novelengine.manager.CharacterManager;
 import hide92795.novelengine.manager.ConfigurationManager;
 import hide92795.novelengine.manager.EffectManager;
 import hide92795.novelengine.manager.GuiManager;
@@ -63,6 +64,42 @@ public class NovelEngine {
 	 * NovelEngineをデバッグモードで動かす際にtrueにします。
 	 */
 	public static final boolean DEBUG = true;
+	/**
+	 * キューデータを実行するキューマネージャーです。
+	 */
+	private final QueueManager queueManager;
+	/**
+	 * 画像の管理を行うイメージマネージャーです。
+	 */
+	private final ImageManager imageManager;
+	/**
+	 * 音声の管理を行うサウンドマネージャーです。
+	 */
+	private final SoundManager soundManager;
+	/**
+	 * ストーリーデーターの管理を行うストーリーマネージャーです。
+	 */
+	private final StoryManager storyManager;
+	/**
+	 * ストーリー上での描画の管理を行うバックグラウンドマネージャーです。
+	 */
+	private final BackGroundManager backGroundManager;
+	/**
+	 * 各種エフェクトの管理を行うエフェクトマネージャーです。
+	 */
+	private final EffectManager effectManager;
+	/**
+	 * ゲーム上での設定及びフラグを管理するコンフィグマネージャーです。
+	 */
+	private final ConfigurationManager configurationManager;
+	/**
+	 * 操作可能な各種GUIを管理するGUIマネージャーです。
+	 */
+	private final GuiManager guiManager;
+	/**
+	 * キャラクターデータを管理するキャラクターマネージャーです。
+	 */
+	private final CharacterManager characterManager;
 	/**
 	 * 最後にループ処理が行われた時間です。
 	 */
@@ -124,38 +161,6 @@ public class NovelEngine {
 	 */
 	private float magnification = 1.0f;
 	/**
-	 * キューデータを実行するキューマネージャーです。
-	 */
-	private final QueueManager queueManager;
-	/**
-	 * 画像の管理を行うイメージマネージャーです。
-	 */
-	private final ImageManager imageManager;
-	/**
-	 * 音声の管理を行うサウンドマネージャーです。
-	 */
-	private final SoundManager soundManager;
-	/**
-	 * ストーリーデーターの管理を行うストーリーマネージャーです。
-	 */
-	private final StoryManager storyManager;
-	/**
-	 * ストーリー上での描画の管理を行うバックグラウンドマネージャーです。
-	 */
-	private final BackGroundManager backGroundManager;
-	/**
-	 * 各種エフェクトの管理を行うエフェクトマネージャーです。
-	 */
-	private final EffectManager effectManager;
-	/**
-	 * ゲーム上での設定及びフラグを管理するコンフィグマネージャーです。
-	 */
-	private final ConfigurationManager configurationManager;
-	/**
-	 * 操作可能な各種GUIを管理するGUIマネージャーです。
-	 */
-	private final GuiManager guiManager;
-	/**
 	 * 現在実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクトです。
 	 */
 	private static NovelEngine theEngine;
@@ -173,6 +178,7 @@ public class NovelEngine {
 		queueManager = new QueueManager();
 		backGroundManager = new BackGroundManager();
 		guiManager = new GuiManager(this);
+		characterManager = new CharacterManager();
 		initResource();
 	}
 
@@ -555,7 +561,7 @@ public class NovelEngine {
 	 *
 	 * @return 実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 */
-	public static NovelEngine getEngine() {
+	public static final NovelEngine getEngine() {
 		return theEngine;
 	}
 
@@ -564,7 +570,7 @@ public class NovelEngine {
 	 *
 	 * @return キューマネージャー
 	 */
-	public QueueManager getQueueManager() {
+	public final QueueManager getQueueManager() {
 		return queueManager;
 	}
 
@@ -573,7 +579,7 @@ public class NovelEngine {
 	 *
 	 * @return イメージマネージャー
 	 */
-	public ImageManager getImageManager() {
+	public final ImageManager getImageManager() {
 		return imageManager;
 	}
 
@@ -582,7 +588,7 @@ public class NovelEngine {
 	 *
 	 * @return サウンドマネージャー
 	 */
-	public SoundManager getSoundManager() {
+	public final SoundManager getSoundManager() {
 		return soundManager;
 	}
 
@@ -591,7 +597,7 @@ public class NovelEngine {
 	 *
 	 * @return ストーリーマネージャー
 	 */
-	public StoryManager getStoryManager() {
+	public final StoryManager getStoryManager() {
 		return storyManager;
 	}
 
@@ -600,7 +606,7 @@ public class NovelEngine {
 	 *
 	 * @return バックグラウンドマネージャー
 	 */
-	public BackGroundManager getBackGroundManager() {
+	public final BackGroundManager getBackGroundManager() {
 		return backGroundManager;
 	}
 
@@ -609,7 +615,7 @@ public class NovelEngine {
 	 *
 	 * @return エフェクトマネージャー
 	 */
-	public EffectManager getEffectManager() {
+	public final EffectManager getEffectManager() {
 		return effectManager;
 	}
 
@@ -618,17 +624,26 @@ public class NovelEngine {
 	 *
 	 * @return コンフィグマネージャー
 	 */
-	public ConfigurationManager getSettingManager() {
+	public final ConfigurationManager getConfigurationManager() {
 		return configurationManager;
 	}
 
 	/**
 	 * 操作可能な各種GUIを管理するコンフィグマネージャーを返します。
 	 *
-	 * @return コンフィグマネージャー
+	 * @return GUIマネージャー
 	 */
-	public GuiManager getGuiManager() {
+	public final GuiManager getGuiManager() {
 		return guiManager;
+	}
+
+	/**
+	 * キャラクターデータを管理するキャラクターマネージャーを返します。
+	 *
+	 * @return キャラクターマネージャー
+	 */
+	public CharacterManager getCharacterManager() {
+		return characterManager;
 	}
 
 	/**
@@ -636,7 +651,7 @@ public class NovelEngine {
 	 *
 	 * @return デフォルトの画面の横幅
 	 */
-	public int getDefaultWidth() {
+	public final int getDefaultWidth() {
 		return dataBasic.getWidth();
 	}
 
@@ -645,7 +660,7 @@ public class NovelEngine {
 	 *
 	 * @return デフォルトの画面の縦幅
 	 */
-	public int getDefaultHeight() {
+	public final int getDefaultHeight() {
 		return dataBasic.getHeight();
 	}
 
@@ -654,7 +669,7 @@ public class NovelEngine {
 	 *
 	 * @return 現在のマウスのX座標
 	 */
-	public int getMouseX() {
+	public final int getMouseX() {
 		int x = Math.round((Mouse.getX() - this.x) / magnification);
 		return x;
 	}
@@ -664,7 +679,7 @@ public class NovelEngine {
 	 *
 	 * @return 現在のマウスのY 座標
 	 */
-	public int getMouseY() {
+	public final int getMouseY() {
 		int y = Math.round((Display.getHeight() - (Mouse.getY() + 1) - this.y) / magnification);
 		return y;
 	}
@@ -674,7 +689,7 @@ public class NovelEngine {
 	 *
 	 * @return 有効な描画範囲の左上のX座標
 	 */
-	public int getX() {
+	public final int getX() {
 		return x;
 	}
 
@@ -684,7 +699,7 @@ public class NovelEngine {
 	 * @param x
 	 *            描画範囲として設定された範囲の左上のX座標
 	 */
-	public void setX(int x) {
+	public final void setX(int x) {
 		this.x = x;
 	}
 
@@ -693,7 +708,7 @@ public class NovelEngine {
 	 *
 	 * @return y 有効な描画範囲の左上のY座標
 	 */
-	public int getY() {
+	public final int getY() {
 		return y;
 	}
 
@@ -703,7 +718,7 @@ public class NovelEngine {
 	 * @param y
 	 *            描画範囲として設定された範囲の左上のY座標
 	 */
-	public void setY(int y) {
+	public final void setY(int y) {
 		this.y = y;
 	}
 
@@ -712,7 +727,7 @@ public class NovelEngine {
 	 *
 	 * @return 現在の画面内の描画範囲の横幅
 	 */
-	public int getWidth() {
+	public final int getWidth() {
 		return width;
 	}
 
@@ -722,7 +737,7 @@ public class NovelEngine {
 	 * @param width
 	 *            新しい画面内の描画範囲の横幅
 	 */
-	public void setWidth(int width) {
+	public final void setWidth(int width) {
 		this.width = width;
 	}
 
@@ -731,7 +746,7 @@ public class NovelEngine {
 	 *
 	 * @return 現在の画面内の描画範囲の縦幅
 	 */
-	public int getHeight() {
+	public final int getHeight() {
 		return height;
 	}
 
@@ -741,7 +756,7 @@ public class NovelEngine {
 	 * @param height
 	 *            新しい画面内の描画範囲の縦幅
 	 */
-	public void setHeight(int height) {
+	public final void setHeight(int height) {
 		this.height = height;
 	}
 
@@ -750,7 +765,7 @@ public class NovelEngine {
 	 *
 	 * @return 画面の大きさの拡大縮小率
 	 */
-	public float getMagnification() {
+	public final float getMagnification() {
 		return magnification;
 	}
 
@@ -760,7 +775,7 @@ public class NovelEngine {
 	 * @param magnification
 	 *            新しい画面の大きさの拡大縮小率
 	 */
-	public void setMagnification(float magnification) {
+	public final void setMagnification(float magnification) {
 		this.magnification = magnification;
 	}
 }

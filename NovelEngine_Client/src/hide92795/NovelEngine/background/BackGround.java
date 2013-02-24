@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL11.glStencilFunc;
 import static org.lwjgl.opengl.GL11.glStencilOp;
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.background.figure.Figure_EntireScreen;
+import hide92795.novelengine.character.EntityCharacter;
 import hide92795.novelengine.client.NovelEngine;
 
 import org.newdawn.slick.opengl.Texture;
@@ -37,8 +38,6 @@ public class BackGround {
 	 * 描画をする際の拡大率です。
 	 */
 	private float magnificartion = 1.0f;
-
-	// private LinkedList<EntityCharacter> characters;
 	/**
 	 * 描画範囲を示す{@link hide92795.novelengine.background.Figure Figure}です
 	 */
@@ -60,6 +59,10 @@ public class BackGround {
 	 * 背景全体のアルファ値です。
 	 */
 	private float alpha = 1.0f;
+	/**
+	 * 描画するキャラクターです。
+	 */
+	private EntityCharacter character;
 
 	/**
 	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを指定された描画範囲で作成します。<br>
@@ -70,7 +73,6 @@ public class BackGround {
 	 */
 	public BackGround(Figure figure) {
 		this.figure = figure;
-		// characters = new LinkedList<EntityCharacter>();
 	}
 
 	/**
@@ -114,9 +116,9 @@ public class BackGround {
 			Renderer.renderColor(red, green, blue, alpha);
 		}
 		// キャラクター
-		// for (EntityCharacter character : characters) {
-		// character.render();
-		// }
+		if (character != null) {
+			character.render(engine, alpha);
+		}
 	}
 
 	/**
@@ -124,7 +126,7 @@ public class BackGround {
 	 *
 	 * @return 現在の背景のイメージID
 	 */
-	public int getImageId() {
+	public final int getImageId() {
 		return imageId;
 	}
 
@@ -134,7 +136,7 @@ public class BackGround {
 	 * @param imageId
 	 *            設定するイメージID
 	 */
-	public void setImageId(int imageId) {
+	public final void setImageId(int imageId) {
 		this.imageId = imageId;
 	}
 
@@ -143,7 +145,7 @@ public class BackGround {
 	 *
 	 * @return 現在のアルファ値
 	 */
-	public float getAlpha() {
+	public final float getAlpha() {
 		return alpha;
 	}
 
@@ -153,7 +155,7 @@ public class BackGround {
 	 * @param alpha
 	 *            設定するアルファ値
 	 */
-	public void setAlpha(float alpha) {
+	public final void setAlpha(float alpha) {
 		this.alpha = alpha;
 	}
 
@@ -162,7 +164,7 @@ public class BackGround {
 	 *
 	 * @return 現在のX軸方向の位置
 	 */
-	public int getX() {
+	public final int getX() {
 		return x;
 	}
 
@@ -172,7 +174,7 @@ public class BackGround {
 	 * @param x
 	 *            設定するX軸方向の位置
 	 */
-	public void setX(int x) {
+	public final void setX(int x) {
 		this.x = x;
 	}
 
@@ -181,7 +183,7 @@ public class BackGround {
 	 *
 	 * @return 現在のY軸方向の位置
 	 */
-	public int getY() {
+	public final int getY() {
 		return y;
 	}
 
@@ -191,7 +193,7 @@ public class BackGround {
 	 * @param y
 	 *            設定するY軸方向の位置
 	 */
-	public void setY(int y) {
+	public final void setY(int y) {
 		this.y = y;
 	}
 
@@ -200,7 +202,7 @@ public class BackGround {
 	 *
 	 * @return 現在の拡大率
 	 */
-	public float getMagnificartion() {
+	public final float getMagnificartion() {
 		return magnificartion;
 	}
 
@@ -210,7 +212,7 @@ public class BackGround {
 	 * @param magnificartion
 	 *            設定する拡大率
 	 */
-	public void setMagnificartion(float magnificartion) {
+	public final void setMagnificartion(float magnificartion) {
 		this.magnificartion = magnificartion;
 	}
 
@@ -219,7 +221,7 @@ public class BackGround {
 	 *
 	 * @return 現在の描画範囲を表す{@link hide92795.novelengine.background.Figure}オブジェクト
 	 */
-	public Figure getFigure() {
+	public final Figure getFigure() {
 		return figure;
 	}
 
@@ -229,7 +231,7 @@ public class BackGround {
 	 * @param figure
 	 *            描画範囲を表す{@link hide92795.novelengine.background.Figure}オブジェクト
 	 */
-	public void setFigure(Figure figure) {
+	public final void setFigure(Figure figure) {
 		this.figure = figure;
 	}
 
@@ -238,7 +240,7 @@ public class BackGround {
 	 *
 	 * @return 現在の背景色の赤成分
 	 */
-	public float getRed() {
+	public final float getRed() {
 		return red;
 	}
 
@@ -248,7 +250,7 @@ public class BackGround {
 	 * @param red
 	 *            設定する背景色の赤成分
 	 */
-	public void setRed(float red) {
+	public final void setRed(float red) {
 		this.red = red;
 	}
 
@@ -257,7 +259,7 @@ public class BackGround {
 	 *
 	 * @return 現在の背景色の緑成分
 	 */
-	public float getGreen() {
+	public final float getGreen() {
 		return green;
 	}
 
@@ -267,7 +269,7 @@ public class BackGround {
 	 * @param green
 	 *            設定する背景色の緑成分
 	 */
-	public void setGreen(float green) {
+	public final void setGreen(float green) {
 		this.green = green;
 	}
 
@@ -276,7 +278,7 @@ public class BackGround {
 	 *
 	 * @return 現在の背景色の青成分
 	 */
-	public float getBlue() {
+	public final float getBlue() {
 		return blue;
 	}
 
@@ -286,7 +288,17 @@ public class BackGround {
 	 * @param blue
 	 *            設定する背景色の青成分
 	 */
-	public void setBlue(float blue) {
+	public final void setBlue(float blue) {
 		this.blue = blue;
+	}
+
+	/**
+	 * この背景に描画するキャラクターを設定します。
+	 *
+	 * @param character
+	 *            描画するキャラクター
+	 */
+	public final void setCharacter(EntityCharacter character) {
+		this.character = character;
 	}
 }

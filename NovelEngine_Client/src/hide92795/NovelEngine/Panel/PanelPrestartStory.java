@@ -43,7 +43,7 @@ public class PanelPrestartStory extends Panel {
 
 	@Override
 	public void render(NovelEngine engine) {
-		Properties prop = engine.getSettingManager().getProperties(ConfigurationManager.VARIABLE_SETTING);
+		Properties prop = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_SETTING);
 		int rgb = prop.getProperty(Setting.SETTING_PRESTART_BACKGROUND_COLOR);
 		int r = (rgb & 0x00FF0000) >> 16;
 		int g = (rgb & 0x0000FF00) >> 8;
