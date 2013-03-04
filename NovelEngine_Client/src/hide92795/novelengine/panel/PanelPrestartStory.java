@@ -1,3 +1,20 @@
+//
+// NovelEngine Project
+//
+// Copyright (C) 2013 - hide92795
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
 package hide92795.novelengine.panel;
 
 import hide92795.novelengine.Properties;
@@ -43,8 +60,8 @@ public class PanelPrestartStory extends Panel {
 
 	@Override
 	public void render(NovelEngine engine) {
-		Properties prop = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_SETTING);
-		int rgb = prop.getProperty(Setting.SETTING_PRESTART_BACKGROUND_COLOR);
+		Properties prop = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
+		int rgb = prop.getProperty(Setting.RENDER_PRESTART_BACKGROUND_COLOR);
 		int r = (rgb & 0x00FF0000) >> 16;
 		int g = (rgb & 0x0000FF00) >> 8;
 		int b = (rgb & 0x000000FF);

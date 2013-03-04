@@ -1,3 +1,20 @@
+//
+// NovelEngine Project
+//
+// Copyright (C) 2013 - hide92795
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
 package hide92795.novelengine.client;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
@@ -200,7 +217,8 @@ public class NovelEngine {
 	 * 実行に必要なネイティブライブラリをパスに追加します。
 	 */
 	private static void initNativeLibrary() {
-		File path = new File(getCurrentDir(), "lib\\native");
+		File path = new File(getCurrentDir(), "lib");
+		path = new File(path, "native");
 		int platform = LWJGLUtil.getPlatform();
 		switch (platform) {
 		case LWJGLUtil.PLATFORM_WINDOWS:
@@ -272,7 +290,7 @@ public class NovelEngine {
 		try {
 			// ディスプレイ初期化
 			Display.setDisplayMode(new DisplayMode(dataBasic.getWidth(), dataBasic.getHeight()));
-			Display.setResizable(dataBasic.isArrowResize());
+			Display.setResizable(dataBasic.isAllowResize());
 			Display.setVSyncEnabled(true);
 			Display.setIcon(dataBasic.getIcons());
 			Display.setTitle(dataBasic.getGamename());
@@ -438,7 +456,6 @@ public class NovelEngine {
 				currentPanel.init();
 			}
 		}
-
 	}
 
 	/**
@@ -642,7 +659,7 @@ public class NovelEngine {
 	 *
 	 * @return キャラクターマネージャー
 	 */
-	public CharacterManager getCharacterManager() {
+	public final CharacterManager getCharacterManager() {
 		return characterManager;
 	}
 

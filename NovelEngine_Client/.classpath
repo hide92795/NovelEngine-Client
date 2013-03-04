@@ -18,9 +18,6 @@
 	<classpathentry kind="lib" path="lib/jorbis-0.0.15.jar"/>
 	<classpathentry kind="lib" path="lib/PackageSearcher.jar"/>
 	<classpathentry kind="lib" path="lib/jinput.jar"/>
-	<classpathentry kind="lib" path="lib/jna.jar"/>
-	<classpathentry kind="lib" path="lib/platform.jar"/>
-	<classpathentry kind="lib" path="lib/vlcj.jar"/>
 	<classpathentry kind="lib" path="lib/javassist-3.17.1-GA.jar"/>
 	<classpathentry kind="lib" path="lib/LibraryLWJGLOpenAL.jar"/>
 	<classpathentry kind="lib" path="lib/SoundSystem.jar"/>

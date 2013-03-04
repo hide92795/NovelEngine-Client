@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project NovelEngine_Client with libraries in sub-folder" basedir=".">
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+	<!--ANT 1.7 is required                                        -->
+	<target name="create_run_jar">
+		<mkdir dir="${basedir}/jar" />
+		<mkdir dir="${basedir}/jar/lib" />
+		<mkdir dir="${basedir}/jar/lib/native" />
+		<mkdir dir="${basedir}/jar/license" />
+		<jar destfile="${basedir}/jar/NovelEngine.jar">
+			<manifest>
+				<attribute name="Main-Class" value="hide92795.novelengine.client.NovelEngine" />
+				<attribute name="Class-Path" value=". lib/json-simple-1.1.jar lib/slf4j-api-1.7.2.jar lib/lwjgl.jar lib/lwjgl_util.jar lib/slick-util.jar lib/logback-classic-1.0.9.jar lib/logback-core-1.0.9.jar lib/msgpack-0.6.8-SNAPSHOT.jar lib/jogg-0.0.7.jar lib/jorbis-0.0.15.jar lib/PackageSearcher.jar lib/jinput.jar lib/jna.jar lib/platform.jar lib/vlcj.jar lib/javassist-3.17.1-GA.jar lib/LibraryLWJGLOpenAL.jar lib/SoundSystem.jar" />
+			</manifest>
+			<fileset dir="${basedir}/bin" />
+		</jar>
+
+		<copy file="${basedir}/lib/json-simple-1.1.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/slf4j-api-1.7.2.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/lwjgl.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/lwjgl_util.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/slick-util.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/logback-classic-1.0.9.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/logback-core-1.0.9.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/msgpack-0.6.8-SNAPSHOT.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/jogg-0.0.7.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/jorbis-0.0.15.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/PackageSearcher.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/jinput.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/javassist-3.17.1-GA.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/LibraryLWJGLOpenAL.jar" todir="${basedir}/jar/lib" />
+		<copy file="${basedir}/lib/SoundSystem.jar" todir="${basedir}/jar/lib" />
+
+		<copy todir="${basedir}/jar/lib/native">
+			<fileset dir="${basedir}/lib/native">
+			</fileset>
+		</copy>
+
+		<copy todir="${basedir}/jar/license">
+			<fileset dir="${basedir}/license">
+			</fileset>
+		</copy>
+
+		<zip destfile="NovelEngine.zip">
+			<fileset dir="jar" />
+			<fileset dir="." includes="license.txt" />
+		</zip>
+		<zip destfile="NovelEngine-src.zip">
+			<fileset dir="src" />
+			<fileset dir="." includes="license.txt" />
+		</zip>
+		<delete dir="${basedir}/jar" />
+	</target>
+</project>

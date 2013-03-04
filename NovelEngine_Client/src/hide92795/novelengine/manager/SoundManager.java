@@ -1,6 +1,24 @@
+//
+// NovelEngine Project
+//
+// Copyright (C) 2013 - hide92795
+//
+//    Licensed under the Apache License, Version 2.0 (the "License");
+//    you may not use this file except in compliance with the License.
+//    You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//    Unless required by applicable law or agreed to in writing, software
+//    distributed under the License is distributed on an "AS IS" BASIS,
+//    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//    See the License for the specific language governing permissions and
+//    limitations under the License.
+//
 package hide92795.novelengine.manager;
 
 import hide92795.novelengine.NovelEngineException;
+import hide92795.novelengine.Properties;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.soundsystem.XCodecJOrbis;
@@ -67,11 +85,10 @@ public class SoundManager {
 	 *            ファイルの拡張子
 	 */
 	public void playAsBGM(URL url, String identifier) {
-		int enable_fade = engine.getConfigurationManager().getValue(ConfigurationManager.VARIABLE_SETTING,
-				Setting.SETTING_ENABLE_FADE_BGM);
+		Properties properties = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
+		int enable_fade = properties.getProperty(Setting.RENDER_ENABLE_FADE_BGM);
 		if (enable_fade == 1) {
-			int duration_fade = engine.getConfigurationManager().getValue(ConfigurationManager.VARIABLE_SETTING,
-					Setting.SETTING_DURATION_FADE_BGM);
+			int duration_fade = properties.getProperty(Setting.RENDER_DURATION_FADE_BGM);
 			if (sound.playing("BGM")) {
 				sound.fadeOut("BGM", url, identifier, duration_fade);
 				return;
