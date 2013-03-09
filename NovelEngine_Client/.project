@@ -25,4 +25,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Javadocコメント.txt</name>
+			<type>1</type>
+			<location>C:/Users/Hidetugu/Desktop/NovelEngine/Javadocコメント.txt</location>
+		</link>
+	</linkedResources>
 </projectDescription>

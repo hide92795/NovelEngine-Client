@@ -19,6 +19,7 @@ package hide92795.novelengine.panel;
 
 import static org.lwjgl.opengl.GL11.glClearColor;
 import hide92795.novelengine.UniqueNumberProvider;
+import hide92795.novelengine.box.Box;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.entity.EntityGui;
 import hide92795.novelengine.gui.event.MouseEvent;
@@ -125,18 +126,19 @@ public class PanelStory extends Panel {
 			EntityGui entityGui = guiList.get(id);
 			entityGui.update(this, delta);
 		}
+		updateBox(delta);
 	}
 
 	@Override
 	public void render(NovelEngine engine) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		engine.getBackGroundManager().render(engine);
-		// renderBox();
 		Iterator<Story> iterator_s = processList.iterator();
 		while (iterator_s.hasNext()) {
 			Story story = iterator_s.next();
 			story.render(engine);
 		}
+		renderBox(engine);
 		Set<Integer> set_g = guiList.keySet();
 		for (Integer id : set_g) {
 			EntityGui entityGui = guiList.get(id);
@@ -144,16 +146,27 @@ public class PanelStory extends Panel {
 		}
 	}
 
-	// private void renderBox() {
-	// if (showBox) {
-	// //DataGui data = engine.dataGui;
-	// Texture t = engine.imageManager.getImage(data.getBoxImageId());
-	// int x = data.getBoxXpos();
-	// int y = data.getBoxYpos();
-	// Renderer.renderImage(t, x, y, x + t.getTextureWidth(), y +
-	// t.getTextureHeight());
-	// }
-	// }
+	/**
+	 * メッセージボックスを更新します。
+	 *
+	 * @param delta
+	 *            前回のupdateとの時間差
+	 */
+	private void updateBox(int delta) {
+		Box box = engine().getBoxManager().getCurrentBox();
+		box.update(delta);
+	}
+
+	/**
+	 * メッセージボックスを描画します。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 */
+	private void renderBox(NovelEngine engine) {
+		Box box = engine.getBoxManager().getCurrentBox();
+		box.render(engine);
+	}
 
 	/**
 	 * 同チャプター内の別のシーンへ移動します。

@@ -42,6 +42,7 @@ import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.loader.item.DataBasic;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.BackGroundManager;
+import hide92795.novelengine.manager.BoxManager;
 import hide92795.novelengine.manager.CharacterManager;
 import hide92795.novelengine.manager.ConfigurationManager;
 import hide92795.novelengine.manager.EffectManager;
@@ -70,6 +71,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GLContext;
 
 /**
  * NovelEngineの中枢機能を担うクラスです。
@@ -117,6 +119,10 @@ public class NovelEngine {
 	 * キャラクターデータを管理するキャラクターマネージャーです。
 	 */
 	private final CharacterManager characterManager;
+	/**
+	 * メッセージボックスを管理するボックスマネージャーです。
+	 */
+	private final BoxManager boxManager;
 	/**
 	 * 最後にループ処理が行われた時間です。
 	 */
@@ -194,8 +200,9 @@ public class NovelEngine {
 		soundManager = new SoundManager(this);
 		queueManager = new QueueManager();
 		backGroundManager = new BackGroundManager();
-		guiManager = new GuiManager(this);
+		guiManager = new GuiManager();
 		characterManager = new CharacterManager();
+		boxManager = new BoxManager(this);
 		initResource();
 	}
 
@@ -265,6 +272,7 @@ public class NovelEngine {
 		storyManager.addStory(data);
 		LoaderResource loader = new LoaderResource(this, StoryManager.CHAPTER_BOOT);
 		guiManager.loadResource(loader);
+		boxManager.load(this, loader);
 		loader.start();
 	}
 
@@ -295,6 +303,7 @@ public class NovelEngine {
 			Display.setIcon(dataBasic.getIcons());
 			Display.setTitle(dataBasic.getGamename());
 			Display.create();
+			GLContext.loadOpenGLLibrary();
 		} catch (LWJGLException e) {
 			crash(new NovelEngineException(e, "null"));
 		}
@@ -343,6 +352,7 @@ public class NovelEngine {
 	 * OpenGL系の初期化処理を行います。
 	 */
 	private void initGL() {
+
 		glClearColor(0f, 0f, 0f, 0f);
 		glEnable(GL_BLEND);
 		glEnable(GL_STENCIL_TEST);
@@ -661,6 +671,15 @@ public class NovelEngine {
 	 */
 	public final CharacterManager getCharacterManager() {
 		return characterManager;
+	}
+
+	/**
+	 * メッセージボックスを管理するボックスマネージャーを返します。
+	 *
+	 * @return ボックスマネージャー
+	 */
+	public final BoxManager getBoxManager() {
+		return boxManager;
 	}
 
 	/**

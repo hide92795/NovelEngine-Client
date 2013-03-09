@@ -143,7 +143,7 @@ public class ConfigurationManager {
 			Logger.info("Global Variable File is not found!");
 			Logger.info("Create a new Global Variable File.");
 		}
-		//render.setProperty(Setting.RENDER_PRESTART_BACKGROUND_COLOR, -1);
+		// render.setProperty(Setting.RENDER_PRESTART_BACKGROUND_COLOR, -1);
 		render.setProperty(Setting.RENDER_PRESTART_BACKGROUND_COLOR, Color.red.getRGB());
 		render.setProperty(Setting.RENDER_SKIPPABLE, 1);
 		render.setProperty(Setting.RENDER_DURATION_FADE_BGM, 500);
@@ -172,6 +172,10 @@ public class ConfigurationManager {
 		 * BGMの変更時のフェードに掛ける時間を表します。
 		 */
 		public static final String RENDER_DURATION_FADE_BGM = "duration_fade_bgm";
+		/**
+		 * 使用するメッセージボックスのIDを表します。
+		 */
+		public static final String RENDER_MESSAGE_BOX = "message_box";
 		/**
 		 * 現在の西暦を表します。
 		 */

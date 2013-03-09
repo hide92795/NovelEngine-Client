@@ -17,7 +17,6 @@
 //
 package hide92795.novelengine.manager;
 
-import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.LoaderGui;
 import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.manager.gui.ButtonManager;
@@ -41,11 +40,8 @@ public class GuiManager {
 
 	/**
 	 * {@link hide92795.novelengine.manager.GuiManager GuiManager} のオブジェクトを生成します。
-	 *
-	 * @param engine
-	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public GuiManager(NovelEngine engine) {
+	public GuiManager() {
 		clickable = new HashMap<Integer, boolean[]>();
 		buttonManager = new ButtonManager();
 	}
