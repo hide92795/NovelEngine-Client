@@ -18,29 +18,30 @@
 package hide92795.novelengine.story;
 
 import org.lwjgl.input.Keyboard;
-import org.newdawn.slick.opengl.Texture;
-import hide92795.novelengine.Renderer;
+
+import hide92795.novelengine.box.Box;
+import hide92795.novelengine.box.BoxProcessListener;
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.panel.PanelStory;
 
 /**
  * メッセージボックスの開閉を行うストーリーデータです。<br>
- * 今後大幅な修正が加わります。
  *
  * @author hide92795
  */
-@Deprecated
-public class StoryShowBox extends Story {
+public class StoryShowBox extends Story implements BoxProcessListener {
+	/**
+	 * このストーリーデータがメッセージボックスの表示を行うかどうか。
+	 */
 	private boolean show;
-	private int height = 241;
-	private int width = 700;
-	private float now;
-	private float speed = 0.05f;
-	// 経過時間
-	private int elapsedTime;
-	private int totalTime = 400;
-	private float alpha;
 
+	/**
+	 * メッセージボックスの開閉を行うストーリーデータを生成します。
+	 *
+	 * @param show
+	 *            メッセージボックスを表示する場合はtrue
+	 */
 	public StoryShowBox(boolean show) {
 		this.show = show;
 	}
@@ -48,74 +49,56 @@ public class StoryShowBox extends Story {
 	@Override
 	public void init(PanelStory story) {
 		resetFinish();
-		elapsedTime = 0;
+		int mode;
 		if (show) {
-			now = height;
+			mode = Box.SHOWING;
 		} else {
-			now = 0.0f;
-			// story.setShowBox(false);
+			mode = Box.HIDING;
 		}
+		Box currentBox = story.engine().getBoxManager().getCurrentBox();
+		currentBox.setMode(mode);
+		currentBox.setListener(this);
 	}
 
-	private void skip(PanelStory story) {
-		if (show) {
-			now = 0.0f;
-			// story.setShowBox(true);
-			finish();
-		} else {
-			now = height;
-			finish();
+	/**
+	 * メッセージボックスの開閉をスキップします。
+	 *
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 */
+	private void skip(NovelEngine engine) {
+		if (canSkip(engine)) {
+			if (show) {
+				engine.getBoxManager().getCurrentBox().setMode(Box.SHOWED);
+				finish();
+			} else {
+				engine.getBoxManager().getCurrentBox().setMode(Box.HIDED);
+				finish();
+			}
 		}
 	}
-
-	// @Override
-	// public void leftClick(PanelStory story, int x, int y) {
-	// skip(story);
-	// }
-	//
-	// @Override
-	// public void keyPressed(PanelStory story, int eventKey) {
-	// if (eventKey == Keyboard.KEY_RETURN) {
-	// skip(story);
-	// }
-	// }
 
 	@Override
-	public void update(PanelStory panelStory, int delta) {
+	public void onLeftClickFinish(MouseEvent event) {
+		skip(event.engine());
+	}
+
+	@Override
+	public void onKeyPressed(NovelEngine engine, int eventKey) {
+		if (eventKey == Keyboard.KEY_RETURN) {
+			skip(engine);
+		}
+	}
+
+	@Override
+	public void update(PanelStory story, int delta) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-			skip(panelStory);
+			skip(story.engine());
 		}
-
-		elapsedTime += delta;
-		if (show) {
-			float f = (float) Math.pow(speed, (float) elapsedTime / totalTime);
-			alpha = 1.0f - f;
-
-			now = (float) height * (f - speed);
-			if (now <= 0f) {
-				now = 0;
-				// panelStory.setShowBox(true);
-				finish();
-			}
-		} else {
-			float f = (float) elapsedTime / totalTime;
-			alpha = 1.0f - f;
-			if (f >= 1.0f) {
-				now = height;
-				finish();
-				return;
-			}
-			now = (float) height * f;
-		}
-
 	}
 
 	@Override
-	public void render(NovelEngine engine) {
-		float x = engine.getDefaultWidth() - width;
-		float y = (float) (engine.getDefaultHeight() - height + now);
-
-		Texture t = engine.getImageManager().getImage(123456);
-		Renderer.renderImage(t, alpha, x, y, x + t.getTextureWidth(), y + t.getTextureHeight());
+	public void onProcessFinish() {
+		finish();
 	}
 }

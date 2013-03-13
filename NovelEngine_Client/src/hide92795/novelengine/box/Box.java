@@ -98,6 +98,10 @@ public abstract class Box {
 	 * 処理が始まってから経過した時間です。
 	 */
 	private int elapsedTime;
+	/**
+	 * 開閉完了の通知を受け取るリスナーです。
+	 */
+	private BoxProcessListener listener;
 
 	/**
 	 * メッセージボックスを生成します。
@@ -151,6 +155,13 @@ public abstract class Box {
 		case SHOWING: {
 			elapsedTime += delta;
 			float ratio = updateShowRatio(elapsedTime);
+			if (ratio >= 1.0f) {
+				setMode(SHOWED);
+				ratio = 1.0f;
+				if (listener != null) {
+					listener.onProcessFinish();
+				}
+			}
 			x = Math.round(updateShowX(ratio));
 			y = Math.round(updateShowY(ratio));
 			alpha = updateShowAlpha(ratio);
@@ -159,6 +170,13 @@ public abstract class Box {
 		case HIDING: {
 			elapsedTime += delta;
 			float ratio = updateHideRatio(elapsedTime);
+			if (ratio >= 1.0f) {
+				setMode(HIDED);
+				ratio = 1.0f;
+				if (listener != null) {
+					listener.onProcessFinish();
+				}
+			}
 			x = Math.round(updateHideX(ratio));
 			y = Math.round(updateHideY(ratio));
 			alpha = updateHideAlpha(ratio);
@@ -180,6 +198,27 @@ public abstract class Box {
 		if (t != null) {
 			Renderer.renderImage(t, alpha, x, y);
 		}
+	}
+
+	/**
+	 * 開閉完了の通知を受け取るリスナーを設定します。
+	 *
+	 * @param listener
+	 *            開閉完了の通知を受け取るリスナー
+	 */
+	public final void setListener(BoxProcessListener listener) {
+		this.listener = listener;
+	}
+
+	/**
+	 * 描画モードを設定します。
+	 *
+	 * @param mode
+	 *            描画モード
+	 */
+	public void setMode(int mode) {
+		this.mode = mode;
+		this.elapsedTime = 0;
 	}
 
 	/**

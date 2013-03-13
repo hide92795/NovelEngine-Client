@@ -1,30 +1,30 @@
 NovelEngine Project
 ======================
-���̃\�t�g�E�F�A�͒N�ł��r�W���A���m�x���Q�[���𐧍�E�z�z�ł���悤�ɂ��邽�߂̃c�[���y��
-�G���W���Q�ł��B  
-���̃\�t�g�E�F�A�̓I�[�v���\�[�X�ł��B�N�ł����̃\�t�g�E�F�A�̊J���Ɋւ�邱�Ƃ��ł��܂��B  
+このソフトウェアは誰でもビジュアルノベルゲームを制作・配布できるようにするためのツール及び
+エンジン群です。  
+このソフトウェアはオープンソースです。誰でもこのソフトウェアの開発に関わることができます。  
  
-�֘A�c�[��
+関連ツール
 ------
-[NovelEngine FileCreator](https://github.com/hide92795/NovelEngine-FileCreator) --- ���̃\�t�g�E�F�A�Ŏ��s�o����`���̃Q�[���f�[�^�t�@�C���𐶐����邽�߂̃\�t�g�E�F�A�ł��B
+[NovelEngine FileCreator](https://github.com/hide92795/NovelEngine-FileCreator) --- このソフトウェアで実行出来る形式のゲームデータファイルを生成するためのソフトウェアです。
 
-�g�p���C�u����
+使用ライブラリ
 --------
-[LWJGL](http://www.lwjgl.org/) by Lightweight Java Game Library Project (LWJGL License)  
-[Slick-Util](http://www.slick2d.org/) by Slick 2D (BSD License)  
-[SoundSystem](http://www.paulscode.com/) by Paul Lamb (SoundSystem License)  
-[LWJGL OpenAL library plug-in](http://www.paulscode.com/) by Paul Lamb (SoundSystem LibraryLWJGLOpenAL License)  
-[JOrbis codec plug-in](http://www.paulscode.com/) by Paul Lamb (SoundSystem CodecJOrbis Class License)  
-[JOrbis](http://www.jcraft.com/jorbis/) by JCraft (LGPL v3.0)  
-[JOgg](http://www.jcraft.com/jorbis/) by JCraft (LGPL v3.0)  
-[MessagePack](http://msgpack.org/) by FURUHASHI Sadayuki and Muga Nishizawa (Apache License v2.0)  
-[JSON.simple](http://code.google.com/p/json-simple/) by Yidong Fang (Apache License v2.0)  
-[Javassist](http://code.google.com/p/json-simple/) by Shigeru Chiba (Apache License v2.0)  
-[PackageSearcher](https://github.com/hide92795/PackageSearcher) by hide92795 (LGPL v3.0)  
-[LogBack](http://logback.qos.ch/) by QOS.ch (LGPL v3.0)  
-[SLF4J](https://www.slf4j.org/) by QOS.ch (MIT License)  
+[LWJGL](http://www.lwjgl.org/) (LWJGL License)  
+[Slick-Util](http://www.slick2d.org/) (BSD License)  
+[SoundSystem](http://www.paulscode.com/) (SoundSystem License)  
+[LWJGL OpenAL library plug-in](http://www.paulscode.com/) (SoundSystem LibraryLWJGLOpenAL License)  
+[JOrbis codec plug-in](http://www.paulscode.com/) (SoundSystem CodecJOrbis Class License)  
+[JOrbis](http://www.jcraft.com/jorbis/) (LGPL v3.0)  
+[JOgg](http://www.jcraft.com/jorbis/) (LGPL v3.0)  
+[MessagePack](http://msgpack.org/) (Apache License v2.0)  
+[JSON.simple](http://code.google.com/p/json-simple/) (Apache License v2.0)  
+[Javassist](http://code.google.com/p/json-simple/) (Apache License v2.0)  
+[PackageSearcher](https://github.com/hide92795/PackageSearcher) (LGPL v3.0)  
+[LogBack](http://logback.qos.ch/) (LGPL v3.0)  
+[SLF4J](https://www.slf4j.org/) (MIT License)  
 
-���C�Z���X
+ライセンス
 ----------
 NovelEngine Project  
   

@@ -125,9 +125,9 @@ public class LoaderBox extends Loader {
 				sb.append("}");
 				CtMethod m_showAlpha = CtNewMethod.make(sb.toString(), cc);
 
-				// updateHidewRatio
+				// updateHideRatio
 				sb = new StringBuilder();
-				sb.append("protected float updateHidewRatio(int time) {");
+				sb.append("protected float updateHideRatio(int time) {");
 				sb.append("return (float)(").append(hideMoveRatio).append(");");
 				sb.append("}");
 				CtMethod m_hideRatio = CtNewMethod.make(sb.toString(), cc);
