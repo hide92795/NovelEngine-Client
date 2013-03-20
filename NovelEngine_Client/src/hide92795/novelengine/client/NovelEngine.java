@@ -46,6 +46,7 @@ import hide92795.novelengine.manager.BoxManager;
 import hide92795.novelengine.manager.CharacterManager;
 import hide92795.novelengine.manager.ConfigurationManager;
 import hide92795.novelengine.manager.EffectManager;
+import hide92795.novelengine.manager.FontManager;
 import hide92795.novelengine.manager.GuiManager;
 import hide92795.novelengine.manager.ImageManager;
 import hide92795.novelengine.manager.QueueManager;
@@ -123,6 +124,10 @@ public class NovelEngine {
 	 * メッセージボックスを管理するボックスマネージャーです。
 	 */
 	private final BoxManager boxManager;
+	/**
+	 * フォントデータを管理するフォントマネージャーです。
+	 */
+	private final FontManager fontManager;
 	/**
 	 * 最後にループ処理が行われた時間です。
 	 */
@@ -203,6 +208,7 @@ public class NovelEngine {
 		guiManager = new GuiManager();
 		characterManager = new CharacterManager();
 		boxManager = new BoxManager(this);
+		fontManager = new FontManager(this);
 		initResource();
 	}
 
@@ -680,6 +686,15 @@ public class NovelEngine {
 	 */
 	public final BoxManager getBoxManager() {
 		return boxManager;
+	}
+
+	/**
+	 * フォントデータを管理するフォントマネージャーです。
+	 *
+	 * @return フォントマネージャー
+	 */
+	public final FontManager getFontManager() {
+		return fontManager;
 	}
 
 	/**

@@ -177,6 +177,10 @@ public class ConfigurationManager {
 		 */
 		public static final String RENDER_MESSAGE_BOX = "message_box";
 		/**
+		 * 使用するフォントのIDを表します。
+		 */
+		public static final String RENDER_FONT = "font";
+		/**
 		 * 現在の西暦を表します。
 		 */
 		public static final String SYSTEM_YEAR = "year";
