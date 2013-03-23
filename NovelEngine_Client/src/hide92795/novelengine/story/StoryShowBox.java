@@ -26,7 +26,7 @@ import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.panel.PanelStory;
 
 /**
- * メッセージボックスの開閉を行うストーリーデータです。<br>
+ * メッセージボックスの開閉を行うストーリーデータです。
  *
  * @author hide92795
  */

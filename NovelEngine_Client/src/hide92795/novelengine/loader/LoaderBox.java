@@ -33,6 +33,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+
 import javax.crypto.CipherInputStream;
 
 import org.msgpack.MessagePack;
@@ -40,16 +41,16 @@ import org.msgpack.unpacker.Unpacker;
 
 /**
  * メッセージボックスに関するデータを外部ファイルから読み込むためのクラスです。
- *
+ * 
  * @author hide92795
  */
 public class LoaderBox extends Loader {
 	/**
 	 * メッセージボックスに関するデータを読み込み、マップに格納します。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
-	 *
+	 * 
 	 * @param loader
 	 *            リソースをロードするためのローダー
 	 * @param boxes
@@ -81,6 +82,18 @@ public class LoaderBox extends Loader {
 				int hideX = unpacker.readInt();
 				int hideY = unpacker.readInt();
 				float hideAlpha = unpacker.readFloat();
+
+				// 名前表示エリアデータ
+				int nameType = unpacker.readInt();
+				int nameX = unpacker.readInt();
+				int nameY = unpacker.readInt();
+
+				// 表示エリアデータ
+				int areaLightUpX = unpacker.readInt();
+				int areaLightUpY = unpacker.readInt();
+
+				int areaRightDownX = unpacker.readInt();
+				int areaRightDownY = unpacker.readInt();
 
 				// 移動データ
 				String showMoveRatio = unpacker.readString();
@@ -166,7 +179,8 @@ public class LoaderBox extends Loader {
 				@SuppressWarnings("unchecked")
 				Class<Box> c = cc.toClass();
 				Constructor<Box> constructor = c.getConstructor(Box.CONSTRUCTOR);
-				Object[] args = { imageId, showX, showY, showAlpha, hideX, hideY, hideAlpha };
+				Object[] args = { imageId, showX, showY, showAlpha, hideX, hideY, hideAlpha, nameType, nameX, nameY,
+						areaLightUpX, areaLightUpY, areaRightDownX, areaRightDownY };
 				Box box = constructor.newInstance(args);
 				boxes.put(id, box);
 			}

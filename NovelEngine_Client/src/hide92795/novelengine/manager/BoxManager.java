@@ -76,4 +76,15 @@ public class BoxManager {
 		return boxes.get(boxId);
 
 	}
+
+	/**
+	 * 指定したIDのメッセージボックスを取得します。
+	 *
+	 * @param boxId
+	 *            取得するメッセージボックスのID
+	 * @return メッセージボックス
+	 */
+	public Box getBox(int boxId) {
+		return boxes.get(boxId);
+	}
 }

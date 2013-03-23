@@ -26,6 +26,7 @@ import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryBlock;
+import hide92795.novelengine.words.EntityWords;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,7 +35,7 @@ import java.util.Set;
 
 /**
  * ゲーム上でストーリーデータを読み込んで表示を行うクラスです。
- *
+ * 
  * @author hide92795
  */
 public class PanelStory extends Panel {
@@ -54,12 +55,17 @@ public class PanelStory extends Panel {
 	 * GUIのIDを提供するプロバイダーです。
 	 */
 	private UniqueNumberProvider guiIdProvider;
-
-	// private boolean showBox = false;
-	// private Audio bgm;
+	/**
+	 * 現在表示している文章データです。
+	 */
+	private EntityWords words;
+	/**
+	 * ブロック内のストーリーデータの処理が終わったかどうかを表します。
+	 */
+	private boolean finishAll;
 
 	/**
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 * @param story
@@ -75,21 +81,10 @@ public class PanelStory extends Panel {
 
 	@Override
 	public void init() {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	@Override
 	public void update(int delta) {
-		boolean finishAll = true;
-		Iterator<Story> i = processList.iterator();
-		// 完了確認
-		while (i.hasNext()) {
-			Story s = i.next();
-			if (!s.isFinish()) {
-				finishAll = false;
-			}
-		}
 		if (finishAll) {
 			// すべてが完了
 			// 処理リストをクリア
@@ -116,10 +111,15 @@ public class PanelStory extends Panel {
 			}
 		}
 
+		finishAll = true;
+
 		Iterator<Story> iterator_s = processList.iterator();
 		while (iterator_s.hasNext()) {
 			Story story = iterator_s.next();
 			story.update(this, delta);
+			if (!story.isFinish()) {
+				finishAll = false;
+			}
 		}
 		Set<Integer> set_g = guiList.keySet();
 		for (Integer id : set_g) {
@@ -127,6 +127,7 @@ public class PanelStory extends Panel {
 			entityGui.update(this, delta);
 		}
 		updateBox(delta);
+		updateWords(delta);
 	}
 
 	@Override
@@ -139,6 +140,7 @@ public class PanelStory extends Panel {
 			story.render(engine);
 		}
 		renderBox(engine);
+		renderWords(engine);
 		Set<Integer> set_g = guiList.keySet();
 		for (Integer id : set_g) {
 			EntityGui entityGui = guiList.get(id);
@@ -148,7 +150,7 @@ public class PanelStory extends Panel {
 
 	/**
 	 * メッセージボックスを更新します。
-	 *
+	 * 
 	 * @param delta
 	 *            前回のupdateとの時間差
 	 */
@@ -158,8 +160,20 @@ public class PanelStory extends Panel {
 	}
 
 	/**
+	 * 文章データを更新します。
+	 * 
+	 * @param delta
+	 *            前回のupdateとの時間差
+	 */
+	private void updateWords(int delta) {
+		if (words != null) {
+			words.update(this, delta);
+		}
+	}
+
+	/**
 	 * メッセージボックスを描画します。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
@@ -169,8 +183,20 @@ public class PanelStory extends Panel {
 	}
 
 	/**
+	 * メッセージボックスに文章を描画します。
+	 * 
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 */
+	private void renderWords(NovelEngine engine) {
+		if (words != null) {
+			words.render(engine);
+		}
+	}
+
+	/**
 	 * 同チャプター内の別のシーンへ移動します。
-	 *
+	 * 
 	 * @param sceneId
 	 *            移動先のシーンID
 	 */
@@ -238,7 +264,7 @@ public class PanelStory extends Panel {
 
 	/**
 	 * パネルにGUIを登録します。
-	 *
+	 * 
 	 * @param gui
 	 *            登録するGUI
 	 * @return 削除用に使用する番号
@@ -252,7 +278,7 @@ public class PanelStory extends Panel {
 	/**
 	 * パネルからGUIを削除します。<br>
 	 * 削除に使用するIDは登録した際の戻り値です。
-	 *
+	 * 
 	 * @param id
 	 *            削除するGUIのID
 	 */
@@ -261,28 +287,14 @@ public class PanelStory extends Panel {
 		guiIdProvider.release(id);
 	}
 
-	// public boolean isShowBox() {
-	// return showBox;
-	// }
-	//
-	// public void setShowBox(boolean showBox) {
-	// this.showBox = showBox;
-	// }
-	//
-	// public void playBGM(int id) {
-	// if (bgm != null) {
-	// bgm.stop();
-	// }
-	// // bgm = engine.soundManager.getSound(id);
-	// if (bgm != null) {
-	// bgm.playAsMusic(1.0f, 1.0f, true);
-	// }
-	// }
-	//
-	// public void stopBGM() {
-	// if (bgm != null) {
-	// bgm.stop();
-	// }
-	// }
-
+	/**
+	 * 文章データの表示を開始します。
+	 * 
+	 * @param words
+	 *            表示する文章データ
+	 */
+	public void setWords(EntityWords words) {
+		words.init(this);
+		this.words = words;
+	}
 }

@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 /**
  * キャラクターの表情などのデータを管理するクラスです。
- *
+ * 
  * @author hide92795
  */
 public class DataCharacter {
@@ -32,22 +32,37 @@ public class DataCharacter {
 	/**
 	 * このキャラクターの文章を表示する際に表示される名前です。
 	 */
-	private String name;
+	private final String name;
+	/**
+	 * このキャラクターの名前を描画するフォントのIDです。
+	 */
+	private final int font;
+	/**
+	 * このキャラクターの名前の画像データが作成されているかどうかです。
+	 */
+	private boolean createdNameImage;
+	/**
+	 * このキャラクターの名前の画像データのIDです。
+	 */
+	private int nameImageId;
 
 	/**
 	 * 指定された名前のキャラクターのデータを作成します。
-	 *
+	 * 
 	 * @param name
 	 *            このキャラクターの名前
+	 * @param font
+	 *            名前を描画するフォントのID
 	 */
-	public DataCharacter(String name) {
+	public DataCharacter(String name, int font) {
 		this.name = name;
+		this.font = font;
 		faces = new HashMap<Integer, Face>();
 	}
 
 	/**
 	 * 表情データを追加します。
-	 *
+	 * 
 	 * @param id
 	 *            表情データのID
 	 * @param face
@@ -59,7 +74,7 @@ public class DataCharacter {
 
 	/**
 	 * 指定されたIDの表情データを取得します。
-	 *
+	 * 
 	 * @param faceId
 	 *            表情データのID
 	 * @return 表情データ
@@ -67,4 +82,52 @@ public class DataCharacter {
 	public final Face getFace(int faceId) {
 		return faces.get(faceId);
 	}
+
+	/**
+	 * このキャラクターの名前を取得します。
+	 * 
+	 * @return このキャラクターの名前
+	 */
+	public final String getName() {
+		return name;
+	}
+
+	/**
+	 * このキャラクターの名前を描画するフォントのIDを取得します。
+	 * 
+	 * @return このキャラクターの名前を描画するフォントのID
+	 */
+	public int getFont() {
+		return font;
+	}
+
+	/**
+	 * このキャラクターの名前の画像データが作成されているかどうかを取得します。
+	 * 
+	 * @return このキャラクターの名前の画像データが作成されているかどうか
+	 */
+	public boolean isCreatedNameImage() {
+		return createdNameImage;
+	}
+
+	/**
+	 * このキャラクターの名前の画像データのIDを取得します。
+	 * 
+	 * @return このキャラクターの名前の画像データのID
+	 */
+	public int getNameImageId() {
+		return nameImageId;
+	}
+
+	/**
+	 * このキャラクターの名前の画像データのIDを設定します。
+	 * 
+	 * @param nameImageId
+	 *            このキャラクターの名前の画像データのID
+	 */
+	public void setNameImageId(int nameImageId) {
+		this.nameImageId = nameImageId;
+		createdNameImage = true;
+	}
+
 }

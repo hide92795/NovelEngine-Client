@@ -33,13 +33,13 @@ import org.msgpack.unpacker.Unpacker;
 
 /**
  * キャラクターデータを外部ファイルから読み込むためのクラスです。
- *
+ * 
  * @author hide92795
  */
 public class LoaderCharacter extends Loader {
 	/**
 	 * キャラクターデータを読み込みマップに格納します。
-	 *
+	 * 
 	 * @param manager
 	 *            キャラクターを管理するマネージャー
 	 */
@@ -64,8 +64,9 @@ public class LoaderCharacter extends Loader {
 			for (int i = 0; i < character_num; i++) {
 				int characterId = unpacker.readInt();
 				String name = unpacker.readString();
+				int font = unpacker.readInt();
 
-				DataCharacter character = new DataCharacter(name);
+				DataCharacter character = new DataCharacter(name, font);
 
 				int face_num = unpacker.readInt();
 				for (int j = 0; j < face_num; j++) {

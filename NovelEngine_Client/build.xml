@@ -15,21 +15,10 @@
 			<fileset dir="${basedir}/bin" />
 		</jar>
 
-		<copy file="${basedir}/lib/json-simple-1.1.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/slf4j-api-1.7.2.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/lwjgl.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/lwjgl_util.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/slick-util.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/logback-classic-1.0.9.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/logback-core-1.0.9.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/msgpack-0.6.8-SNAPSHOT.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/jogg-0.0.7.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/jorbis-0.0.15.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/PackageSearcher.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/jinput.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/javassist-3.17.1-GA.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/LibraryLWJGLOpenAL.jar" todir="${basedir}/jar/lib" />
-		<copy file="${basedir}/lib/SoundSystem.jar" todir="${basedir}/jar/lib" />
+		<copy todir="${basedir}/jar/lib">
+			<fileset dir="${basedir}/lib" includes="*.jar">
+			</fileset>
+		</copy>
 
 		<copy todir="${basedir}/jar/lib/native">
 			<fileset dir="${basedir}/lib/native">

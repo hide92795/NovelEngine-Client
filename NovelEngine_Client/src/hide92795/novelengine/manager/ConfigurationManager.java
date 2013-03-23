@@ -39,7 +39,7 @@ import java.io.File;
  * <li>{@link #VARIABLE_SETTING} ソフトの起動時に読み込まれます。
  * <li>{@link #VARIABLE_RENDER} 各セーブファイルが読み込まれる際に同時に読み込まれます。起動時はデフォルトが読み込まれます。
  * </ul>
- *
+ * 
  * @author hide92795
  */
 public class ConfigurationManager {
@@ -96,7 +96,7 @@ public class ConfigurationManager {
 
 	/**
 	 * 指定した種類のプロパティを取得します。
-	 *
+	 * 
 	 * @param type
 	 *            プロパティの種類
 	 * @return 対象のプロパティ
@@ -115,7 +115,7 @@ public class ConfigurationManager {
 
 	/**
 	 * 変数を取得します。
-	 *
+	 * 
 	 * @param type
 	 *            取得する変数の種類
 	 * @param name
@@ -148,11 +148,13 @@ public class ConfigurationManager {
 		render.setProperty(Setting.RENDER_SKIPPABLE, 1);
 		render.setProperty(Setting.RENDER_DURATION_FADE_BGM, 500);
 		render.setProperty(Setting.RENDER_ENABLE_FADE_BGM, 0);
+		render.setProperty(Setting.RENDER_WORDS_SPEED, 300);
+		render.setProperty(Setting.RENDER_WORDS_CLEAR_ON_CLOSE_BOX, 1);
 	}
 
 	/**
 	 * システム変数及びゲームの内部的な設定情報の変数一覧です。
-	 *
+	 * 
 	 * @author hide92795
 	 */
 	public static class Setting {
@@ -180,6 +182,15 @@ public class ConfigurationManager {
 		 * 使用するフォントのIDを表します。
 		 */
 		public static final String RENDER_FONT = "font";
+		/**
+		 * 文章表示のスピードを表します。<br>
+		 * 単位は px/s(ピクセル/秒) です
+		 */
+		public static final String RENDER_WORDS_SPEED = "words_speed";
+		/**
+		 * メッセージボックスが隠れた際に表示していた文章を消すかどうかを表します。
+		 */
+		public static final String RENDER_WORDS_CLEAR_ON_CLOSE_BOX = "words_clear_on_close_box";
 		/**
 		 * 現在の西暦を表します。
 		 */

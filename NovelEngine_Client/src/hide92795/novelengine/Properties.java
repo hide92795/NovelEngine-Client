@@ -23,7 +23,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Key;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -39,7 +40,7 @@ import org.msgpack.unpacker.UnpackerIterator;
  *
  * @author hide92795
  */
-public class Properties extends HashMap<String, Integer> {
+public class Properties extends ConcurrentHashMap<String, Integer> {
 	/**
 	 * このクラスを直列化することは推奨されていません。
 	 */

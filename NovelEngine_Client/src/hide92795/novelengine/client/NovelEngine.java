@@ -52,6 +52,7 @@ import hide92795.novelengine.manager.ImageManager;
 import hide92795.novelengine.manager.QueueManager;
 import hide92795.novelengine.manager.SoundManager;
 import hide92795.novelengine.manager.StoryManager;
+import hide92795.novelengine.manager.WordsManager;
 import hide92795.novelengine.panel.Panel;
 import hide92795.novelengine.panel.PanelCrashInfo;
 import hide92795.novelengine.panel.PanelPrestartStory;
@@ -76,7 +77,7 @@ import org.lwjgl.opengl.GLContext;
 
 /**
  * NovelEngineの中枢機能を担うクラスです。
- *
+ * 
  * @author hide92795
  */
 public class NovelEngine {
@@ -84,6 +85,10 @@ public class NovelEngine {
 	 * NovelEngineをデバッグモードで動かす際にtrueにします。
 	 */
 	public static final boolean DEBUG = true;
+	/**
+	 * NovelEngineのバージョンです。
+	 */
+	public static final String VERSION = "a1.2.0";
 	/**
 	 * キューデータを実行するキューマネージャーです。
 	 */
@@ -128,6 +133,10 @@ public class NovelEngine {
 	 * フォントデータを管理するフォントマネージャーです。
 	 */
 	private final FontManager fontManager;
+	/**
+	 * 文章データを管理するマネージャーです。
+	 */
+	private final WordsManager wordsManager;
 	/**
 	 * 最後にループ処理が行われた時間です。
 	 */
@@ -206,21 +215,22 @@ public class NovelEngine {
 		queueManager = new QueueManager();
 		backGroundManager = new BackGroundManager();
 		guiManager = new GuiManager();
+		fontManager = new FontManager(this);
 		characterManager = new CharacterManager();
 		boxManager = new BoxManager(this);
-		fontManager = new FontManager(this);
+		wordsManager = new WordsManager();
 		initResource();
 	}
 
 	/**
 	 * NovelEngineシステムを起動します。
-	 *
+	 * 
 	 * @param arg
 	 *            起動時に与えられた引数
 	 */
 	public static void main(String[] arg) {
 		Logger.init();
-		Logger.info("NovelEngine launched!");
+		Logger.info("NovelEngine " + VERSION + " launched!");
 		initNativeLibrary();
 		NovelEngine engine = new NovelEngine();
 		engine.start();
@@ -284,7 +294,7 @@ public class NovelEngine {
 
 	/**
 	 * クライアントjarがあるフォルダを返します。
-	 *
+	 * 
 	 * @return jarファイルのある場所を示すFile。エラーが発生した場合はnull
 	 */
 	public static File getCurrentDir() {
@@ -437,7 +447,7 @@ public class NovelEngine {
 
 	/**
 	 * マネージャー及び画面に対してアップデートを行います。
-	 *
+	 * 
 	 * @param delta
 	 *            前回のupdateとの時間差
 	 */
@@ -476,7 +486,7 @@ public class NovelEngine {
 
 	/**
 	 * 正確なシステムの時刻を取得します。
-	 *
+	 * 
 	 * @return ミリ秒単位でのシステム上の時間
 	 */
 	private long getTime() {
@@ -485,7 +495,7 @@ public class NovelEngine {
 
 	/**
 	 * 前回のフレームとの時間差をミリ秒単位で返します。
-	 *
+	 * 
 	 * @return 前回のフレームとの時間差
 	 */
 	private int getDelta() {
@@ -513,7 +523,7 @@ public class NovelEngine {
 	 * プログラムの実行中に続行不可の例外が投げられた場合に呼ばれます。<br>
 	 * １度目はクラッシュ用の画面の表示を試みます。<br>
 	 * それでもまたこのメソッドが呼ばれた場合はエラーログを出力してプログラムを停止させます。
-	 *
+	 * 
 	 * @param exception
 	 *            発生した例外
 	 */
@@ -527,7 +537,7 @@ public class NovelEngine {
 	/**
 	 * 指定したチャプターのロードを開始します。<br>
 	 * ロードは別スレッドにて行われます。
-	 *
+	 * 
 	 * @param chapterId
 	 *            読み込み先のチャプターID
 	 */
@@ -548,7 +558,7 @@ public class NovelEngine {
 	/**
 	 * 指定されたチャプターIDのデータのロードを待ってから開始します。<br>
 	 * 画面は{@link PanelPrestartStory}により提供されます。
-	 *
+	 * 
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
@@ -559,7 +569,7 @@ public class NovelEngine {
 	/**
 	 * 画面に表示するパネルを変更します。<br>
 	 * 実際に入れ替わるのは{@link NovelEngine#panelChange() panelChange}が呼ばれた時です。
-	 *
+	 * 
 	 * @see NovelEngine#panelChange()
 	 * @param panel
 	 *            次に処理を行う{@link hide92795.novelengine.panel.Panel Panel}オブジェクト
@@ -572,7 +582,7 @@ public class NovelEngine {
 	 * 指定されたチャプターIDからストーリーを開始します。<br>
 	 * すべてのロードが終わっていない場合、表示に問題が発生する可能性があります。<br>
 	 * このメソッドは{@link PanelPrestartStory}より呼び出されるのが適切です。<br>
-	 *
+	 * 
 	 * @param id
 	 *            スタート元のチャプターID
 	 */
@@ -591,7 +601,7 @@ public class NovelEngine {
 
 	/**
 	 * 現在実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクトを返します。
-	 *
+	 * 
 	 * @return 実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 */
 	public static final NovelEngine getEngine() {
@@ -600,7 +610,7 @@ public class NovelEngine {
 
 	/**
 	 * キューデータを実行するキューマネージャーを返します。
-	 *
+	 * 
 	 * @return キューマネージャー
 	 */
 	public final QueueManager getQueueManager() {
@@ -609,7 +619,7 @@ public class NovelEngine {
 
 	/**
 	 * 画像の管理を行うイメージマネージャーを返します。
-	 *
+	 * 
 	 * @return イメージマネージャー
 	 */
 	public final ImageManager getImageManager() {
@@ -618,7 +628,7 @@ public class NovelEngine {
 
 	/**
 	 * 音声の管理を行うサウンドマネージャーを返します。
-	 *
+	 * 
 	 * @return サウンドマネージャー
 	 */
 	public final SoundManager getSoundManager() {
@@ -627,7 +637,7 @@ public class NovelEngine {
 
 	/**
 	 * ストーリーデーターの管理を行うストーリーマネージャーを返します。
-	 *
+	 * 
 	 * @return ストーリーマネージャー
 	 */
 	public final StoryManager getStoryManager() {
@@ -636,7 +646,7 @@ public class NovelEngine {
 
 	/**
 	 * ストーリー上での描画の管理を行うバックグラウンドマネージャーを返します。
-	 *
+	 * 
 	 * @return バックグラウンドマネージャー
 	 */
 	public final BackGroundManager getBackGroundManager() {
@@ -645,7 +655,7 @@ public class NovelEngine {
 
 	/**
 	 * 各種エフェクトの管理を行うエフェクトマネージャーを返します。
-	 *
+	 * 
 	 * @return エフェクトマネージャー
 	 */
 	public final EffectManager getEffectManager() {
@@ -654,7 +664,7 @@ public class NovelEngine {
 
 	/**
 	 * ゲーム上での設定及びフラグを管理するコンフィグマネージャーを返します。
-	 *
+	 * 
 	 * @return コンフィグマネージャー
 	 */
 	public final ConfigurationManager getConfigurationManager() {
@@ -663,7 +673,7 @@ public class NovelEngine {
 
 	/**
 	 * 操作可能な各種GUIを管理するコンフィグマネージャーを返します。
-	 *
+	 * 
 	 * @return GUIマネージャー
 	 */
 	public final GuiManager getGuiManager() {
@@ -672,7 +682,7 @@ public class NovelEngine {
 
 	/**
 	 * キャラクターデータを管理するキャラクターマネージャーを返します。
-	 *
+	 * 
 	 * @return キャラクターマネージャー
 	 */
 	public final CharacterManager getCharacterManager() {
@@ -681,7 +691,7 @@ public class NovelEngine {
 
 	/**
 	 * メッセージボックスを管理するボックスマネージャーを返します。
-	 *
+	 * 
 	 * @return ボックスマネージャー
 	 */
 	public final BoxManager getBoxManager() {
@@ -689,8 +699,8 @@ public class NovelEngine {
 	}
 
 	/**
-	 * フォントデータを管理するフォントマネージャーです。
-	 *
+	 * フォントデータを管理するフォントマネージャーを返します。
+	 * 
 	 * @return フォントマネージャー
 	 */
 	public final FontManager getFontManager() {
@@ -698,8 +708,17 @@ public class NovelEngine {
 	}
 
 	/**
+	 * 文章データを管理するマネージャーを返します。
+	 * 
+	 * @return 文章データを管理するマネージャー
+	 */
+	public WordsManager getWordsManager() {
+		return wordsManager;
+	}
+
+	/**
 	 * 進行中のゲームで設定されているデフォルトの画面の横幅を取得します。
-	 *
+	 * 
 	 * @return デフォルトの画面の横幅
 	 */
 	public final int getDefaultWidth() {
@@ -708,7 +727,7 @@ public class NovelEngine {
 
 	/**
 	 * 進行中のゲームで設定されているデフォルトの画面の縦幅を取得します。
-	 *
+	 * 
 	 * @return デフォルトの画面の縦幅
 	 */
 	public final int getDefaultHeight() {
@@ -717,7 +736,7 @@ public class NovelEngine {
 
 	/**
 	 * 現在のマウスのX座標を返します。この座標はデフォルトの画面の大きさ上での位置を表します。
-	 *
+	 * 
 	 * @return 現在のマウスのX座標
 	 */
 	public final int getMouseX() {
@@ -727,7 +746,7 @@ public class NovelEngine {
 
 	/**
 	 * 現在のマウスのY座標を返します。この座標はデフォルトの画面の大きさ上での位置を表します。
-	 *
+	 * 
 	 * @return 現在のマウスのY 座標
 	 */
 	public final int getMouseY() {
@@ -737,7 +756,7 @@ public class NovelEngine {
 
 	/**
 	 * 画面内での有効な描画範囲の左上のX座標を返します。
-	 *
+	 * 
 	 * @return 有効な描画範囲の左上のX座標
 	 */
 	public final int getX() {
@@ -746,7 +765,7 @@ public class NovelEngine {
 
 	/**
 	 * 画面内での有効な描画範囲の左上のX座標を設定します。
-	 *
+	 * 
 	 * @param x
 	 *            描画範囲として設定された範囲の左上のX座標
 	 */
@@ -756,7 +775,7 @@ public class NovelEngine {
 
 	/**
 	 * 画面内での有効な描画範囲の左上のY座標を返します。
-	 *
+	 * 
 	 * @return y 有効な描画範囲の左上のY座標
 	 */
 	public final int getY() {
@@ -765,7 +784,7 @@ public class NovelEngine {
 
 	/**
 	 * 画面内での有効な描画範囲の左上のY座標を設定します。
-	 *
+	 * 
 	 * @param y
 	 *            描画範囲として設定された範囲の左上のY座標
 	 */
@@ -775,7 +794,7 @@ public class NovelEngine {
 
 	/**
 	 * 画面内の描画範囲の横幅を取得します。
-	 *
+	 * 
 	 * @return 現在の画面内の描画範囲の横幅
 	 */
 	public final int getWidth() {
@@ -784,7 +803,7 @@ public class NovelEngine {
 
 	/**
 	 * 新しく画面内の描画範囲の横幅を設定します。
-	 *
+	 * 
 	 * @param width
 	 *            新しい画面内の描画範囲の横幅
 	 */
@@ -794,7 +813,7 @@ public class NovelEngine {
 
 	/**
 	 * 画面内の描画範囲の縦幅を取得します。
-	 *
+	 * 
 	 * @return 現在の画面内の描画範囲の縦幅
 	 */
 	public final int getHeight() {
@@ -803,7 +822,7 @@ public class NovelEngine {
 
 	/**
 	 * 新しく画面内の描画範囲の縦幅を設定します。
-	 *
+	 * 
 	 * @param height
 	 *            新しい画面内の描画範囲の縦幅
 	 */
@@ -813,7 +832,7 @@ public class NovelEngine {
 
 	/**
 	 * デフォルト画面大きさに対する現在の画面の大きさの拡大縮小率を取得します。
-	 *
+	 * 
 	 * @return 画面の大きさの拡大縮小率
 	 */
 	public final float getMagnification() {
@@ -822,7 +841,7 @@ public class NovelEngine {
 
 	/**
 	 * 新しくデフォルト画面大きさに対する現在の画面の大きさの拡大縮小率を設定します。
-	 *
+	 * 
 	 * @param magnification
 	 *            新しい画面の大きさの拡大縮小率
 	 */
