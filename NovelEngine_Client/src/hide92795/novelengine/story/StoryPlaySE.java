@@ -17,20 +17,20 @@
 //
 package hide92795.novelengine.story;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.panel.PanelStory;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.lwjgl.input.Keyboard;
 
 /**
  * SEを再生するストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryPlaySE extends Story {
@@ -45,12 +45,13 @@ public class StoryPlaySE extends Story {
 
 	/**
 	 * SEを再生するストーリーデータを生成します。
-	 *
+	 * 
 	 * @param id
 	 *            再生を行うSEのID
 	 */
 	public StoryPlaySE(int id) {
 		String filename = id + ".nea";
+		sourcename = "se_" + id;
 		File path = new File(NovelEngine.getCurrentDir(), "sound");
 		File file = new File(path, filename);
 		try {
@@ -63,13 +64,12 @@ public class StoryPlaySE extends Story {
 	@Override
 	public void init(PanelStory story) {
 		resetFinish();
-		sourcename = null;
 	}
 
 	@Override
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
-			sourcename = story.engine().getSoundManager().playAsSE(url, ".nea");
+			story.engine().getSoundManager().playAsSE(url, ".nea", sourcename);
 			finish();
 		}
 	}
@@ -88,7 +88,7 @@ public class StoryPlaySE extends Story {
 
 	/**
 	 * スキップ可能な場合にスキップを行います。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */

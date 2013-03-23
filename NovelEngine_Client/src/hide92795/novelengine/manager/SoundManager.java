@@ -32,7 +32,7 @@ import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 
 /**
  * サウンドデータを管理するためのマネージャーです。
- *
+ * 
  * @author hide92795
  */
 public class SoundManager {
@@ -47,7 +47,7 @@ public class SoundManager {
 
 	/**
 	 * {@link hide92795.novelengine.manager.SoundManager SoundManager} のオブジェクトを生成します。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
@@ -78,7 +78,7 @@ public class SoundManager {
 
 	/**
 	 * サウンドをBGMとして再生します。
-	 *
+	 * 
 	 * @param url
 	 *            再生するサウンドのURL
 	 * @param identifier
@@ -95,26 +95,26 @@ public class SoundManager {
 			}
 		}
 		sound.backgroundMusic("BGM", url, identifier, true);
-
 	}
 
 	/**
 	 * サウンドをSEとして再生します。
-	 *
+	 * 
 	 * @param url
 	 *            再生するサウンドのURL
 	 * @param identifier
 	 *            ファイルの拡張子
-	 * @return このサウンドを管理するための名前
+	 * @param sourcename
+	 *            このサウンドの名前
 	 */
-	public String playAsSE(URL url, String identifier) {
-		String sourcename = sound.quickPlay(false, url, identifier, false, 0, 0, 0, 0, 0);
-		return sourcename;
+	public void playAsSE(URL url, String identifier, String sourcename) {
+		sound.newSource(false, sourcename, url, sourcename + identifier, false, 0, 0, 0, 0, 0);
+		sound.play(sourcename);
 	}
 
 	/**
 	 * 指定された名前のサウンドを停止します。
-	 *
+	 * 
 	 * @param sourcename
 	 *            サウンドを管理するための名前
 	 */
