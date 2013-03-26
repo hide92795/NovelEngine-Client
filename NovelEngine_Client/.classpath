@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="lib/msgpack-0.6.8-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/jogg-0.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/jorbis-0.0.15.jar"/>
-	<classpathentry kind="lib" path="lib/PackageSearcher.jar"/>
 	<classpathentry kind="lib" path="lib/jinput.jar"/>
 	<classpathentry kind="lib" path="lib/javassist-3.17.1-GA.jar"/>
 	<classpathentry kind="lib" path="lib/LibraryLWJGLOpenAL.jar"/>

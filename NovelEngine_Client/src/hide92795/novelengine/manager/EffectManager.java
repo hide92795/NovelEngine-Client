@@ -17,149 +17,75 @@
 //
 package hide92795.novelengine.manager;
 
-import hide92795.novelengine.Effectable;
-import hide92795.novelengine.Logger;
+import hide92795.novelengine.background.BackGroundEffect;
+import hide92795.novelengine.background.effect.TransitionFade;
+import hide92795.novelengine.background.effect.TransitionSlide;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import bsh.ClassPathException;
-import bsh.classpath.BshClassPath;
 
 /**
  * 各種エフェクトを管理するマネージャーです。
- *
+ * 
  * @author hide92795
  */
 public class EffectManager {
 	/**
-	 * クラスをパッケージ名から取得するための {@link bsh.classpath.BshClassPath BshClassPath} オブジェクトです。
-	 */
-	private BshClassPath bcp;
-	/**
 	 * バックグラウンドに適用出来るエフェクターを格納します。
 	 */
-	private HashMap<Integer, ClassData> backgroundEffecter;
-
-	// private HashMap<Integer, ClassData> characterFader;
-	// private HashMap<Integer, ClassData> characterEffecter;
+	private HashMap<Integer, ClassData<BackGroundEffect>> backgroundEffect;
 
 	/**
 	 * {@link hide92795.novelengine.manager.EffectManager EffectManager} のオブジェクトを生成します。
 	 */
 	public EffectManager() {
-		backgroundEffecter = new HashMap<Integer, EffectManager.ClassData>();
-		try {
-			bcp = BshClassPath.getUserClassPath();
-		} catch (ClassPathException e) {
-			e.printStackTrace();
-		}
-		create(backgroundEffecter, "hide92795.novelengine.background.effect");
+		backgroundEffect = new HashMap<Integer, ClassData<BackGroundEffect>>();
+		init();
 	}
 
 	/**
-	 * 指定されたマップに該当パッケージ内のクラスデータを格納します。<br>
-	 * クラスパス内に指定された全てのjarファイル内を検索します。
-	 *
-	 * @param map
-	 *            データを格納するマップ
-	 * @param packageName
-	 *            検索を行うパッケージ名
+	 * 内蔵のエフェクトを登録します。
 	 */
-	private void create(HashMap<Integer, ClassData> map, String packageName) {
-		List<String> list = search(packageName);
-		for (String className : list) {
-			Class<? extends Effectable> c = null;
-			try {
-				c = Class.forName(className).asSubclass(Effectable.class);
-				Field fid = c.getField("ID");
-				Field fconstructor = c.getField("CONSTRUCTOR");
-				int id = fid.getInt(null);
-				Class<?>[] constructor = (Class<?>[]) fconstructor.get(null);
-				ClassData cd = new ClassData(c, constructor);
-				map.put(id, cd);
-				Logger.info("Add class " + className);
-			} catch (ClassNotFoundException e) {
-				Logger.info("Error on class mapping - " + className);
-			} catch (Exception e) {
-				if (c != null && !c.isInterface()) {
-					Logger.info("Could not register class - " + className);
-				}
-			}
-		}
-
+	private void init() {
+		addBackGroundEffect(TransitionFade.ID, TransitionFade.class, TransitionFade.CONSTRUCTOR);
+		addBackGroundEffect(TransitionSlide.ID, TransitionSlide.class, TransitionSlide.CONSTRUCTOR);
 	}
 
 	/**
-	 * 指定されたパッケージ内に存在するクラス名のリストを返します。
-	 *
-	 * @param targetPackageName
-	 *            検索を行う対象のパッケージ名
-	 * @return クラス名を格納したリスト
+	 * 背景エフェクトを登録します。
+	 * 
+	 * @param id
+	 *            背景エフェクトのID
+	 * @param c
+	 *            背景エフェクトのクラス
+	 * @param constructor
+	 *            背景エフェクトの生成に必要な引数の配列
 	 */
-	private List<String> search(String targetPackageName) {
-		List<String> ret = new ArrayList<String>();
-		// パッケージ名一覧を取得する
-		Set<?> set = bcp.getPackagesSet();
-		Iterator<?> i = set.iterator();
-		while (i.hasNext()) {
-			search(ret, targetPackageName, (String) i.next());
-		}
-		return ret;
-	}
-
-	/**
-	 * 指定されたパッケージ内に存在するクラスをリストに格納します。
-	 *
-	 * @param ret
-	 *            格納するリスト
-	 * @param name
-	 *            取得するパッケージ名
-	 * @param packageName
-	 *            検索を行うパッケージ名
-	 */
-	private void search(List<String> ret, String name, String packageName) {
-		// パッケージ内のクラス名を一覧する
-		Set<?> set = bcp.getClassesForPackage(packageName);
-		Iterator<?> i = set.iterator();
-		while (i.hasNext()) {
-			String className = (String) i.next();
-			// 内部クラスは無視する
-			if (className.indexOf("$") >= 0) {
-				continue;
-			}
-			if (className.indexOf(name) != -1) {
-				ret.add(className);
-			}
-		}
+	public void addBackGroundEffect(int id, Class<? extends BackGroundEffect> c, Class<?>[] constructor) {
+		backgroundEffect.put(id, new ClassData<BackGroundEffect>(c, constructor));
 	}
 
 	/**
 	 * バックグラウンドエフェクトから対象のエフェクトのクラスデータを取得します。
-	 *
+	 * 
 	 * @param id
 	 *            取得するエフェクトのID
 	 * @return 対象のエフェクトのクラスデータ
 	 */
-	public ClassData getBackgroundEffect(int id) {
-		return backgroundEffecter.get(id);
+	public ClassData<BackGroundEffect> getBackgroundEffect(int id) {
+		return backgroundEffect.get(id);
 	}
 
 	/**
 	 * エフェクトの生成に必要なデータを保管するクラスです。
-	 *
+	 * 
 	 * @author hide92795
 	 */
-	public class ClassData {
+	public class ClassData<T> {
 		/**
 		 * エフェクトのクラスです。
 		 */
-		private final Class<? extends Effectable> targetClass;
+		private final Class<? extends T> targetClass;
 		/**
 		 * エフェクトの生成のコンストラクターに必要な引数リストです。　
 		 */
@@ -167,20 +93,20 @@ public class EffectManager {
 
 		/**
 		 * 各データを保存してエフェクトを作成できるようにします。
-		 *
+		 * 
 		 * @param targetClass
 		 *            エフェクトのクラス
 		 * @param constructor
 		 *            エフェクトの生成のコンストラクターに必要な引数リスト
 		 */
-		public ClassData(Class<? extends Effectable> targetClass, Class<?>[] constructor) {
+		public ClassData(Class<? extends T> targetClass, Class<?>[] constructor) {
 			this.targetClass = targetClass;
 			this.constructor = constructor;
 		}
 
 		/**
 		 * このクラスデータが表すエフェクトをインスタンス化します。
-		 *
+		 * 
 		 * @param argument
 		 *            インスタンス化に使用する引数
 		 * @return エフェクトのオブジェクト
@@ -194,14 +120,14 @@ public class EffectManager {
 		 * @throws IllegalAccessException
 		 *             この <code>Constructor</code> オブジェクトが言語アクセス制御を実施し、基本となるコンストラクタにアクセスできない場合
 		 */
-		public Effectable instantiation(Object[] argument) throws InstantiationException, IllegalAccessException,
+		public T instantiation(Object[] argument) throws InstantiationException, IllegalAccessException,
 				InvocationTargetException, NoSuchMethodException {
 			return targetClass.getConstructor(constructor).newInstance(argument);
 		}
 
 		/**
 		 * このエフェクトの生成に必要な引数のクラスのリストを返します。
-		 *
+		 * 
 		 * @return エフェクトの生成に必要な引数のクラスのリスト
 		 */
 		public Object[] getArgumentList() {

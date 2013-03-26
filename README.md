@@ -1,4 +1,4 @@
-NovelEngine Project
+﻿NovelEngine Project
 ======================
 このソフトウェアは誰でもビジュアルノベルゲームを制作・配布できるようにするためのツール及び
 エンジン群です。  
@@ -20,7 +20,6 @@ NovelEngine Project
 [MessagePack](http://msgpack.org/) (Apache License v2.0)  
 [JSON.simple](http://code.google.com/p/json-simple/) (Apache License v2.0)  
 [Javassist](http://code.google.com/p/json-simple/) (Apache License v2.0)  
-[PackageSearcher](https://github.com/hide92795/PackageSearcher) (LGPL v3.0)  
 [LogBack](http://logback.qos.ch/) (LGPL v3.0)  
 [SLF4J](https://www.slf4j.org/) (MIT License)  
 

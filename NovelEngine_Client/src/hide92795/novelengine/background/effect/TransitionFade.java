@@ -18,17 +18,17 @@
 package hide92795.novelengine.background.effect;
 
 import hide92795.novelengine.background.BackGround;
-import hide92795.novelengine.background.EffectBackGround;
+import hide92795.novelengine.background.BackGroundEffect;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.panel.PanelStory;
-import hide92795.novelengine.story.StoryEffect;
+import hide92795.novelengine.story.StoryBackGroundEffect;
 
 /**
  * フェードによる画面効果を提供します。
  *
  * @author hide92795
  */
-public class TransitionFade extends EffectBackGround {
+public class TransitionFade extends BackGroundEffect {
 	/**
 	 * このエフェクトのIDを表します。
 	 */
@@ -90,7 +90,7 @@ public class TransitionFade extends EffectBackGround {
 	}
 
 	@Override
-	public void update(StoryEffect story, int delta) {
+	public void update(StoryBackGroundEffect story, int delta) {
 		if (finish) {
 			story.effectFinish();
 		} else {
