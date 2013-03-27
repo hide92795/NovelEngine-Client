@@ -42,6 +42,10 @@ public class StoryPlaySE extends Story {
 	 * このサウンドを管理するための名前です。
 	 */
 	private String sourcename;
+	/**
+	 * このサウンドの識別子
+	 */
+	private String identifier;
 
 	/**
 	 * SEを再生するストーリーデータを生成します。
@@ -51,7 +55,7 @@ public class StoryPlaySE extends Story {
 	 */
 	public StoryPlaySE(int id) {
 		String filename = id + ".nea";
-		sourcename = "se_" + id;
+		identifier = filename;
 		File path = new File(NovelEngine.getCurrentDir(), "sound");
 		File file = new File(path, filename);
 		try {
@@ -64,12 +68,13 @@ public class StoryPlaySE extends Story {
 	@Override
 	public void init(PanelStory story) {
 		resetFinish();
+		sourcename = null;
 	}
 
 	@Override
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
-			story.engine().getSoundManager().playAsSE(url, ".nea", sourcename);
+			sourcename = story.engine().getSoundManager().playAsSE(url, identifier);
 			finish();
 		}
 	}

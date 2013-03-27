@@ -103,13 +103,12 @@ public class SoundManager {
 	 * @param url
 	 *            再生するサウンドのURL
 	 * @param identifier
-	 *            ファイルの拡張子
-	 * @param sourcename
-	 *            このサウンドの名前
+	 *            ファイルの名前
+	 * @return このサウンドを管理する名前
 	 */
-	public void playAsSE(URL url, String identifier, String sourcename) {
-		sound.newSource(false, sourcename, url, sourcename + identifier, false, 0, 0, 0, 0, 0);
-		sound.play(sourcename);
+	public String playAsSE(URL url, String identifier) {
+		String sourcename = sound.quickPlay(false, url, identifier, false, 0, 0, 0, 0, 0);
+		return sourcename;
 	}
 
 	/**
