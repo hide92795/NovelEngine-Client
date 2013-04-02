@@ -25,7 +25,7 @@ import hide92795.novelengine.story.StoryBackGroundEffect;
 
 /**
  * 移動による画面効果を提供します。
- *
+ * 
  * @author hide92795
  */
 public class TransitionSlide extends BackGroundEffect {
@@ -80,7 +80,7 @@ public class TransitionSlide extends BackGroundEffect {
 
 	/**
 	 * 変化後の座標と変化に掛ける時間を指定してエフェクトを生成します。
-	 *
+	 * 
 	 * @param movedX
 	 *            変化後の{@link hide92795.novelengine.background.BackGround BackGround} オブジェクトのX座標
 	 * @param movedY
@@ -97,6 +97,7 @@ public class TransitionSlide extends BackGroundEffect {
 	@Override
 	public void init(PanelStory story, byte target) {
 		this.finish = false;
+		background = story.engine().getBackGroundManager().getBackGround(target);
 		this.beforeX = background.getX();
 		this.beforeY = background.getY();
 		this.fluctuationX = movedX - beforeX;

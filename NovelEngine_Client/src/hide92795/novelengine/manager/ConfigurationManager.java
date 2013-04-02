@@ -146,6 +146,10 @@ public class ConfigurationManager {
 		// render.setProperty(Setting.RENDER_PRESTART_BACKGROUND_COLOR, -1);
 		render.setProperty(Setting.RENDER_PRESTART_BACKGROUND_COLOR, Color.red.getRGB());
 		render.setProperty(Setting.RENDER_SKIPPABLE, 1);
+		render.setProperty(Setting.RENDER_WAIT_SE_FINISHED, 1);
+		render.setProperty(Setting.RENDER_STOP_SE_SKIPPED, 1);
+		render.setProperty(Setting.RENDER_WAIT_VOICE_FINISHED, 1);
+		render.setProperty(Setting.RENDER_STOP_VOICE_SKIPPED, 1);
 		render.setProperty(Setting.RENDER_DURATION_FADE_BGM, 500);
 		render.setProperty(Setting.RENDER_ENABLE_FADE_BGM, 0);
 		render.setProperty(Setting.RENDER_WORDS_SPEED, 300);
@@ -191,6 +195,22 @@ public class ConfigurationManager {
 		 * メッセージボックスが隠れた際に表示していた文章を消すかどうかを表します。
 		 */
 		public static final String RENDER_WORDS_CLEAR_ON_CLOSE_BOX = "words_clear_on_close_box";
+		/**
+		 * SEの再生が終了するまでそのストーリーデータを待機させるかを表します。
+		 */
+		public static final String RENDER_WAIT_SE_FINISHED = "wait_se_finished";
+		/**
+		 * ストーリーデータがスキップされた際にSEの再生を止めるかどうかを表します。
+		 */
+		public static final String RENDER_STOP_SE_SKIPPED = "stop_se_skipped";
+		/**
+		 * SEの再生が終了するまでそのストーリーデータを待機させるかを表します。
+		 */
+		public static final String RENDER_WAIT_VOICE_FINISHED = "wait_voice_finished";
+		/**
+		 * ストーリーデータがスキップされた際にSEの再生を止めるかどうかを表します。
+		 */
+		public static final String RENDER_STOP_VOICE_SKIPPED = "stop_voice_skipped";
 		/**
 		 * 現在の西暦を表します。
 		 */

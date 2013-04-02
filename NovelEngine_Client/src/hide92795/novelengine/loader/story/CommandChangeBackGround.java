@@ -20,7 +20,7 @@ package hide92795.novelengine.loader.story;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.story.Story;
-import hide92795.novelengine.story.StoryChangeBg;
+import hide92795.novelengine.story.StoryChangeBackGround;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -43,7 +43,7 @@ public class CommandChangeBackGround implements Command {
 		int magnification = iterator.next().asIntegerValue().getInt();
 		int delay = iterator.next().asIntegerValue().getInt();
 		resourceLoader.loadImage(bgId);
-		StoryChangeBg story = new StoryChangeBg(bgId, target, xPos, yPos, magnification, delay);
+		StoryChangeBackGround story = new StoryChangeBackGround(bgId, target, xPos, yPos, magnification, delay);
 		return story;
 	}
 }

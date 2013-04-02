@@ -20,6 +20,8 @@ package hide92795.novelengine.story;
 import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.event.MouseEvent;
+import hide92795.novelengine.manager.ConfigurationManager;
+import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.panel.PanelStory;
 
 import java.io.File;
@@ -46,6 +48,11 @@ public class StoryPlaySE extends Story {
 	 * このサウンドの識別子
 	 */
 	private String identifier;
+	/**
+	 * このサウンドが再生中かどうかを表します。<br>
+	 * 設定によりサウンドの再生を待機しない場合は常に false です。
+	 */
+	private boolean playing;
 
 	/**
 	 * SEを再生するストーリーデータを生成します。
@@ -68,14 +75,34 @@ public class StoryPlaySE extends Story {
 	@Override
 	public void init(PanelStory story) {
 		resetFinish();
+		playing = false;
 		sourcename = null;
 	}
 
 	@Override
 	public void update(PanelStory story, int delta) {
-		if (!isFinish()) {
+		if (playing) {
+			if (!story.engine().getSoundManager().isPlaying(sourcename)) {
+				playing = false;
+				finish();
+			}
+		} else if (!isFinish()) {
 			sourcename = story.engine().getSoundManager().playAsSE(url, identifier);
-			finish();
+			if (story.engine().getConfigurationManager()
+					.getValue(ConfigurationManager.VARIABLE_RENDER, Setting.RENDER_WAIT_SE_FINISHED) == 1) {
+				playing = true;
+			} else {
+				finish();
+			}
+		}
+	}
+
+	@Override
+	public void dispose(PanelStory story) {
+		if (playing
+				&& story.engine().getConfigurationManager()
+						.getValue(ConfigurationManager.VARIABLE_RENDER, Setting.RENDER_STOP_SE_SKIPPED) == 1) {
+			story.engine().getSoundManager().stop(sourcename);
 		}
 	}
 

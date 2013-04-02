@@ -64,6 +64,7 @@ public class SoundManager {
 		try {
 			SoundSystemConfig.addLibrary(LibraryLWJGLOpenAL.class);
 			SoundSystemConfig.setCodec("nea", XCodecJOrbis.class);
+			SoundSystemConfig.setCodec("nev", XCodecJOrbis.class);
 		} catch (SoundSystemException e) {
 			throw new NovelEngineException(e, "SoundManager#initSoundSystem");
 		}
@@ -119,5 +120,17 @@ public class SoundManager {
 	 */
 	public void stop(String sourcename) {
 		sound.stop(sourcename);
+	}
+
+	/**
+	 * 指定された名前のサウンドが再生中かどうかを取得します。<br>
+	 * 再生した直後にはまだ再生中と返らないので注意してください。
+	 * 
+	 * @param sourcename
+	 *            サウンドを管理するための名前
+	 * @return このサウンドが再生中かどうか
+	 */
+	public boolean isPlaying(String sourcename) {
+		return sound.playing(sourcename);
 	}
 }

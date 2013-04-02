@@ -245,6 +245,15 @@ public class EntityWords {
 	}
 
 	/**
+	 * 全ての文字送りが終わったかどうかを取得します。
+	 * 
+	 * @return 全ての文字送りが終わったかどうか
+	 */
+	public final boolean isFinish() {
+		return finish;
+	}
+
+	/**
 	 * 文章データの１行のデータを表します。
 	 * 
 	 * @author hide92795

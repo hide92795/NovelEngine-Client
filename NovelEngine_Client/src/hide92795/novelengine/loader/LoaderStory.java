@@ -39,6 +39,7 @@ import hide92795.novelengine.loader.story.CommandRandom;
 import hide92795.novelengine.loader.story.CommandShowBox;
 import hide92795.novelengine.loader.story.CommandShowWords;
 import hide92795.novelengine.loader.story.CommandStopBGM;
+import hide92795.novelengine.loader.story.CommandVoice;
 import hide92795.novelengine.loader.story.CommandWait;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryBlock;
@@ -73,7 +74,7 @@ public class LoaderStory extends Loader {
 		commands.put(Story.COMMAND_MOVE_CHAPTER, new CommandMoveChapter());
 		commands.put(Story.COMMAND_CHANGE_BG, new CommandChangeBackGround());
 		commands.put(Story.COMMAND_CHANGE_CHARACTER, new CommandChangeCharacter());
-		// commands.put(Story.COMMAND_MOVE_CHARACTER, new Command());
+		commands.put(Story.COMMAND_VOICE, new CommandVoice());
 		// commands.put(Story.COMMAND_ACTION_CHARACTER, new Command());
 		// commands.put(Story.COMMAND_SHOW_CG, new Command());
 		commands.put(Story.COMMAND_SHOW_WORDS, new CommandShowWords());

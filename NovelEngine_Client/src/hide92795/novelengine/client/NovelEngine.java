@@ -88,7 +88,7 @@ public class NovelEngine {
 	/**
 	 * NovelEngineのバージョンです。
 	 */
-	public static final String VERSION = "a1.3.1";
+	public static final String VERSION = "a1.4.0";
 	/**
 	 * キューデータを実行するキューマネージャーです。
 	 */

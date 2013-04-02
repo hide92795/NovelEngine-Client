@@ -67,27 +67,27 @@ public abstract class Story implements MouseListener, KeybordListener {
 	/**
 	 * 背景を変更するストーリーデータを表します。
 	 * 
-	 * @see StoryChangeBg
+	 * @see StoryChangeBackGround
 	 */
 	public static final byte COMMAND_CHANGE_BG = 5;
 	/**
 	 * キャラクターを変更するストーリーデータを表します。
 	 * 
-	 * @see TODO
+	 * @see StoryChangeCharacter
 	 */
 	public static final byte COMMAND_CHANGE_CHARACTER = 6;
 	/**
-	 * キャラクターを移動するストーリーデータを表します。
+	 * ボイスの再生を行うストーリーデータを表します。
 	 * 
-	 * @see TODO
+	 * @see StoryVoice
 	 */
-	public static final byte COMMAND_MOVE_CHARACTER = 7;
+	public static final byte COMMAND_VOICE = 7;
 	/**
-	 * するストーリーデータを表します。
+	 * 背景エフェクトを実行するストーリーデータを表します。
 	 * 
-	 * @see TODO
+	 * @see StoryBackGroundEffect
 	 */
-	public static final byte COMMAND_ACTION_CHARACTER = 8;
+	public static final byte COMMAND_EFFECT_CHARACTER = 8;
 	/**
 	 * CGを表示するストーリーデータを表します。
 	 * 
@@ -97,7 +97,7 @@ public abstract class Story implements MouseListener, KeybordListener {
 	/**
 	 * 文章を表示するストーリーデータを表します。
 	 * 
-	 * @see TODO
+	 * @see StoryShowWords
 	 */
 	public static final byte COMMAND_SHOW_WORDS = 10;
 	/**
@@ -151,7 +151,7 @@ public abstract class Story implements MouseListener, KeybordListener {
 	/**
 	 * 背景色を変更するストーリーデータを表します。
 	 * 
-	 * @see StoryChangeBgColor
+	 * @see StoryChangeBackGroundColor
 	 */
 	public static final byte COMMAND_SET_BACKGROUND_COLOR = 19;
 	/**
@@ -252,6 +252,15 @@ public abstract class Story implements MouseListener, KeybordListener {
 		Properties properties = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
 		int i = properties.getProperty(Setting.RENDER_SKIPPABLE);
 		return i == 1;
+	}
+
+	/**
+	 * このストーリーデータがパネルによる処理リストから削除される時に呼ばれます。
+	 * 
+	 * @param story
+	 *            現在、ストーリーを実行している {@link hide92795.novelengine.panel.PanelStory PanelStory} オブジェクト
+	 */
+	public void dispose(final PanelStory story) {
 	}
 
 	@Override

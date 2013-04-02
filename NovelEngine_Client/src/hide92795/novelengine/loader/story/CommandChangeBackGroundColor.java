@@ -20,7 +20,7 @@ package hide92795.novelengine.loader.story;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.story.Story;
-import hide92795.novelengine.story.StoryChangeBgColor;
+import hide92795.novelengine.story.StoryChangeBackGroundColor;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,7 +42,7 @@ public class CommandChangeBackGroundColor implements Command {
 		int red = (rgb & 0x00FF0000) >> 16;
 		int green = (rgb & 0x0000FF00) >> 8;
 		int blue = (rgb & 0x000000FF);
-		StoryChangeBgColor story = new StoryChangeBgColor(target, red, green, blue, alpha);
+		StoryChangeBackGroundColor story = new StoryChangeBackGroundColor(target, red, green, blue, alpha);
 		return story;
 	}
 }

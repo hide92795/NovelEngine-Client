@@ -40,6 +40,18 @@ import java.util.Set;
  */
 public class PanelStory extends Panel {
 	/**
+	 * 文章データがこのパネルに設定されていないことを表します。
+	 */
+	public static final int WORDS_UNREGISTED = 0;
+	/**
+	 * 現在設定されている文章データが表示中であることを表します。
+	 */
+	public static final int WORDS_SHOWING = 1;
+	/**
+	 * 現在設定されている文章データが完全に表示されていることを表します。
+	 */
+	public static final int WORDS_SHOWED = 2;
+	/**
 	 * 表示を行うストーリーデータです。
 	 */
 	private DataStory story;
@@ -59,6 +71,10 @@ public class PanelStory extends Panel {
 	 * 現在表示している文章データです。
 	 */
 	private EntityWords words;
+	/**
+	 * 現在の文章データの状況を表します。
+	 */
+	private int wordsState;
 	/**
 	 * ブロック内のストーリーデータの処理が終わったかどうかを表します。
 	 */
@@ -87,6 +103,12 @@ public class PanelStory extends Panel {
 	public void update(int delta) {
 		if (finishAll) {
 			// すべてが完了
+			// 終了通知
+			Iterator<Story> iterator = processList.iterator();
+			while (iterator.hasNext()) {
+				Story story = iterator.next();
+				story.dispose(this);
+			}
 			// 処理リストをクリア
 			processList.clear();
 			Story s;
@@ -168,6 +190,13 @@ public class PanelStory extends Panel {
 	private void updateWords(int delta) {
 		if (words != null) {
 			words.update(this, delta);
+			if (words.isFinish()) {
+				wordsState = WORDS_SHOWED;
+			} else {
+				wordsState = WORDS_SHOWING;
+			}
+		} else {
+			wordsState = WORDS_UNREGISTED;
 		}
 	}
 
@@ -296,5 +325,14 @@ public class PanelStory extends Panel {
 	public void setWords(EntityWords words) {
 		words.init(this);
 		this.words = words;
+	}
+
+	/**
+	 * 現在の文章データの状況を取得します。
+	 * 
+	 * @return 現在の文章データの状況
+	 */
+	public int getWordsState() {
+		return wordsState;
 	}
 }
