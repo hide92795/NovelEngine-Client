@@ -35,10 +35,10 @@ public class CommandChangeCharacter implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
 			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
-		// int キャラID, byte 対象, int 遅延（ms）, int 位置ID, int 表情ID
-		int characterId = iterator.next().asIntegerValue().getInt();
+		// int キャラID, int 遅延（ms）, byte 対象, int 位置ID, int 表情ID
 		byte target = iterator.next().asIntegerValue().getByte();
 		int delay = iterator.next().asIntegerValue().getInt();
+		int characterId = iterator.next().asIntegerValue().getInt();
 		int positionId = iterator.next().asIntegerValue().getInt();
 		int faceId = iterator.next().asIntegerValue().getInt();
 		int[] faceImages = engine.getCharacterManager().getCharacter(characterId).getFace(faceId).getFaceDiff();
