@@ -22,7 +22,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * バックグラウンドの背景色を変更ストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryChangeBackGroundColor extends Story {
@@ -49,7 +49,7 @@ public class StoryChangeBackGroundColor extends Story {
 
 	/**
 	 * バックグラウンドの背景色を変更ストーリーデータを生成します。
-	 *
+	 * 
 	 * @param target
 	 *            背景色を変更するバックグラウンドのID
 	 * @param r
@@ -86,10 +86,7 @@ public class StoryChangeBackGroundColor extends Story {
 			background.setGreen(g);
 			background.setBlue(b);
 			background.setAlpha(a);
-
 			finish();
 		}
-
 	}
-
 }

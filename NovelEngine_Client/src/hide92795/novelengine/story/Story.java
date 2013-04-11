@@ -69,13 +69,13 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 * 
 	 * @see StoryChangeBackGround
 	 */
-	public static final byte COMMAND_CHANGE_BG = 5;
+	public static final byte COMMAND_SET_BACKGROUND = 5;
 	/**
 	 * キャラクターを変更するストーリーデータを表します。
 	 * 
 	 * @see StoryChangeCharacter
 	 */
-	public static final byte COMMAND_CHANGE_CHARACTER = 6;
+	public static final byte COMMAND_SET_CHARACTER = 6;
 	/**
 	 * ボイスの再生を行うストーリーデータを表します。
 	 * 
@@ -89,11 +89,11 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 */
 	public static final byte COMMAND_EFFECT_CHARACTER = 8;
 	/**
-	 * CGを表示するストーリーデータを表します。
+	 * 背景の範囲を変更するストーリーデータを表します。
 	 * 
-	 * @see TODO
+	 * @see StoryChangeBackGroundFigure
 	 */
-	public static final byte COMMAND_SHOW_CG = 9;
+	public static final byte COMMAND_SET_BACKGROUND_FIGURE = 9;
 	/**
 	 * 文章を表示するストーリーデータを表します。
 	 * 

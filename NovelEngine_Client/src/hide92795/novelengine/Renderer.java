@@ -17,6 +17,9 @@
 //
 package hide92795.novelengine;
 
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_LINE_LOOP;
+import static org.lwjgl.opengl.GL11.GL_LINE_STRIP;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBegin;
@@ -25,8 +28,10 @@ import static org.lwjgl.opengl.GL11.glColor4ub;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glLineWidth;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
+import static org.lwjgl.opengl.GL11.glVertex2i;
 import hide92795.novelengine.client.NovelEngine;
 
 import org.newdawn.slick.opengl.Texture;
@@ -343,5 +348,87 @@ public class Renderer {
 			glVertex2f(x, y1);
 		}
 		glEnd();
+	}
+
+	/**
+	 * 指定した色と幅の線を描画します。
+	 * 
+	 * @param red
+	 *            赤成分(0～255の範囲内)
+	 * @param green
+	 *            緑成分(0～255の範囲内)
+	 * @param blue
+	 *            青成分(0～255の範囲内)
+	 * @param alpha
+	 *            アルファ値(0～255の範囲内)
+	 * @param x
+	 *            線の端点のX座標
+	 * @param y
+	 *            線の端点のY座標
+	 * @param x1
+	 *            線のもう一方の端点のX座標
+	 * @param y1
+	 *            線のもう一方の端点のY座標
+	 * @param width
+	 *            線の幅
+	 */
+	public static void renderLine(byte red, byte green, byte blue, byte alpha, int x, int y, int x1, int y1, int width) {
+		glColor4ub(red, green, blue, alpha);
+		glLineWidth(width);
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_LINES);
+		{
+			glVertex2i(x, y);
+			glVertex2i(x1, y1);
+		}
+		glEnd();
+	}
+
+	/**
+	 * 指定した頂点を通過する線を描画します。
+	 * 
+	 * @param red
+	 *            赤成分(0～255の範囲内)
+	 * @param green
+	 *            緑成分(0～255の範囲内)
+	 * @param blue
+	 *            青成分(0～255の範囲内)
+	 * @param alpha
+	 *            アルファ値(0～255の範囲内)
+	 * @param width
+	 *            線の幅
+	 * @param start
+	 *            線の開始点の番号
+	 * @param end
+	 *            線の終了点の番号
+	 * @param apexes
+	 *            頂点の座標の配列
+	 */
+	public static void renderLineAsConsecutive(byte red, byte green, byte blue, byte alpha, int width, int start,
+			int end, float[][] apexes) {
+		glColor4ub(red, green, blue, alpha);
+		glLineWidth(width);
+		glDisable(GL_TEXTURE_2D);
+		if (start == end) {
+			glBegin(GL_LINE_LOOP);
+			{
+				for (float[] apex : apexes) {
+					glVertex2f(apex[0], apex[1]);
+				}
+			}
+			glEnd();
+		} else {
+			glBegin(GL_LINE_STRIP);
+			int current = start;
+			while (current != end) {
+				glVertex2f(apexes[current][0], apexes[current][1]);
+				current++;
+				if (current == apexes.length) {
+					current = 0;
+				}
+			}
+			glVertex2f(apexes[current][0], apexes[current][1]);
+			glEnd();
+		}
 	}
 }

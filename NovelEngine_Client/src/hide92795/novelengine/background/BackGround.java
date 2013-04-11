@@ -27,7 +27,8 @@ import static org.lwjgl.opengl.GL11.glDepthMask;
 import static org.lwjgl.opengl.GL11.glStencilFunc;
 import static org.lwjgl.opengl.GL11.glStencilOp;
 import hide92795.novelengine.Renderer;
-import hide92795.novelengine.background.figure.Figure_EntireScreen;
+import hide92795.novelengine.background.figure.Figure;
+import hide92795.novelengine.background.figure.FigureEntireScreen;
 import hide92795.novelengine.character.EntityCharacter;
 import hide92795.novelengine.client.NovelEngine;
 
@@ -35,7 +36,7 @@ import org.newdawn.slick.opengl.Texture;
 
 /**
  * ストーリー上で背景とキャラクターを保持する１枚のレイヤーとして機能します。
- *
+ * 
  * @author hide92795
  */
 public class BackGround {
@@ -56,7 +57,7 @@ public class BackGround {
 	 */
 	private float magnificartion = 1.0f;
 	/**
-	 * 描画範囲を示す{@link hide92795.novelengine.background.Figure Figure}です
+	 * 描画範囲を示す{@link hide92795.novelengine.background.figure.Figure Figure}です
 	 */
 	private Figure figure;
 
@@ -84,9 +85,9 @@ public class BackGround {
 	/**
 	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを指定された描画範囲で作成します。<br>
 	 * 背景色のデフォルトは白、アルファ値のデフォルトは透明(0.0f)です。
-	 *
+	 * 
 	 * @param figure
-	 *            描画範囲を示す{@link hide92795.novelengine.background.Figure Figure}
+	 *            描画範囲を示す{@link hide92795.novelengine.background.figure.Figure Figure}
 	 */
 	public BackGround(Figure figure) {
 		this.figure = figure;
@@ -95,15 +96,15 @@ public class BackGround {
 	/**
 	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを画面全体を描画範囲として作成します。<br>
 	 * 背景色のデフォルトは白、アルファ値のデフォルトは透明(0.0f)です。
-	 *
+	 * 
 	 */
 	public BackGround() {
-		this(new Figure_EntireScreen());
+		this(new FigureEntireScreen(null));
 	}
 
 	/**
 	 * 描画範囲を表すステンシル領域を描画します。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 */
@@ -116,7 +117,7 @@ public class BackGround {
 
 	/**
 	 * 背景画像、キャラクターなどの描画を行います。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 */
@@ -136,11 +137,12 @@ public class BackGround {
 		if (character != null) {
 			character.render(engine, alpha);
 		}
+		figure.renderLine(engine);
 	}
 
 	/**
 	 * 現在の背景のイメージIDを取得します。
-	 *
+	 * 
 	 * @return 現在の背景のイメージID
 	 */
 	public final int getImageId() {
@@ -149,7 +151,7 @@ public class BackGround {
 
 	/**
 	 * 背景のイメージIDを設定します。
-	 *
+	 * 
 	 * @param imageId
 	 *            設定するイメージID
 	 */
@@ -159,7 +161,7 @@ public class BackGround {
 
 	/**
 	 * 現在のアルファ値を取得します。
-	 *
+	 * 
 	 * @return 現在のアルファ値
 	 */
 	public final float getAlpha() {
@@ -168,7 +170,7 @@ public class BackGround {
 
 	/**
 	 * アルファ値を設定します。
-	 *
+	 * 
 	 * @param alpha
 	 *            設定するアルファ値
 	 */
@@ -178,7 +180,7 @@ public class BackGround {
 
 	/**
 	 * 現在のX軸方向の位置を取得します。
-	 *
+	 * 
 	 * @return 現在のX軸方向の位置
 	 */
 	public final int getX() {
@@ -187,7 +189,7 @@ public class BackGround {
 
 	/**
 	 * X軸方向の位置を設定します。
-	 *
+	 * 
 	 * @param x
 	 *            設定するX軸方向の位置
 	 */
@@ -197,7 +199,7 @@ public class BackGround {
 
 	/**
 	 * 現在のY軸方向の位置を取得します。
-	 *
+	 * 
 	 * @return 現在のY軸方向の位置
 	 */
 	public final int getY() {
@@ -206,7 +208,7 @@ public class BackGround {
 
 	/**
 	 * Y軸方向の位置を設定します。
-	 *
+	 * 
 	 * @param y
 	 *            設定するY軸方向の位置
 	 */
@@ -216,7 +218,7 @@ public class BackGround {
 
 	/**
 	 * 現在の拡大率を取得します。
-	 *
+	 * 
 	 * @return 現在の拡大率
 	 */
 	public final float getMagnificartion() {
@@ -225,7 +227,7 @@ public class BackGround {
 
 	/**
 	 * 拡大率を設定します。
-	 *
+	 * 
 	 * @param magnificartion
 	 *            設定する拡大率
 	 */
@@ -234,9 +236,9 @@ public class BackGround {
 	}
 
 	/**
-	 * 現在の描画範囲を表す{@link hide92795.novelengine.background.Figure}オブジェクトを取得します。
-	 *
-	 * @return 現在の描画範囲を表す{@link hide92795.novelengine.background.Figure}オブジェクト
+	 * 現在の描画範囲を表す{@link hide92795.novelengine.background.figure.Figure}オブジェクトを取得します。
+	 * 
+	 * @return 現在の描画範囲を表す{@link hide92795.novelengine.background.figure.Figure}オブジェクト
 	 */
 	public final Figure getFigure() {
 		return figure;
@@ -244,9 +246,9 @@ public class BackGround {
 
 	/**
 	 * 描画範囲を設定します。
-	 *
+	 * 
 	 * @param figure
-	 *            描画範囲を表す{@link hide92795.novelengine.background.Figure}オブジェクト
+	 *            描画範囲を表す{@link hide92795.novelengine.background.figure.Figure}オブジェクト
 	 */
 	public final void setFigure(Figure figure) {
 		this.figure = figure;
@@ -254,7 +256,7 @@ public class BackGround {
 
 	/**
 	 * 現在の背景色の赤成分を取得します。
-	 *
+	 * 
 	 * @return 現在の背景色の赤成分
 	 */
 	public final float getRed() {
@@ -263,7 +265,7 @@ public class BackGround {
 
 	/**
 	 * 背景色の赤成分を設定します。
-	 *
+	 * 
 	 * @param red
 	 *            設定する背景色の赤成分
 	 */
@@ -273,7 +275,7 @@ public class BackGround {
 
 	/**
 	 * 現在の背景色の緑成分を取得します。
-	 *
+	 * 
 	 * @return 現在の背景色の緑成分
 	 */
 	public final float getGreen() {
@@ -282,7 +284,7 @@ public class BackGround {
 
 	/**
 	 * 背景色の緑成分を設定します。
-	 *
+	 * 
 	 * @param green
 	 *            設定する背景色の緑成分
 	 */
@@ -292,7 +294,7 @@ public class BackGround {
 
 	/**
 	 * 現在の背景色の青成分を取得します。
-	 *
+	 * 
 	 * @return 現在の背景色の青成分
 	 */
 	public final float getBlue() {
@@ -301,7 +303,7 @@ public class BackGround {
 
 	/**
 	 * 背景色の青成分を設定します。
-	 *
+	 * 
 	 * @param blue
 	 *            設定する背景色の青成分
 	 */
@@ -311,7 +313,7 @@ public class BackGround {
 
 	/**
 	 * この背景に描画するキャラクターを設定します。
-	 *
+	 * 
 	 * @param character
 	 *            描画するキャラクター
 	 */

@@ -20,7 +20,10 @@ package hide92795.novelengine.client;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH_HINT;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_NICEST;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_PROJECTION;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -30,6 +33,7 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glHint;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
@@ -46,6 +50,7 @@ import hide92795.novelengine.manager.BoxManager;
 import hide92795.novelengine.manager.CharacterManager;
 import hide92795.novelengine.manager.ConfigurationManager;
 import hide92795.novelengine.manager.EffectManager;
+import hide92795.novelengine.manager.FigureManager;
 import hide92795.novelengine.manager.FontManager;
 import hide92795.novelengine.manager.GuiManager;
 import hide92795.novelengine.manager.ImageManager;
@@ -88,7 +93,7 @@ public class NovelEngine {
 	/**
 	 * NovelEngineのバージョンです。
 	 */
-	public static final String VERSION = "a1.4.1";
+	public static final String VERSION = "a1.5.0";
 	/**
 	 * キューデータを実行するキューマネージャーです。
 	 */
@@ -137,6 +142,10 @@ public class NovelEngine {
 	 * 文章データを管理するマネージャーです。
 	 */
 	private final WordsManager wordsManager;
+	/**
+	 * フィギュアデータを管理するフィギュアマネージャーです。
+	 */
+	private final FigureManager figureManager;
 	/**
 	 * 最後にループ処理が行われた時間です。
 	 */
@@ -219,6 +228,7 @@ public class NovelEngine {
 		characterManager = new CharacterManager();
 		boxManager = new BoxManager(this);
 		wordsManager = new WordsManager();
+		figureManager = new FigureManager();
 		initResource();
 	}
 
@@ -372,6 +382,8 @@ public class NovelEngine {
 		glClearColor(0f, 0f, 0f, 0f);
 		glEnable(GL_BLEND);
 		glEnable(GL_STENCIL_TEST);
+		glEnable(GL_LINE_SMOOTH);
+		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -714,6 +726,15 @@ public class NovelEngine {
 	 */
 	public WordsManager getWordsManager() {
 		return wordsManager;
+	}
+
+	/**
+	 * フィギュアデータを管理するフィギュアマネージャーを返します。
+	 * 
+	 * @return フィギュアマネージャー
+	 */
+	public final FigureManager getFigureManager() {
+		return figureManager;
 	}
 
 	/**
