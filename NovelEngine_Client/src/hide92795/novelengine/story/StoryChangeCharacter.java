@@ -23,7 +23,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * 指定された背景にキャラクターを配置するストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryChangeCharacter extends Story {
@@ -57,6 +57,10 @@ public class StoryChangeCharacter extends Story {
 	private EntityCharacter character;
 
 	/**
+	 * 指定された背景にキャラクターを配置するストーリーデータを生成します。
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param characterId
 	 *            配置するキャラクターのID
 	 * @param target
@@ -68,7 +72,8 @@ public class StoryChangeCharacter extends Story {
 	 * @param faceId
 	 *            キャラクターの表情を表すID
 	 */
-	public StoryChangeCharacter(int characterId, byte target, int delay, int positionId, int faceId) {
+	public StoryChangeCharacter(int line, int characterId, byte target, int delay, int positionId, int faceId) {
+		super(line);
 		this.characterId = characterId;
 		this.target = target;
 		this.delay = delay;

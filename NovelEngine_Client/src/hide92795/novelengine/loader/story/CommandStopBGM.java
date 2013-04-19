@@ -34,8 +34,9 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandStopBGM implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator unpacker, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
-		StoryStopBGM story = new StoryStopBGM();
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
+		// none
+		StoryStopBGM story = new StoryStopBGM(line);
 		return story;
 	}
 }

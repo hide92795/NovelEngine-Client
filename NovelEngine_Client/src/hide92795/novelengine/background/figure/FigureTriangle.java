@@ -37,13 +37,15 @@ public class FigureTriangle extends Figure {
 	/**
 	 * 指定した３つの点を頂点にもつ三角形を描画範囲とするフィギュアデータを生成します。
 	 * 
+	 * @param id
+	 *            このフィギュアのID
 	 * @param apexes
 	 *            描画範囲の頂点
 	 * @param lines
 	 *            描画する線の配列
 	 */
-	public FigureTriangle(int[][] apexes, Line[] lines) {
-		super(lines);
+	public FigureTriangle(int id, int[][] apexes, Line[] lines) {
+		super(id, lines);
 		this.apexes = apexes;
 	}
 

@@ -34,15 +34,15 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandChangeBackGroundColor implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// byte 対象, int 色, int アルファ値
 		byte target = iterator.next().asIntegerValue().getByte();
 		int rgb = iterator.next().asIntegerValue().getInt();
-		int alpha = iterator.next().asIntegerValue().getInt();
-		int red = (rgb & 0x00FF0000) >> 16;
-		int green = (rgb & 0x0000FF00) >> 8;
-		int blue = (rgb & 0x000000FF);
-		StoryChangeBackGroundColor story = new StoryChangeBackGroundColor(target, red, green, blue, alpha);
+		byte alpha = iterator.next().asIntegerValue().getByte();
+		byte red = (byte) ((rgb & 0x00FF0000) >> 16);
+		byte green = (byte) ((rgb & 0x0000FF00) >> 8);
+		byte blue = (byte) (rgb & 0x000000FF);
+		StoryChangeBackGroundColor story = new StoryChangeBackGroundColor(line, target, red, green, blue, alpha);
 		return story;
 	}
 }

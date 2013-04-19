@@ -35,7 +35,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandButton implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// int 個数, int 位置ID, [int ボタンID, int シーンID]
 		int num = iterator.next().asIntegerValue().getInt();
 		int positionId = iterator.next().asIntegerValue().getInt();
@@ -46,7 +46,7 @@ public class CommandButton implements Command {
 			EntityButton button = new EntityButton(buttonId, jumpSceneId);
 			buttons[j] = button;
 		}
-		StoryButton story = new StoryButton(positionId, buttons);
+		StoryButton story = new StoryButton(line, positionId, buttons);
 		return story;
 	}
 }

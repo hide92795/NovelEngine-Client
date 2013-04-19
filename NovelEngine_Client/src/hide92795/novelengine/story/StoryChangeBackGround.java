@@ -22,7 +22,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * バックグラウンドの画像を変更ストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryChangeBackGround extends Story {
@@ -57,7 +57,9 @@ public class StoryChangeBackGround extends Story {
 
 	/**
 	 * バックグラウンドの画像を変更するストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param bgId
 	 *            変更後の画像
 	 * @param target
@@ -71,7 +73,8 @@ public class StoryChangeBackGround extends Story {
 	 * @param delay
 	 *            イメージを変更するまでの待機時間
 	 */
-	public StoryChangeBackGround(int bgId, byte target, int x, int y, int magnification, int delay) {
+	public StoryChangeBackGround(int line, int bgId, byte target, int x, int y, int magnification, int delay) {
+		super(line);
 		this.nextBgId = bgId;
 		this.target = target;
 		this.x = x;

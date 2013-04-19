@@ -34,8 +34,8 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandHideBox implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator unpacker, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
-		StoryShowBox story = new StoryShowBox(false);
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
+		StoryShowBox story = new StoryShowBox(line, false);
 		return story;
 	}
 }

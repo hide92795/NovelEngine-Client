@@ -25,19 +25,28 @@ import static org.lwjgl.opengl.GL11.glStencilFunc;
 import static org.lwjgl.opengl.GL11.glStencilOp;
 import hide92795.novelengine.background.BackGround;
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.loader.item.DataSavedBackGround;
 
+import java.io.OutputStream;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeMap;
 
 import org.lwjgl.opengl.GL11;
+import org.msgpack.MessagePack;
+import org.msgpack.packer.Packer;
 
 /**
  * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトの管理及び描画指示を行うクラスです。
- *
+ * 
  * @author hide92795
  */
 public class BackGroundManager {
+	/**
+	 * 実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクトです。
+	 */
+	private final NovelEngine engine;
 	/**
 	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトのリストです。
 	 */
@@ -45,14 +54,18 @@ public class BackGroundManager {
 
 	/**
 	 * {@link hide92795.novelengine.manager.BackGroundManager BackGroundManager} のオブジェクトを生成します。
+	 * 
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public BackGroundManager() {
-		backgrounds = new TreeMap<Byte, BackGround>(new DataComparator());
+	public BackGroundManager(NovelEngine engine) {
+		this.engine = engine;
+		this.backgrounds = new TreeMap<Byte, BackGround>(new DataComparator());
 	}
 
 	/**
 	 * 指定された {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを取得します。
-	 *
+	 * 
 	 * @param target
 	 *            取得する {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトのID
 	 * @return 対象の {@link hide92795.novelengine.background.BackGround BackGround} オブジェクト
@@ -60,7 +73,7 @@ public class BackGroundManager {
 	public BackGround getBackGround(byte target) {
 		BackGround bg = backgrounds.get(target);
 		if (bg == null) {
-			bg = new BackGround();
+			bg = new BackGround(engine);
 			backgrounds.put(target, bg);
 		}
 		return bg;
@@ -68,7 +81,7 @@ public class BackGroundManager {
 
 	/**
 	 * 各 {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトに描画指示を行います。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
@@ -85,7 +98,7 @@ public class BackGroundManager {
 
 	/**
 	 * ステンシルバッファに書き込まれたステンシル領域をリセットします。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
@@ -105,11 +118,53 @@ public class BackGroundManager {
 	}
 
 	/**
+	 * 現在の背景の状態を保存し、再開出来るようにします。
+	 * 
+	 * @param os
+	 *            書き込み先のストリーム
+	 * @throws Exception
+	 *             何らかのエラーが発生した場合
+	 */
+	public void save(OutputStream os) throws Exception {
+		MessagePack msgpack = new MessagePack();
+		Packer p = msgpack.createPacker(os);
+		Set<Byte> s = backgrounds.keySet();
+		for (byte b : s) {
+			p.write(b);
+			BackGround bg = backgrounds.get(b);
+			BackGround.save(bg, p);
+		}
+	}
+
+	/**
+	 * 読み込み済みの背景データを復元します。
+	 * 
+	 * @param data
+	 *            展開する背景データ
+	 */
+	public void restore(DataSavedBackGround data) {
+		HashMap<Byte, BackGround> savedBackgrounds = data.getBackGrounds();
+		Set<Byte> targets = savedBackgrounds.keySet();
+		for (Byte target : targets) {
+			BackGround backGround = savedBackgrounds.get(target);
+			backgrounds.put(target, backGround);
+		}
+
+	}
+
+	/**
+	 * 全ての背景の状態を初期状態にします。
+	 */
+	public void clear() {
+		backgrounds.clear();
+	}
+
+	/**
 	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを昇順に整列させるコンパレータです。
-	 *
+	 * 
 	 * @author hide92795
 	 */
-	public class DataComparator implements Comparator<Byte> {
+	private class DataComparator implements Comparator<Byte> {
 		@Override
 		public int compare(Byte o1, Byte o2) {
 			if (o1.byteValue() > o1.byteValue()) {
@@ -122,4 +177,5 @@ public class BackGroundManager {
 			return 0;
 		}
 	}
+
 }

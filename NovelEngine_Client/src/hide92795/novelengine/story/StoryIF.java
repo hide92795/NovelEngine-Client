@@ -22,7 +22,7 @@ import hide92795.novelengine.panel.PanelStory;
 /**
  * ２つの値を比較するストーリーデータです。<br>
  * 結果によってそれぞれ指定されたシーンIDへ移動します。
- *
+ * 
  * @author hide92795
  */
 public class StoryIF extends Story {
@@ -77,7 +77,9 @@ public class StoryIF extends Story {
 
 	/**
 	 * ２つの値を比較するストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param operator
 	 *            ストーリーデータが行う演算子
 	 * @param leftVarType
@@ -93,8 +95,9 @@ public class StoryIF extends Story {
 	 * @param falseGoto
 	 *            演算結果が偽の場合に移動するシーンID
 	 */
-	public StoryIF(byte operator, byte leftVarType, String leftVarName, byte rightVarType, String rightVarName,
-			int trueGoto, int falseGoto) {
+	public StoryIF(int line, byte operator, byte leftVarType, String leftVarName, byte rightVarType,
+			String rightVarName, int trueGoto, int falseGoto) {
+		super(line);
 		this.operator = operator;
 		this.leftVarType = leftVarType;
 		this.leftVarName = leftVarName;
@@ -126,7 +129,7 @@ public class StoryIF extends Story {
 
 	/**
 	 * 比較を行います。
-	 *
+	 * 
 	 * @param left
 	 *            演算子の左側の変数
 	 * @param right

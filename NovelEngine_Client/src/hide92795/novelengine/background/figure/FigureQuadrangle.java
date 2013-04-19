@@ -37,13 +37,15 @@ public class FigureQuadrangle extends Figure {
 	/**
 	 * 指定した４つの点を頂点にもつ四角形を描画範囲とするフィギュアデータを生成します。
 	 * 
+	 * @param id
+	 *            このフィギュアのID
 	 * @param apexes
 	 *            描画範囲の頂点
 	 * @param lines
 	 *            描画する線の配列
 	 */
-	public FigureQuadrangle(int[][] apexes, Line[] lines) {
-		super(lines);
+	public FigureQuadrangle(int id, int[][] apexes, Line[] lines) {
+		super(id, lines);
 		this.apexes = apexes;
 	}
 

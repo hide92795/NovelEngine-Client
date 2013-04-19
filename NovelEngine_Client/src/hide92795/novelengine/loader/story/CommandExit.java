@@ -34,10 +34,10 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandExit implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// boolean 終了確認
 		boolean confirm = iterator.next().asBooleanValue().getBoolean();
-		StoryExit story = new StoryExit(confirm);
+		StoryExit story = new StoryExit(line, confirm);
 		return story;
 	}
 }

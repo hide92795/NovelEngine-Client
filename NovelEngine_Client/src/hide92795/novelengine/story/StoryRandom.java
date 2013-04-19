@@ -23,7 +23,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * ランダムな値を生成するストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryRandom extends Story {
@@ -42,7 +42,9 @@ public class StoryRandom extends Story {
 
 	/**
 	 * ランダムな値を生成するストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param varType
 	 *            結果を代入する変数の種類
 	 * @param varName
@@ -50,7 +52,8 @@ public class StoryRandom extends Story {
 	 * @param num
 	 *            乱数を生成する範囲
 	 */
-	public StoryRandom(byte varType, String varName, int num) {
+	public StoryRandom(int line, byte varType, String varName, int num) {
+		super(line);
 		this.varType = varType;
 		this.varName = varName;
 		this.num = num;

@@ -21,7 +21,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * 指定時間待機するストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryWait extends Story {
@@ -36,11 +36,14 @@ public class StoryWait extends Story {
 
 	/**
 	 * 指定時間待機するストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param waitTimeMs
 	 *            待機する時間
 	 */
-	public StoryWait(int waitTimeMs) {
+	public StoryWait(int line, int waitTimeMs) {
+		super(line);
 		this.waitTimeMs = waitTimeMs;
 	}
 

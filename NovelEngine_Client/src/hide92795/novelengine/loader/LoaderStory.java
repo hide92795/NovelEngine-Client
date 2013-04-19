@@ -40,6 +40,8 @@ import hide92795.novelengine.loader.story.CommandRandom;
 import hide92795.novelengine.loader.story.CommandShowBox;
 import hide92795.novelengine.loader.story.CommandShowWords;
 import hide92795.novelengine.loader.story.CommandStopBGM;
+import hide92795.novelengine.loader.story.CommandSystemLoad;
+import hide92795.novelengine.loader.story.CommandSystemSave;
 import hide92795.novelengine.loader.story.CommandVoice;
 import hide92795.novelengine.loader.story.CommandWait;
 import hide92795.novelengine.story.Story;
@@ -93,6 +95,8 @@ public class LoaderStory extends Loader {
 		commands.put(Story.COMMAND_CALCULATION, new CommandCalculation());
 		commands.put(Story.COMMAND_EXIT, new CommandExit());
 		commands.put(Story.COMMAND_WAIT, new CommandWait());
+		commands.put(Story.COMMAND_SYSTEM_SAVE, new CommandSystemSave());
+		commands.put(Story.COMMAND_SYSTEM_LOAD, new CommandSystemLoad());
 	}
 
 	/**
@@ -120,6 +124,8 @@ public class LoaderStory extends Loader {
 			unpacker.getNextType();
 			UnpackerIterator iterator = unpacker.iterator();
 
+			int currentLine = 0;
+
 			while (iterator.hasNext()) {
 				Value v = iterator.next();
 				byte command_b = v.asIntegerValue().getByte();
@@ -137,17 +143,19 @@ public class LoaderStory extends Loader {
 				case Story.COMMAND_SET_SCENEID: {
 					// シーン
 					int sceneId = iterator.next().asIntegerValue().getInt();
-					StoryScene story = new StoryScene(sceneId);
+					StoryScene story = new StoryScene(currentLine, sceneId);
 					initVariable = new ConcurrentHashMap<String, Integer>();
 					data.addStory(story);
 					break;
 				}
 				default: {
 					Command command = commands.get(command_b);
-					Story story = command.load(engine, iterator, resourceLoader, initVariable);
+					Story story = command.load(engine, iterator, resourceLoader, initVariable, currentLine);
 					data.addStory(story);
+					break;
 				}
 				}
+				currentLine++;
 			}
 		} catch (Exception e) {
 			throw new NovelEngineException(e, String.valueOf(id));

@@ -34,7 +34,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandIF implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// byte 演算子, byte 左変数タイプ ,int 左数字, byte 右変数タイプ ,int 右数字, int 真, int 偽
 		byte operator = iterator.next().asIntegerValue().getByte();
 		byte leftVarType = iterator.next().asIntegerValue().getByte();
@@ -43,7 +43,8 @@ public class CommandIF implements Command {
 		String rightVarName = iterator.next().asRawValue().getString();
 		int trueGoto = iterator.next().asIntegerValue().getInt();
 		int falseGoto = iterator.next().asIntegerValue().getInt();
-		StoryIF story = new StoryIF(operator, leftVarType, leftVarName, rightVarType, rightVarName, trueGoto, falseGoto);
+		StoryIF story = new StoryIF(line, operator, leftVarType, leftVarName, rightVarType, rightVarName, trueGoto,
+				falseGoto);
 		return story;
 	}
 }

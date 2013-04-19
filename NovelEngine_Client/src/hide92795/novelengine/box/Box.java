@@ -19,6 +19,9 @@ package hide92795.novelengine.box;
 
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.manager.ConfigurationManager;
+import hide92795.novelengine.manager.ConfigurationManager.Setting;
+import hide92795.novelengine.panel.PanelStory;
 
 import org.newdawn.slick.opengl.Texture;
 
@@ -205,10 +208,12 @@ public abstract class Box {
 	/**
 	 * メッセージボックスの位置を更新します。
 	 * 
+	 * @param story
+	 *            現在、画面を描画している {@link hide92795.novelengine.panel.Panel Panel} オブジェクト
 	 * @param delta
 	 *            前回のupdateとの時間差
 	 */
-	public final void update(int delta) {
+	public final void update(PanelStory story, int delta) {
 		switch (mode) {
 		case SHOWED: {
 			x = showX;
@@ -244,6 +249,7 @@ public abstract class Box {
 				setMode(HIDED);
 				ratio = 1.0f;
 				if (listener != null) {
+					checkWordsHide(story);
 					listener.onProcessFinish();
 				}
 			}
@@ -254,6 +260,21 @@ public abstract class Box {
 		}
 		default:
 			break;
+		}
+	}
+
+	/**
+	 * ボックスを閉じた際に文章を削除するかどうかを確認し、削除する場合は削除を行います。
+	 * 
+	 * @param story
+	 *            現在、画面を描画している {@link hide92795.novelengine.panel.Panel Panel} オブジェクト
+	 */
+	private void checkWordsHide(PanelStory story) {
+		int i = story.engine().getConfigurationManager()
+				.getValue(ConfigurationManager.VARIABLE_RENDER, Setting.RENDER_WORDS_CLEAR_ON_CLOSE_BOX);
+		if (i == 1) {
+			story.setWords(null);
+			story.setInternalData(PanelStory.INTERNAL_DATA_WORDS_LINE, -1);
 		}
 	}
 
@@ -289,6 +310,15 @@ public abstract class Box {
 	public final void setMode(int mode) {
 		this.mode = mode;
 		this.elapsedTime = 0;
+	}
+
+	/**
+	 * 描画モードを取得します。
+	 * 
+	 * @return 描画モード
+	 */
+	public final int getMode() {
+		return mode;
 	}
 
 	/**

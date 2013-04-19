@@ -34,9 +34,9 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandMoveChapter implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		int chapterId = iterator.next().asIntegerValue().getInt();
-		StoryMoveChapter story = new StoryMoveChapter(chapterId);
+		StoryMoveChapter story = new StoryMoveChapter(line, chapterId);
 		return story;
 	}
 }

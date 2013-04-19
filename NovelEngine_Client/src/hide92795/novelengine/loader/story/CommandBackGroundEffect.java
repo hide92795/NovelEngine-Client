@@ -36,7 +36,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandBackGroundEffect implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// 数値 対象, 数値 遅延（ms）, 背景エフェクト エフェクト
 		byte target = iterator.next().asIntegerValue().getByte();
 		int delay = iterator.next().asIntegerValue().getInt();
@@ -52,7 +52,7 @@ public class CommandBackGroundEffect implements Command {
 			}
 		}
 		BackGroundEffect backGroundEffect = cd.instantiation(c_obj);
-		StoryBackGroundEffect story = new StoryBackGroundEffect(target, delay, backGroundEffect);
+		StoryBackGroundEffect story = new StoryBackGroundEffect(line, target, delay, backGroundEffect);
 		return story;
 	}
 }

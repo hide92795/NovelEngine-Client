@@ -37,7 +37,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandShowWords implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// int キャラID, String 文章
 		int characterId = iterator.next().asIntegerValue().getInt();
 		String words_str = iterator.next().asRawValue().getString();
@@ -52,7 +52,7 @@ public class CommandShowWords implements Command {
 		}
 		EntityWords words = new EntityWords(characterId);
 		resourceLoader.loadWords(words, words_str, initVariable);
-		StoryShowWords story = new StoryShowWords(characterId, words);
+		StoryShowWords story = new StoryShowWords(line, characterId, words);
 		return story;
 	}
 }

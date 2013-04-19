@@ -22,7 +22,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * チャプターのロードを開始するためのストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryLoadChapter extends Story {
@@ -33,11 +33,14 @@ public class StoryLoadChapter extends Story {
 
 	/**
 	 * チャプターのロードを開始するためのストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param chapterId
 	 *            ロードを行うチャプターのID
 	 */
-	public StoryLoadChapter(int chapterId) {
+	public StoryLoadChapter(int line, int chapterId) {
+		super(line);
 		this.loadChapterId = chapterId;
 	}
 

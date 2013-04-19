@@ -30,7 +30,7 @@ import org.msgpack.unpacker.Unpacker;
  */
 public class FigureLoaderTriangle implements FigureLoader {
 	@Override
-	public Figure load(Unpacker unpacker) throws Exception {
+	public Figure load(int id, Unpacker unpacker) throws Exception {
 		int[][] apexes = new int[3][2];
 		for (int i = 0; i < 3; i++) {
 			int x = unpacker.readInt();
@@ -52,7 +52,7 @@ public class FigureLoaderTriangle implements FigureLoader {
 			Line line = new Line(start, end, red, green, blue, alpha, width);
 			lines[i] = line;
 		}
-		FigureTriangle figure = new FigureTriangle(apexes, lines);
+		FigureTriangle figure = new FigureTriangle(id, apexes, lines);
 		return figure;
 	}
 }

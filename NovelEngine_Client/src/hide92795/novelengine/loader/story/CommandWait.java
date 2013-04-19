@@ -34,10 +34,10 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandWait implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// int 待機時間（ms）
 		int waitTimeMs = iterator.next().asIntegerValue().getInt();
-		StoryWait story = new StoryWait(waitTimeMs);
+		StoryWait story = new StoryWait(line, waitTimeMs);
 		return story;
 	}
 }

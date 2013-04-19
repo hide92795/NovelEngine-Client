@@ -17,17 +17,17 @@
 //
 package hide92795.novelengine.story;
 
-import org.lwjgl.input.Keyboard;
-
 import hide92795.novelengine.box.Box;
 import hide92795.novelengine.box.BoxProcessListener;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.panel.PanelStory;
 
+import org.lwjgl.input.Keyboard;
+
 /**
  * メッセージボックスの開閉を行うストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryShowBox extends Story implements BoxProcessListener {
@@ -38,11 +38,14 @@ public class StoryShowBox extends Story implements BoxProcessListener {
 
 	/**
 	 * メッセージボックスの開閉を行うストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param show
 	 *            メッセージボックスを表示する場合はtrue
 	 */
-	public StoryShowBox(boolean show) {
+	public StoryShowBox(int line, boolean show) {
+		super(line);
 		this.show = show;
 	}
 
@@ -62,7 +65,7 @@ public class StoryShowBox extends Story implements BoxProcessListener {
 
 	/**
 	 * メッセージボックスの開閉をスキップします。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */

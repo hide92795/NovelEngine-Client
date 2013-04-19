@@ -34,7 +34,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandCalculation implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// byte 代入先変数タイプ, String 代入先変数名, byte 演算子, byte 左辺の変数タイプ,
 		// String 左辺の変数名, byte 右辺の変数タイプ, String 右辺の変数名,
 		byte varType = iterator.next().asIntegerValue().getByte();
@@ -44,7 +44,7 @@ public class CommandCalculation implements Command {
 		String leftVarName = iterator.next().asRawValue().getString();
 		byte rightVarType = iterator.next().asIntegerValue().getByte();
 		String rightVarName = iterator.next().asRawValue().getString();
-		StoryCalculation story = new StoryCalculation(varType, varName, operator, leftVarType, leftVarName,
+		StoryCalculation story = new StoryCalculation(line, varType, varName, operator, leftVarType, leftVarName,
 				rightVarType, rightVarName);
 		return story;
 	}

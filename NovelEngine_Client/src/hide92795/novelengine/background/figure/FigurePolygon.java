@@ -37,13 +37,15 @@ public class FigurePolygon extends Figure {
 	/**
 	 * ４つ以上の点を頂点にもつ多角形を描画範囲とするフィギュアデータを生成します。
 	 * 
+	 * @param id
+	 *            このフィギュアのID
 	 * @param apexes
 	 *            描画範囲の頂点
 	 * @param lines
 	 *            描画する線の配列
 	 */
-	public FigurePolygon(int[][] apexes, Line[] lines) {
-		super(lines);
+	public FigurePolygon(int id, int[][] apexes, Line[] lines) {
+		super(id, lines);
 		this.apexes = apexes;
 	}
 

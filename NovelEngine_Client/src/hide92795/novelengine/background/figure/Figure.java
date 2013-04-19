@@ -48,6 +48,10 @@ public abstract class Figure {
 	public static final byte FIGURE_CIRCLE = 4;
 
 	/**
+	 * このフィギュアのIDを表します。
+	 */
+	private final int id;
+	/**
 	 * 描画する線を表す配列です。
 	 */
 	private final Line[] lines;
@@ -55,10 +59,13 @@ public abstract class Figure {
 	/**
 	 * 描画範囲を決めるフィギュアデータを生成します。
 	 * 
+	 * @param id
+	 *            このフィギュアのID
 	 * @param lines
 	 *            描画する線を表す配列
 	 */
-	public Figure(Line[] lines) {
+	public Figure(int id, Line[] lines) {
+		this.id = id;
 		this.lines = lines;
 	}
 
@@ -77,6 +84,15 @@ public abstract class Figure {
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
 	public abstract void renderLine(NovelEngine engine);
+
+	/**
+	 * このフィギュアのIDを取得します。
+	 * 
+	 * @return このフィギュアのID
+	 */
+	public int getId() {
+		return id;
+	}
 
 	/**
 	 * 描画する線を表す配列を取得します。

@@ -34,7 +34,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandChangeBackGround implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// byte 対象, int 遅延（ms）, int 画像ID, int 左上X座標, int 左上Y座標, int 拡大率
 		byte target = iterator.next().asIntegerValue().getByte();
 		int delay = iterator.next().asIntegerValue().getInt();
@@ -43,7 +43,7 @@ public class CommandChangeBackGround implements Command {
 		int yPos = iterator.next().asIntegerValue().getInt();
 		int magnification = iterator.next().asIntegerValue().getInt();
 		resourceLoader.loadImage(bgId);
-		StoryChangeBackGround story = new StoryChangeBackGround(bgId, target, xPos, yPos, magnification, delay);
+		StoryChangeBackGround story = new StoryChangeBackGround(line, bgId, target, xPos, yPos, magnification, delay);
 		return story;
 	}
 }

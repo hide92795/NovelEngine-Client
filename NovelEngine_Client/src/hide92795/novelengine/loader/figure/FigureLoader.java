@@ -30,11 +30,14 @@ public interface FigureLoader {
 	/**
 	 * フィギュアデータをロードします。
 	 * 
+	 * @param id
+	 *            このフィギュアのID
 	 * @param unpacker
 	 *            データを読み込むアンパッカー
+	 * 
 	 * @return ロードしたフィギュアデータ
 	 * @throws Exception
 	 *             何らかのエラーが発生した場合
 	 */
-	Figure load(Unpacker unpacker) throws Exception;
+	Figure load(int id, Unpacker unpacker) throws Exception;
 }

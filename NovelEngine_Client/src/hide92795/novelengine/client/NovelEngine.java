@@ -39,11 +39,15 @@ import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
 import hide92795.novelengine.Logger;
 import hide92795.novelengine.NovelEngineException;
+import hide92795.novelengine.Properties;
 import hide92795.novelengine.Utils;
 import hide92795.novelengine.gui.event.MouseEvent;
+import hide92795.novelengine.loader.Loader;
 import hide92795.novelengine.loader.LoaderBasic;
 import hide92795.novelengine.loader.LoaderResource;
+import hide92795.novelengine.loader.LoaderSavedBackGround;
 import hide92795.novelengine.loader.item.DataBasic;
+import hide92795.novelengine.loader.item.DataSavedBackGround;
 import hide92795.novelengine.loader.item.DataStory;
 import hide92795.novelengine.manager.BackGroundManager;
 import hide92795.novelengine.manager.BoxManager;
@@ -69,6 +73,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import javax.crypto.CipherInputStream;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
@@ -79,6 +88,8 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GLContext;
+import org.msgpack.MessagePack;
+import org.msgpack.unpacker.Unpacker;
 
 /**
  * NovelEngineの中枢機能を担うクラスです。
@@ -93,7 +104,7 @@ public class NovelEngine {
 	/**
 	 * NovelEngineのバージョンです。
 	 */
-	public static final String VERSION = "a1.5.0";
+	public static final String VERSION = "a1.6.0";
 	/**
 	 * キューデータを実行するキューマネージャーです。
 	 */
@@ -222,7 +233,7 @@ public class NovelEngine {
 		imageManager = new ImageManager();
 		soundManager = new SoundManager(this);
 		queueManager = new QueueManager();
-		backGroundManager = new BackGroundManager();
+		backGroundManager = new BackGroundManager(this);
 		guiManager = new GuiManager();
 		fontManager = new FontManager(this);
 		characterManager = new CharacterManager();
@@ -293,7 +304,7 @@ public class NovelEngine {
 	private void createBootStory() {
 		DataStory data = new DataStory(StoryManager.CHAPTER_BOOT);
 		data.addStory(StoryBlock.BLOCKSTART);
-		data.addStory(new StoryMoveChapter(StoryManager.CHAPTER_START));
+		data.addStory(new StoryMoveChapter(1, StoryManager.CHAPTER_START));
 		data.addStory(StoryBlock.BLOCKEND);
 		storyManager.addStory(data);
 		LoaderResource loader = new LoaderResource(this, StoryManager.CHAPTER_BOOT);
@@ -337,7 +348,13 @@ public class NovelEngine {
 		width = getDefaultWidth();
 		height = getDefaultHeight();
 		initGL();
-		setCurrentPanel(new PanelPrestartStory(this, StoryManager.CHAPTER_BOOT));
+		// try {
+		// startStoryFromSave(1);
+		// } catch (Exception e1) {
+		// // TODO 自動生成された catch ブロック
+		// e1.printStackTrace();
+		// }
+		setCurrentPanel(new PanelPrestartStory(this, StoryManager.CHAPTER_BOOT, 0, null, null));
 		closeRequested = false;
 		while (!Display.isCloseRequested() && !closeRequested) {
 			try {
@@ -370,6 +387,7 @@ public class NovelEngine {
 		Display.destroy();
 		soundManager.clean();
 		AL.destroy();
+		configurationManager.save();
 		Logger.info("NovelEngine shutdowned!");
 		System.exit(0);
 	}
@@ -568,14 +586,87 @@ public class NovelEngine {
 	}
 
 	/**
+	 * セーブデータからストーリーを再開します。
+	 * 
+	 * @param saveId
+	 *            セーブ番号
+	 * @throws Exception
+	 *             何らかのエラーが発生した場合
+	 */
+	public void startStoryFromSave(int saveId) throws Exception {
+		File dir = new File(NovelEngine.getCurrentDir(), "save");
+		File file = new File(dir, "save." + saveId + ".neb");
+		CipherInputStream cis = Loader.createCipherInputStream(file);
+		MessagePack msgpack = new MessagePack();
+		Unpacker up = msgpack.createUnpacker(cis);
+		int chapterId = up.readInt();
+		int line = up.readInt();
+		Map<String, Integer> internalData = up.read(PanelStory.INTERNAL_DATA_TEMPLATE);
+		DataSavedBackGround data = null;
+		ZipInputStream zis = new ZipInputStream(cis);
+		for (ZipEntry ze = zis.getNextEntry(); ze != null; ze = zis.getNextEntry()) {
+			String name = ze.getName();
+			switch (name) {
+			case "private.neb": {
+				Properties prop = configurationManager.getProperties(ConfigurationManager.VARIABLE_PRIVATE);
+				prop.clear();
+				Unpacker unpacker = msgpack.createUnpacker(zis);
+				prop.load(unpacker);
+				break;
+			}
+			case "render.neb": {
+				Properties prop = configurationManager.getProperties(ConfigurationManager.VARIABLE_RENDER);
+				prop.clear();
+				Unpacker unpacker = msgpack.createUnpacker(zis);
+				prop.load(unpacker);
+				break;
+			}
+			case "background.neb": {
+				data = LoaderSavedBackGround.load(this, zis);
+				break;
+			}
+			default:
+				break;
+			}
+		}
+		loadStory(chapterId);
+		prestartStory(chapterId, line, internalData, data);
+	}
+
+	/**
 	 * 指定されたチャプターIDのデータのロードを待ってから開始します。<br>
-	 * 画面は{@link PanelPrestartStory}により提供されます。
+	 * 画面は{@link PanelPrestartStory}により提供されます。<br>
+	 * 背景データはすべて初期化された状態から始まります。
 	 * 
 	 * @param id
 	 *            スタート元のチャプターID
+	 * @param line
+	 *            ストーリーを開始する行番号
+	 * @param internalData
+	 *            ロードする際に必要なデータ
+	 * @param data
 	 */
-	public void prestartStory(int id) {
-		setCurrentPanel(new PanelPrestartStory(this, id));
+	public void prestartStory(int id, int line, Map<String, Integer> internalData) {
+		prestartStory(id, line, internalData, null);
+	}
+
+	/**
+	 * 指定されたチャプターIDのデータのロードを待ってから開始します。<br>
+	 * 画面は{@link PanelPrestartStory}により提供されます。<br>
+	 * 読み込み済みの背景データがある場合はそれらが背景として使用されます。
+	 * 
+	 * @param id
+	 *            スタート元のチャプターID
+	 * @param line
+	 *            ストーリーを開始する行番号
+	 * @param internalData
+	 *            ロードする際に必要なデータ
+	 * @param data
+	 *            読み込み済みの背景データ
+	 */
+	public void prestartStory(int id, int line, Map<String, Integer> internalData, DataSavedBackGround data) {
+		setCurrentPanel(new PanelPrestartStory(this, id, line, internalData, data));
+
 	}
 
 	/**
@@ -597,11 +688,17 @@ public class NovelEngine {
 	 * 
 	 * @param id
 	 *            スタート元のチャプターID
+	 * @param line
+	 *            ストーリーを開始する行番号
+	 * @param internalData
+	 *            ロードする際に必要なデータ
+	 * @param data
+	 *            読み込み済みの背景データ
 	 */
-	public void startStory(int id) {
+	public void startStory(int id, int line, Map<String, Integer> internalData, DataSavedBackGround data) {
 		DataStory story = storyManager.getStory(id);
 		story.reset();
-		setCurrentPanel(new PanelStory(this, story));
+		setCurrentPanel(new PanelStory(this, story, line, internalData, data));
 	}
 
 	/**
@@ -724,7 +821,7 @@ public class NovelEngine {
 	 * 
 	 * @return 文章データを管理するマネージャー
 	 */
-	public WordsManager getWordsManager() {
+	public final WordsManager getWordsManager() {
 		return wordsManager;
 	}
 

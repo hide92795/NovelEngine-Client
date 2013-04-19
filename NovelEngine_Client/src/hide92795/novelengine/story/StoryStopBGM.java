@@ -20,11 +20,21 @@ package hide92795.novelengine.story;
 import hide92795.novelengine.panel.PanelStory;
 
 /**
- * BGMの再生を行うストーリーデータです。
- *
+ * BGMの停止を行うストーリーデータです。
+ * 
  * @author hide92795
  */
 public class StoryStopBGM extends Story {
+	/**
+	 * BGMの停止を行うストーリーデータを生成します。
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
+	 */
+	public StoryStopBGM(int line) {
+		super(line);
+	}
+
 	@Override
 	public void init(PanelStory story) {
 		resetFinish();
@@ -34,6 +44,7 @@ public class StoryStopBGM extends Story {
 	public void update(PanelStory story, int delta) {
 		if (!isFinish()) {
 			story.engine().getSoundManager().stop("BGM");
+			story.setInternalData(PanelStory.INTERNAL_DATA_BGM, -1);
 			finish();
 		}
 	}

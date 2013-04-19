@@ -57,10 +57,13 @@ public class StoryPlaySE extends Story {
 	/**
 	 * SEを再生するストーリーデータを生成します。
 	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param id
 	 *            再生を行うSEのID
 	 */
-	public StoryPlaySE(int id) {
+	public StoryPlaySE(int line, int id) {
+		super(line);
 		String filename = id + ".nea";
 		identifier = filename;
 		File path = new File(NovelEngine.getCurrentDir(), "sound");

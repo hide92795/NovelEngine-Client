@@ -28,10 +28,11 @@ import static org.lwjgl.opengl.GL11.glStencilFunc;
 import static org.lwjgl.opengl.GL11.glStencilOp;
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.background.figure.Figure;
-import hide92795.novelengine.background.figure.FigureEntireScreen;
 import hide92795.novelengine.character.EntityCharacter;
 import hide92795.novelengine.client.NovelEngine;
 
+import org.msgpack.packer.Packer;
+import org.msgpack.unpacker.UnpackerIterator;
 import org.newdawn.slick.opengl.Texture;
 
 /**
@@ -60,23 +61,22 @@ public class BackGround {
 	 * 描画範囲を示す{@link hide92795.novelengine.background.figure.Figure Figure}です
 	 */
 	private Figure figure;
-
 	/**
 	 * 背景色の赤成分です。
 	 */
-	private float red;
+	private byte red;
 	/**
 	 * 背景色の緑成分です。
 	 */
-	private float green;
+	private byte green;
 	/**
 	 * 背景色の青成分です。
 	 */
-	private float blue;
+	private byte blue;
 	/**
 	 * 背景全体のアルファ値です。
 	 */
-	private float alpha = 1.0f;
+	private byte alpha = (byte) 0xFF;
 	/**
 	 * 描画するキャラクターです。
 	 */
@@ -86,10 +86,12 @@ public class BackGround {
 	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを指定された描画範囲で作成します。<br>
 	 * 背景色のデフォルトは白、アルファ値のデフォルトは透明(0.0f)です。
 	 * 
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 * @param figure
 	 *            描画範囲を示す{@link hide92795.novelengine.background.figure.Figure Figure}
 	 */
-	public BackGround(Figure figure) {
+	public BackGround(NovelEngine engine, Figure figure) {
 		this.figure = figure;
 	}
 
@@ -97,9 +99,11 @@ public class BackGround {
 	 * {@link hide92795.novelengine.background.BackGround BackGround} オブジェクトを画面全体を描画範囲として作成します。<br>
 	 * 背景色のデフォルトは白、アルファ値のデフォルトは透明(0.0f)です。
 	 * 
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
-	public BackGround() {
-		this(new FigureEntireScreen(null));
+	public BackGround(NovelEngine engine) {
+		this(engine, engine.getFigureManager().getFigure(0));
 	}
 
 	/**
@@ -141,6 +145,64 @@ public class BackGround {
 	}
 
 	/**
+	 * 現在のこの背景の状態を保存します。
+	 * 
+	 * @param background
+	 *            保存する背景
+	 * @param packer
+	 *            保存先のPacker
+	 * @throws Exception
+	 *             何らかのエラーが発生した場合
+	 */
+	public static final void save(BackGround background, Packer packer) throws Exception {
+		packer.write(background.imageId);
+		packer.write(background.x);
+		packer.write(background.y);
+		packer.write(background.magnificartion);
+		packer.write(background.figure.getId());
+		packer.write(background.red);
+		packer.write(background.green);
+		packer.write(background.blue);
+		packer.write(background.alpha);
+		if (background.character == null) {
+			packer.write(false);
+		} else {
+			packer.write(true);
+			EntityCharacter.save(background.character, packer);
+		}
+	}
+
+	/**
+	 * 背景データをロードします。
+	 * 
+	 * @param engine
+	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 * @param iterator
+	 *            ロード元のUnpackerIterator
+	 * @return ロードした背景データ
+	 * @throws Exception
+	 *             何らかのエラーが発生した場合
+	 */
+	public static BackGround load(NovelEngine engine, UnpackerIterator iterator) throws Exception {
+		BackGround backGround = new BackGround(engine);
+		backGround.imageId = iterator.next().asIntegerValue().getInt();
+		backGround.x = iterator.next().asIntegerValue().getInt();
+		backGround.y = iterator.next().asIntegerValue().getInt();
+		backGround.magnificartion = iterator.next().asFloatValue().getFloat();
+		int figureId = iterator.next().asIntegerValue().getInt();
+		backGround.figure = engine.getFigureManager().getFigure(figureId);
+		backGround.red = iterator.next().asIntegerValue().getByte();
+		backGround.green = iterator.next().asIntegerValue().getByte();
+		backGround.blue = iterator.next().asIntegerValue().getByte();
+		backGround.alpha = iterator.next().asIntegerValue().getByte();
+		boolean hasCharacter = iterator.next().asBooleanValue().getBoolean();
+		if (hasCharacter) {
+			backGround.character = EntityCharacter.load(engine, iterator);
+		}
+		return backGround;
+	}
+
+	/**
 	 * 現在の背景のイメージIDを取得します。
 	 * 
 	 * @return 現在の背景のイメージID
@@ -164,7 +226,7 @@ public class BackGround {
 	 * 
 	 * @return 現在のアルファ値
 	 */
-	public final float getAlpha() {
+	public final byte getAlpha() {
 		return alpha;
 	}
 
@@ -174,7 +236,7 @@ public class BackGround {
 	 * @param alpha
 	 *            設定するアルファ値
 	 */
-	public final void setAlpha(float alpha) {
+	public final void setAlpha(byte alpha) {
 		this.alpha = alpha;
 	}
 
@@ -259,7 +321,7 @@ public class BackGround {
 	 * 
 	 * @return 現在の背景色の赤成分
 	 */
-	public final float getRed() {
+	public final byte getRed() {
 		return red;
 	}
 
@@ -269,7 +331,7 @@ public class BackGround {
 	 * @param red
 	 *            設定する背景色の赤成分
 	 */
-	public final void setRed(float red) {
+	public final void setRed(byte red) {
 		this.red = red;
 	}
 
@@ -278,7 +340,7 @@ public class BackGround {
 	 * 
 	 * @return 現在の背景色の緑成分
 	 */
-	public final float getGreen() {
+	public final byte getGreen() {
 		return green;
 	}
 
@@ -288,7 +350,7 @@ public class BackGround {
 	 * @param green
 	 *            設定する背景色の緑成分
 	 */
-	public final void setGreen(float green) {
+	public final void setGreen(byte green) {
 		this.green = green;
 	}
 
@@ -297,7 +359,7 @@ public class BackGround {
 	 * 
 	 * @return 現在の背景色の青成分
 	 */
-	public final float getBlue() {
+	public final byte getBlue() {
 		return blue;
 	}
 
@@ -307,7 +369,7 @@ public class BackGround {
 	 * @param blue
 	 *            設定する背景色の青成分
 	 */
-	public final void setBlue(float blue) {
+	public final void setBlue(byte blue) {
 		this.blue = blue;
 	}
 

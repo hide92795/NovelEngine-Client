@@ -22,7 +22,7 @@ import hide92795.novelengine.panel.PanelStory;
 /**
  * ブロックを表すストーリーデータです。<br>
  * このストーリーデータの終了確認が行われることはありません。
- *
+ * 
  * @author hide92795
  */
 public class StoryBlock extends Story {
@@ -36,8 +36,8 @@ public class StoryBlock extends Story {
 	public static final StoryBlock BLOCKEND;
 
 	static {
-		BLOCKSTART = new StoryBlock(true);
-		BLOCKEND = new StoryBlock(false);
+		BLOCKSTART = new StoryBlock(-1, true);
+		BLOCKEND = new StoryBlock(-2, false);
 	}
 
 	/**
@@ -47,15 +47,19 @@ public class StoryBlock extends Story {
 
 	/**
 	 * ブロックを表すストーリーデータを生成します。<br>
-	 * このストーリーデータはマーカーとしての機能を行うだけなので必要以上に生成されるべきではありません。
-	 *
+	 * このストーリーデータはマーカーとしての機能を行うだけなので必要以上に生成されるべきではありません。<br>
+	 * 行番号は常に-1となります。
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param start
 	 *            このブロックが開始ブロックかどうか
-	 *
+	 * 
 	 * @see StoryBlock#BLOCKSTART
 	 * @see StoryBlock#BLOCKEND
 	 */
-	private StoryBlock(boolean start) {
+	private StoryBlock(int line, boolean start) {
+		super(line);
 		this.startBlock = start;
 	}
 
@@ -65,7 +69,7 @@ public class StoryBlock extends Story {
 
 	/**
 	 * このブロックが開始ブロックかどうかを返します。
-	 *
+	 * 
 	 * @return このブロックが開始ブロックの場合は <code>true</code>
 	 */
 	public boolean isStartBlock() {

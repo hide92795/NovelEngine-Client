@@ -18,6 +18,7 @@
 package hide92795.novelengine.manager;
 
 import hide92795.novelengine.background.figure.Figure;
+import hide92795.novelengine.background.figure.FigureEntireScreen;
 import hide92795.novelengine.loader.LoaderFigure;
 
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class FigureManager {
 	 */
 	public FigureManager() {
 		this.figures = new HashMap<Integer, Figure>();
+		figures.put(0, new FigureEntireScreen(0, null));
 		load();
 	}
 

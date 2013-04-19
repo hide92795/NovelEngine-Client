@@ -30,7 +30,7 @@ import org.msgpack.unpacker.Unpacker;
  */
 public class FigureLoaderQuadrangle implements FigureLoader {
 	@Override
-	public Figure load(Unpacker unpacker) throws Exception {
+	public Figure load(int id, Unpacker unpacker) throws Exception {
 		int[][] apexes = new int[4][2];
 		for (int i = 0; i < 4; i++) {
 			int x = unpacker.readInt();
@@ -52,7 +52,7 @@ public class FigureLoaderQuadrangle implements FigureLoader {
 			Line line = new Line(start, end, red, green, blue, alpha, width);
 			lines[i] = line;
 		}
-		FigureQuadrangle figure = new FigureQuadrangle(apexes, lines);
+		FigureQuadrangle figure = new FigureQuadrangle(id, apexes, lines);
 		return figure;
 	}
 }

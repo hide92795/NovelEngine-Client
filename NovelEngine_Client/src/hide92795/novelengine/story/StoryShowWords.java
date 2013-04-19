@@ -43,12 +43,15 @@ public class StoryShowWords extends Story implements WordsProcessListener {
 	/**
 	 * 文章の表示を行うストーリーデータを作成します。
 	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param characterId
 	 *            名前部分に表示するキャラクターのID
 	 * @param words
 	 *            表示を行う文章データ
 	 */
-	public StoryShowWords(int characterId, EntityWords words) {
+	public StoryShowWords(int line, int characterId, EntityWords words) {
+		super(line);
 		this.words = words;
 	}
 
@@ -57,6 +60,7 @@ public class StoryShowWords extends Story implements WordsProcessListener {
 		showFinish = false;
 		words.setListener(this);
 		story.setWords(words);
+		story.setInternalData(PanelStory.INTERNAL_DATA_WORDS_LINE, getLine());
 	}
 
 	/**

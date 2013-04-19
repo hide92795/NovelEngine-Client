@@ -42,10 +42,12 @@ public interface Command {
 	 *            リソースをロードするためのローダー
 	 * @param initVariable
 	 *            初期変数
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @return ストーリーデータ
 	 * @throws Exception
 	 *             何らかのエラーが発生した場合
 	 */
 	Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception;
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception;
 }

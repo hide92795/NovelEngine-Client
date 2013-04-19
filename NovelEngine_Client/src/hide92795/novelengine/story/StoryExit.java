@@ -21,7 +21,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * ゲームを終了するストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryExit extends Story {
@@ -32,11 +32,14 @@ public class StoryExit extends Story {
 
 	/**
 	 * ゲームを終了するストーリーデータを作成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param confirm
 	 *            終了を確認するかどうか
 	 */
-	public StoryExit(boolean confirm) {
+	public StoryExit(int line, boolean confirm) {
+		super(line);
 		this.confirm = confirm;
 	}
 

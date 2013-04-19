@@ -34,7 +34,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandChangeCharacter implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// int キャラID, int 遅延（ms）, byte 対象, int 位置ID, int 表情ID
 		byte target = iterator.next().asIntegerValue().getByte();
 		int delay = iterator.next().asIntegerValue().getInt();
@@ -43,7 +43,7 @@ public class CommandChangeCharacter implements Command {
 		int faceId = iterator.next().asIntegerValue().getInt();
 		int[] faceImages = engine.getCharacterManager().getCharacter(characterId).getFace(faceId).getFaceDiff();
 		resourceLoader.loadImages(faceImages);
-		StoryChangeCharacter story = new StoryChangeCharacter(characterId, target, delay, positionId, faceId);
+		StoryChangeCharacter story = new StoryChangeCharacter(line, characterId, target, delay, positionId, faceId);
 		return story;
 	}
 }

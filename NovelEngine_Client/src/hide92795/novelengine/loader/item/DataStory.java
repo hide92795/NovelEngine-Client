@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * １チャプター分のストーリーデータを格納及び管理を行うクラスです。<br>
  * ストーリーを開始するためには全てのリソースが使用可能である必要があります。
- *
+ * 
  * @author hide92795
  */
 public class DataStory {
@@ -47,7 +47,7 @@ public class DataStory {
 	/**
 	 * 次に {@link #next() }を呼び出した際に返されるストーリーデータの番号です。
 	 */
-	private int pos;
+	private int position;
 	/**
 	 * 全てのリソースデータが使用可能になったかどうかを表します。
 	 */
@@ -67,7 +67,7 @@ public class DataStory {
 
 	/**
 	 * 指定されたチャプターIDのストーリーを作成します。
-	 *
+	 * 
 	 * @param chapterId
 	 *            チャプターID
 	 */
@@ -80,7 +80,7 @@ public class DataStory {
 
 	/**
 	 * このストーリーのチャプターIDを取得します。
-	 *
+	 * 
 	 * @return チャプターID
 	 */
 	public int getChapterId() {
@@ -90,7 +90,7 @@ public class DataStory {
 	/**
 	 * このストーリーにストーリーデータを追加します。<br>
 	 * ストーリーは追加した順に保存されます。
-	 *
+	 * 
 	 * @param story
 	 *            追加するストーリーデータ
 	 */
@@ -105,34 +105,64 @@ public class DataStory {
 	 * ストーリーの現在の位置を最初に戻します。
 	 */
 	public void reset() {
-		pos = 0;
+		position = 0;
 	}
 
 	/**
 	 * 次のストーリーデータを読み込みます。
-	 *
+	 * 
 	 * @return 次のストーリーデータ
 	 */
 	public Story next() {
-		Story s = commandLine.get(pos);
-		pos++;
+		Story s = commandLine.get(position);
+		position++;
 		return s;
 	}
 
 	/**
+	 * 現在のストーリーの位置を返します。
+	 * 
+	 * @return 現在のストーリーの位置
+	 */
+	public final int getCurrentLine() {
+		return position - 1;
+	}
+
+	/**
+	 * 現在のストーリーの位置を設定します
+	 * 
+	 * @param line
+	 *            ストーリーの位置
+	 */
+	public final void setCurrentLine(int line) {
+		this.position = line;
+	}
+
+	/**
+	 * 指定位置のストーリーデータを取得します。
+	 * 
+	 * @param line
+	 *            取得するストーリーデータの位置
+	 * @return ストーリーデータ
+	 */
+	public final Story getStory(int line) {
+		return commandLine.get(line);
+	}
+
+	/**
 	 * ストーリー内の指定されたシーンIDの位置に移動します。
-	 *
+	 * 
 	 * @param sceneId
 	 *            移動先のシーンID
 	 */
 	public void moveScene(int sceneId) {
 		Integer integer = scenes.get(sceneId);
-		this.pos = integer.intValue();
+		this.position = integer.intValue();
 	}
 
 	/**
 	 * 画像・文字・BGM,SE・ボイスデータ全てのロードが終わっており、ストーリーの開始に問題がない場合はtrueを返します。
-	 *
+	 * 
 	 * @return 読み込みが終わっているか
 	 */
 	public boolean isDataLoaded() {
@@ -180,5 +210,4 @@ public class DataStory {
 			System.out.println(story.getClass());
 		}
 	}
-
 }

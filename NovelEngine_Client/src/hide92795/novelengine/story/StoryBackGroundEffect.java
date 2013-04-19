@@ -54,6 +54,8 @@ public class StoryBackGroundEffect extends Story {
 	/**
 	 * エフェクトを実行するストーリーデータを生成します。
 	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param target
 	 *            エフェクトを実行するレイヤーのID
 	 * @param delay
@@ -61,7 +63,8 @@ public class StoryBackGroundEffect extends Story {
 	 * @param backGroundEffect
 	 *            実行するエフェクト
 	 */
-	public StoryBackGroundEffect(byte target, int delay, BackGroundEffect backGroundEffect) {
+	public StoryBackGroundEffect(int line, byte target, int delay, BackGroundEffect backGroundEffect) {
+		super(line);
 		this.target = target;
 		this.delay = delay;
 		this.backGroundEffect = backGroundEffect;

@@ -223,6 +223,170 @@ public class Renderer {
 	}
 
 	/**
+	 * 指定したテクスチャを左上を起点に指定したアルファ値で描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 */
+	public static void renderImage(Texture texture, byte alpha) {
+		renderImage(texture, alpha, 0.0f, 0.0f);
+	}
+
+	/**
+	 * 指定したテクスチャを指定された点を起点に指定したアルファ値で描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 */
+	public static void renderImage(Texture texture, byte alpha, float x, float y) {
+		renderImage(texture, alpha, x, y, 1.0f);
+	}
+
+	/**
+	 * 指定したテクスチャを指定された点を起点に指定した拡大率で拡大縮小し、指定したアルファ値で描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 * @param magnificartion
+	 *            拡大率
+	 */
+	public static void renderImage(Texture texture, byte alpha, float x, float y, float magnificartion) {
+		renderImage(texture, alpha, x, y, x + texture.getTextureWidth() * magnificartion,
+				y + texture.getTextureHeight() * magnificartion);
+	}
+
+	/**
+	 * 指定したテクスチャを指定した範囲内に収まるように拡大縮小し、指定したアルファ値で描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 * @param x1
+	 *            画像を描画する右下の点のX座標
+	 * @param y1
+	 *            画像を描画する右下の点のY座標
+	 */
+	public static void renderImage(Texture texture, byte alpha, float x, float y, float x1, float y1) {
+		renderImage(texture, alpha, x, y, x1, y1, 0.0f, 0.0f, 1.0f, 1.0f);
+	}
+
+	/**
+	 * テクスチャの指定範囲内の領域を、指定したアルファ値で描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 * @param cx
+	 *            描画する画像の左上の点のX座標
+	 * @param cy
+	 *            描画する画像の左上の点のY座標
+	 * @param cx1
+	 *            描画する画像の右下の点のX座標
+	 * @param cy1
+	 *            描画する画像の右下の点のY座標
+	 */
+	public static void renderImage(Texture texture, byte alpha, float x, float y, float cx, float cy, float cx1,
+			float cy1) {
+		renderImage(texture, alpha, x, y, 1.0f, cx, cy, cx1, cy1);
+	}
+
+	/**
+	 * テクスチャの指定範囲内の領域を指定した拡大率で拡大縮小し、指定したアルファ値で描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 * @param magnificartion
+	 *            拡大率
+	 * @param cx
+	 *            描画する画像の左上の点のX座標
+	 * @param cy
+	 *            描画する画像の左上の点のY座標
+	 * @param cx1
+	 *            描画する画像の右下の点のX座標
+	 * @param cy1
+	 *            描画する画像の右下の点のY座標
+	 */
+	public static void renderImage(Texture texture, byte alpha, float x, float y, float magnificartion, float cx,
+			float cy, float cx1, float cy1) {
+		renderImage(texture, alpha, x, y, x + texture.getTextureWidth() * magnificartion,
+				y + texture.getTextureHeight() * magnificartion, cx, cy, cx1, cy1);
+
+	}
+
+	/**
+	 * テクスチャの指定範囲内の領域を指定された描画領域に収まるように拡大縮小し、指定したアルファ値で描画します。
+	 * 
+	 * @param texture
+	 *            描画するテクスチャ
+	 * @param alpha
+	 *            アルファ値
+	 * @param x
+	 *            画像を描画する左上の点のX座標
+	 * @param y
+	 *            画像を描画する左上の点のY座標
+	 * @param x1
+	 *            画像を描画する右下の点のX座標
+	 * @param y1
+	 *            画像を描画する右下の点のY座標
+	 * @param cx
+	 *            描画する画像の左上の点のX座標
+	 * @param cy
+	 *            描画する画像の左上の点のY座標
+	 * @param cx1
+	 *            描画する画像の右下の点のX座標
+	 * @param cy1
+	 *            描画する画像の右下の点のY座標
+	 */
+	public static void renderImage(Texture texture, byte alpha, float x, float y, float x1, float y1, float cx,
+			float cy, float cx1, float cy1) {
+		texture.bind();
+		glColor4ub((byte) 0xFF, (byte) 0xFF, (byte) 0xFF, alpha);
+		glEnable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+		{
+			glTexCoord2f(cx, cy);
+			glVertex2f(x, y);
+			glTexCoord2f(cx1, cy);
+			glVertex2f(x1, y);
+			glTexCoord2f(cx1, cy1);
+			glVertex2f(x1, y1);
+			glTexCoord2f(cx, cy1);
+			glVertex2f(x, y1);
+		}
+		glEnd();
+	}
+
+	/**
 	 * 画面全体を指定した色で塗りつぶします。
 	 * 
 	 * @param red

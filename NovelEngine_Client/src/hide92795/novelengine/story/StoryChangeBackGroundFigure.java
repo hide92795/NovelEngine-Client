@@ -39,12 +39,15 @@ public class StoryChangeBackGroundFigure extends Story {
 	/**
 	 * 背景の範囲を表すフィギュアを変更するストーリーデータを生成します。
 	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param target
 	 *            フィギュアを変更するレイヤーのID
 	 * @param figureId
 	 *            変更するフィギュアのID
 	 */
-	public StoryChangeBackGroundFigure(byte target, int figureId) {
+	public StoryChangeBackGroundFigure(int line, byte target, int figureId) {
+		super(line);
 		this.target = target;
 		this.figureId = figureId;
 	}

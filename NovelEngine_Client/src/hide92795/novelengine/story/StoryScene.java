@@ -22,7 +22,7 @@ import hide92795.novelengine.panel.PanelStory;
 /**
  * シーンの位置を表すストーリーデータです。<br>
  * このストーリーデータの終了確認が行われることはありません。
- *
+ * 
  * @author hide92795
  */
 public class StoryScene extends Story {
@@ -33,11 +33,14 @@ public class StoryScene extends Story {
 
 	/**
 	 * シーンの位置を表すストーリーデータを作成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param sceneId
 	 *            シーンID
 	 */
-	public StoryScene(int sceneId) {
+	public StoryScene(int line, int sceneId) {
+		super(line);
 		this.sceneId = sceneId;
 	}
 
@@ -47,7 +50,7 @@ public class StoryScene extends Story {
 
 	/**
 	 * このストーリーデータが表すシーンIDです。
-	 *
+	 * 
 	 * @return シーンID
 	 */
 	public int getSceneId() {

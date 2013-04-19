@@ -27,13 +27,11 @@ import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.panel.PanelStory;
 
 /**
- * ストーリを構成するパーツとして機能します。
- * 
+ * ストーリを構成するパーツとして機能するストーリーデータを表すクラスです。
  * 
  * @author hide92795
  */
 public abstract class Story implements MouseListener, KeybordListener {
-
 	/**
 	 * ブロックの開始地点を表します。
 	 * 
@@ -185,9 +183,35 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 */
 	public static final byte COMMAND_WAIT = 24;
 	/**
+	 * 現在の状態を外部ファイルに保存し、再開できるようにするストーリーデータを表します。
+	 * 
+	 * @see StorySystemSave
+	 */
+	public static final byte COMMAND_SYSTEM_LOAD = 25;
+	/**
+	 * 外部ファイルからセーブデータを読み込み、ゲームを再開するストーリーデータを表します。
+	 * 
+	 * @see StorySystemLoad
+	 */
+	public static final byte COMMAND_SYSTEM_SAVE = 26;
+	/**
+	 * このストーリーデータの行番号を表します。
+	 */
+	private final int line;
+	/**
 	 * このストーリーデータの処理が終了したかどうかを表します。
 	 */
 	private boolean finish;
+
+	/**
+	 * ストーリーデータを生成します。
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
+	 */
+	public Story(int line) {
+		this.line = line;
+	}
 
 	/**
 	 * このストーリーデータの処理が終了したかどうかを返します。
@@ -261,6 +285,29 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 *            現在、ストーリーを実行している {@link hide92795.novelengine.panel.PanelStory PanelStory} オブジェクト
 	 */
 	public void dispose(final PanelStory story) {
+	}
+
+	/**
+	 * このストーリーデータの行番号を取得します。<br>
+	 * 一部のストーリーデータは固定値を返します。
+	 * 
+	 * @return このストーリーデータの行番号
+	 */
+	public final int getLine() {
+		return line;
+	}
+
+	@Override
+	public int hashCode() {
+		return line;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Story) {
+			return line == ((Story) obj).getLine();
+		}
+		return false;
 	}
 
 	@Override

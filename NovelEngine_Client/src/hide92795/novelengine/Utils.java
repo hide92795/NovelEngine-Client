@@ -17,11 +17,20 @@
 //
 package hide92795.novelengine;
 
+import hide92795.novelengine.loader.Loader;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.security.Key;
 import java.util.Random;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
 
 /**
  * 　多クラスから利用される機能を提供します。
- *
+ * 
  * @author hide92795
  */
 public final class Utils {
@@ -38,7 +47,7 @@ public final class Utils {
 
 	/**
 	 * 0から指定された値までの乱数を生成します。
-	 *
+	 * 
 	 * @param num
 	 *            乱数の上限数
 	 * @return 生成された乱数
@@ -49,7 +58,7 @@ public final class Utils {
 
 	/**
 	 * 発生した例外をロガーに出力します。
-	 *
+	 * 
 	 * @param e
 	 *            発生した例外
 	 */
@@ -69,9 +78,9 @@ public final class Utils {
 
 	/**
 	 * 元の例外をスローさせた原因となる{@link java.lang.Throwable Throwable}を出力します。
-	 *
+	 * 
 	 * @see <a href="http://stackoverflow.com/questions/6691150"> http://stackoverflow.com/questions/6691150 </a>
-	 *
+	 * 
 	 * @param t
 	 *            例外の原因
 	 * @param causedTrace
@@ -98,5 +107,36 @@ public final class Utils {
 		if (ourCause != null) {
 			printStackTraceToLoggerAsCause(ourCause, causedTrace);
 		}
+	}
+
+	/**
+	 * 暗号化しながら指定したファイルに書き込みを行うストリームを作成します。
+	 * 
+	 * @param file
+	 *            書き込み先のファイル
+	 * @return 暗号化を行うストリーム
+	 * @throws Exception
+	 *             何らかのエラーが発生した場合
+	 */
+	public static CipherOutputStream createCipherOutputStream(File file) throws Exception {
+		return createCipherOutputStream(new FileOutputStream(file));
+	}
+
+	/**
+	 * 暗号化しながら指定したストリームに書き込みを行うストリームを作成します。
+	 * 
+	 * @param os
+	 *            書き込み先のストリーム
+	 * @return 暗号化を行うストリーム
+	 * @throws Exception
+	 *             何らかのエラーが発生した場合
+	 */
+	public static CipherOutputStream createCipherOutputStream(OutputStream os) throws Exception {
+		Key key = Loader.getKey();
+		Cipher cipher = Cipher.getInstance("AES/PCBC/PKCS5Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, key);
+		CipherOutputStream cos = new CipherOutputStream(os, cipher);
+		os.write(cipher.getIV());
+		return cos;
 	}
 }

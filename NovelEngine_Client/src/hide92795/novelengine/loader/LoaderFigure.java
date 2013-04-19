@@ -75,7 +75,7 @@ public class LoaderFigure extends Loader {
 				int id = unpacker.readInt();
 				byte type = unpacker.readByte();
 				FigureLoader loader = loaders.get(type);
-				Figure figure = loader.load(unpacker);
+				Figure figure = loader.load(id, unpacker);
 				figureManager.addFigure(id, figure);
 			}
 		} catch (Exception e) {

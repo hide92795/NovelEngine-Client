@@ -22,7 +22,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * 計算を行うストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryCalculation extends Story {
@@ -101,7 +101,9 @@ public class StoryCalculation extends Story {
 
 	/**
 	 * 計算を行うストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param varType
 	 *            演算結果を代入する変数の種類
 	 * @param varName
@@ -117,8 +119,9 @@ public class StoryCalculation extends Story {
 	 * @param rightVarName
 	 *            演算子の右側の変数の名前
 	 */
-	public StoryCalculation(byte varType, String varName, byte operator, byte leftVarType, String leftVarName,
-			byte rightVarType, String rightVarName) {
+	public StoryCalculation(int line, byte varType, String varName, byte operator, byte leftVarType,
+			String leftVarName, byte rightVarType, String rightVarName) {
+		super(line);
 		this.varType = varType;
 		this.varName = varName;
 		this.operator = operator;
@@ -147,7 +150,7 @@ public class StoryCalculation extends Story {
 
 	/**
 	 * 計算を行います。
-	 *
+	 * 
 	 * @param operator
 	 *            計算を行う演算子
 	 * @param leftValue

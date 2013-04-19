@@ -46,6 +46,8 @@ public class FigureCircle extends Figure {
 	/**
 	 * 円形を描画範囲とするフィギュアデータを生成します。
 	 * 
+	 * @param id
+	 *            このフィギュアのID
 	 * @param ox
 	 *            円の中心のX座標
 	 * @param oy
@@ -55,8 +57,8 @@ public class FigureCircle extends Figure {
 	 * @param lines
 	 *            描画する線の配列
 	 */
-	public FigureCircle(int ox, int oy, float[][] apexes, Line[] lines) {
-		super(lines);
+	public FigureCircle(int id, int ox, int oy, float[][] apexes, Line[] lines) {
+		super(id, lines);
 		this.ox = ox;
 		this.oy = oy;
 		this.apexes = apexes;

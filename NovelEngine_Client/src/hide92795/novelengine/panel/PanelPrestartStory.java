@@ -20,12 +20,15 @@ package hide92795.novelengine.panel;
 import hide92795.novelengine.Properties;
 import hide92795.novelengine.Renderer;
 import hide92795.novelengine.client.NovelEngine;
+import hide92795.novelengine.loader.item.DataSavedBackGround;
 import hide92795.novelengine.manager.ConfigurationManager;
 import hide92795.novelengine.manager.ConfigurationManager.Setting;
 
+import java.util.Map;
+
 /**
  * {@link hide92795.novelengine.panel.PanelStory PanelStory} が初期化及びテクスチャ待機中に画面の描画を行うクラスです。
- *
+ * 
  * @author hide92795
  */
 public class PanelPrestartStory extends Panel {
@@ -33,18 +36,40 @@ public class PanelPrestartStory extends Panel {
 	 * ロード待機を行うチャプターのIDです。
 	 */
 	private final int chapterId;
+	/**
+	 * ストーリーを開始する行番号です。
+	 */
+	private final int line;
+	/**
+	 * ロードする際に必要なデータです。
+	 */
+	private final Map<String, Integer> internalData;
+	/**
+	 * 読み込み済みの背景データです。
+	 */
+	private final DataSavedBackGround savedBackGround;
 
 	/**
 	 * 指定されたチャプターのロードを待機する {@link hide92795.novelengine.panel.PanelStory PanelStory} を作成します。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 * @param chapterid
 	 *            ロード待機を行うチャプターのID
+	 * @param line
+	 *            ストーリーを開始する行番号
+	 * @param internalData
+	 *            ロードする際に必要なデータ
+	 * @param savedBackGround
+	 *            読み込み済みの背景データ
 	 */
-	public PanelPrestartStory(NovelEngine engine, int chapterid) {
+	public PanelPrestartStory(NovelEngine engine, int chapterid, int line, Map<String, Integer> internalData,
+			DataSavedBackGround savedBackGround) {
 		super(engine);
 		this.chapterId = chapterid;
+		this.line = line;
+		this.internalData = internalData;
+		this.savedBackGround = savedBackGround;
 	}
 
 	@Override
@@ -54,7 +79,7 @@ public class PanelPrestartStory extends Panel {
 	@Override
 	public void update(int delta) {
 		if (engine().getStoryManager().isLoaded(chapterId)) {
-			engine().startStory(chapterId);
+			engine().startStory(chapterId, line, internalData, savedBackGround);
 		}
 	}
 

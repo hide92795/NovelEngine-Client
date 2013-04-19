@@ -30,7 +30,7 @@ import org.msgpack.unpacker.Unpacker;
  */
 public class FigureLoaderPolygon implements FigureLoader {
 	@Override
-	public Figure load(Unpacker unpacker) throws Exception {
+	public Figure load(int id, Unpacker unpacker) throws Exception {
 		int apexNum = unpacker.readInt();
 		int[][] apexes = new int[apexNum][2];
 		for (int i = 0; i < apexNum; i++) {
@@ -53,7 +53,7 @@ public class FigureLoaderPolygon implements FigureLoader {
 			Line line = new Line(start, end, red, green, blue, alpha, width);
 			lines[i] = line;
 		}
-		FigurePolygon figure = new FigurePolygon(apexes, lines);
+		FigurePolygon figure = new FigurePolygon(id, apexes, lines);
 		return figure;
 	}
 }

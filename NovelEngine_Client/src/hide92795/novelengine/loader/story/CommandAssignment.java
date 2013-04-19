@@ -34,12 +34,12 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandAssignment implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// byte 変数タイプ, String 変数名, int 値
 		byte type = iterator.next().asIntegerValue().getByte();
 		String name = iterator.next().asRawValue().getString();
 		int value = iterator.next().asIntegerValue().getInt();
-		StoryAssignment story = new StoryAssignment(type, name, value);
+		StoryAssignment story = new StoryAssignment(line, type, name, value);
 		return story;
 	}
 }

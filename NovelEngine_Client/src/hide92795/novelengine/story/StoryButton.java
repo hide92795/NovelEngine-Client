@@ -23,7 +23,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * ボタンを生成するストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryButton extends Story {
@@ -51,13 +51,16 @@ public class StoryButton extends Story {
 
 	/**
 	 * ボタンを生成するストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param positionId
 	 *            ボタンの位置を表すID
 	 * @param buttons
 	 *            ボタンの配列
 	 */
-	public StoryButton(int positionId, EntityButton[] buttons) {
+	public StoryButton(int line, int positionId, EntityButton[] buttons) {
+		super(line);
 		this.positionId = positionId;
 		this.buttons = buttons;
 	}
@@ -94,7 +97,7 @@ public class StoryButton extends Story {
 
 	/**
 	 * このストーリーデーターが管理するボタンのどれかがクリックされたことを表します。
-	 *
+	 * 
 	 * @param id
 	 *            ボタンのID
 	 * @param jumpSceneId

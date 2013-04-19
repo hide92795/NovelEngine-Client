@@ -30,7 +30,7 @@ import org.msgpack.unpacker.Unpacker;
  */
 public class FigureLoaderCircle implements FigureLoader {
 	@Override
-	public Figure load(Unpacker unpacker) throws Exception {
+	public Figure load(int id, Unpacker unpacker) throws Exception {
 		int ox = unpacker.readInt();
 		int oy = unpacker.readInt();
 		int division = unpacker.readInt();
@@ -57,7 +57,7 @@ public class FigureLoaderCircle implements FigureLoader {
 			Line line = new Line(start, end, red, green, blue, alpha, width);
 			lines[i] = line;
 		}
-		FigureCircle figure = new FigureCircle(ox, oy, apexes, lines);
+		FigureCircle figure = new FigureCircle(id, ox, oy, apexes, lines);
 		return figure;
 	}
 }

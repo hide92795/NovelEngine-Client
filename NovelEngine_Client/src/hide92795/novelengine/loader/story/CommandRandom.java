@@ -34,12 +34,12 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandRandom implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// byte 変数タイプ, String 変数名, int 乱数範囲
 		byte type = iterator.next().asIntegerValue().getByte();
 		String name = iterator.next().asRawValue().getString();
 		int num = iterator.next().asIntegerValue().getInt();
-		StoryRandom story = new StoryRandom(type, name, num);
+		StoryRandom story = new StoryRandom(line, type, name, num);
 		return story;
 	}
 }

@@ -37,11 +37,13 @@ public class FigureEntireScreen extends Figure {
 	/**
 	 * 画面全体を描画範囲とするフィギュアデータを作成します。
 	 * 
+	 * @param id
+	 *            このフィギュアのID
 	 * @param lines
 	 *            描画する線を表す配列
 	 */
-	public FigureEntireScreen(Line[] lines) {
-		super(lines);
+	public FigureEntireScreen(int id, Line[] lines) {
+		super(id, lines);
 	}
 
 	@Override

@@ -33,23 +33,25 @@ public class StoryChangeBackGroundColor extends Story {
 	/**
 	 * 変更する背景色の赤成分です
 	 */
-	private final float r;
+	private final byte r;
 	/**
 	 * 変更する背景色の緑成分です
 	 */
-	private final float g;
+	private final byte g;
 	/**
 	 * 変更する背景色の青成分です
 	 */
-	private final float b;
+	private final byte b;
 	/**
 	 * 変更する背景色のアルファ成分です
 	 */
-	private final float a;
+	private final byte a;
 
 	/**
 	 * バックグラウンドの背景色を変更ストーリーデータを生成します。
 	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param target
 	 *            背景色を変更するバックグラウンドのID
 	 * @param r
@@ -61,16 +63,13 @@ public class StoryChangeBackGroundColor extends Story {
 	 * @param a
 	 *            変更する背景色のアルファ成分
 	 */
-	public StoryChangeBackGroundColor(byte target, int r, int g, int b, int a) {
+	public StoryChangeBackGroundColor(int line, byte target, byte r, byte g, byte b, byte a) {
+		super(line);
 		this.target = target;
-		this.r = (float) r / 255;
-		this.g = (float) g / 255;
-		this.b = (float) b / 255;
-		if (target == (byte) 10) {
-			this.a = 1.0f;
-		} else {
-			this.a = a / 255;
-		}
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		this.a = a;
 	}
 
 	@Override

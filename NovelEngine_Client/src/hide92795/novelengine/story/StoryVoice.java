@@ -61,12 +61,15 @@ public class StoryVoice extends Story {
 	/**
 	 * ボイスを再生するストーリーデータを生成します。
 	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param characterId
 	 *            再生を行うキャラクターのID
 	 * @param voiceId
 	 *            再生を行うボイスのID
 	 */
-	public StoryVoice(int characterId, int voiceId) {
+	public StoryVoice(int line, int characterId, int voiceId) {
+		super(line);
 		String filename = voiceId + ".nev";
 		identifier = filename;
 		File path = new File(NovelEngine.getCurrentDir(), "voice");

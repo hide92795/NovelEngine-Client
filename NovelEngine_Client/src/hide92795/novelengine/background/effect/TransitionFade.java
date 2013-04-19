@@ -25,7 +25,7 @@ import hide92795.novelengine.story.StoryBackGroundEffect;
 
 /**
  * フェードによる画面効果を提供します。
- *
+ * 
  * @author hide92795
  */
 public class TransitionFade extends BackGroundEffect {
@@ -68,7 +68,7 @@ public class TransitionFade extends BackGroundEffect {
 
 	/**
 	 * 変化後のアルファ値と変化に掛ける時間を指定してエフェクトを生成します。
-	 *
+	 * 
 	 * @param endAlpha
 	 *            フェード後のアルファ値
 	 * @param totalTime
@@ -84,8 +84,7 @@ public class TransitionFade extends BackGroundEffect {
 		finish = false;
 		elapsedTime = 0;
 		background = story.engine().getBackGroundManager().getBackGround(target);
-		float now = background.getAlpha();
-		firstAlpha = (int) (now * 255);
+		firstAlpha = background.getAlpha() & 0xFF;
 		changeAlpha = endAlpha - firstAlpha;
 	}
 
@@ -99,12 +98,12 @@ public class TransitionFade extends BackGroundEffect {
 				finish = true;
 				per = 1.0f;
 			}
-			int fluctuation = (int) (changeAlpha * per);
-			int alpha_255 = firstAlpha + fluctuation;
-			background.setAlpha((float) alpha_255 / 255);
+			float fluctuation = changeAlpha * per;
+			int alpha_255 = firstAlpha + Math.round(fluctuation);
+			byte alpha = (byte) (alpha_255);
+			background.setAlpha(alpha);
 			elapsedTime += delta;
 		}
-
 	}
 
 	@Override
@@ -113,7 +112,7 @@ public class TransitionFade extends BackGroundEffect {
 
 	@Override
 	public void skip() {
-		background.setAlpha((float) endAlpha / 255);
+		background.setAlpha((byte) endAlpha);
 		finish = true;
 	}
 

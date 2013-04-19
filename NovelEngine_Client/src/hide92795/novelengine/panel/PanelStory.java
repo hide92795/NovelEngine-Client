@@ -18,20 +18,37 @@
 package hide92795.novelengine.panel;
 
 import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.msgpack.template.Templates.TInteger;
+import static org.msgpack.template.Templates.TString;
+import static org.msgpack.template.Templates.tMap;
 import hide92795.novelengine.UniqueNumberProvider;
+import hide92795.novelengine.Utils;
 import hide92795.novelengine.box.Box;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.entity.EntityGui;
 import hide92795.novelengine.gui.event.MouseEvent;
+import hide92795.novelengine.loader.item.DataSavedBackGround;
 import hide92795.novelengine.loader.item.DataStory;
+import hide92795.novelengine.manager.ConfigurationManager;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryBlock;
+import hide92795.novelengine.story.StoryPlayBGM;
+import hide92795.novelengine.story.StoryShowWords;
 import hide92795.novelengine.words.EntityWords;
 
+import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import javax.crypto.CipherOutputStream;
+
+import org.msgpack.MessagePack;
+import org.msgpack.packer.Packer;
+import org.msgpack.template.Template;
 
 /**
  * ゲーム上でストーリーデータを読み込んで表示を行うクラスです。
@@ -39,6 +56,25 @@ import java.util.Set;
  * @author hide92795
  */
 public class PanelStory extends Panel {
+	static {
+		INTERNAL_DATA_TEMPLATE = tMap(TString, TInteger);
+	}
+	/**
+	 * ロード時に必要な物を保存するマップのデシリアライズに必要なテンプレートです。
+	 */
+	public static final Template<Map<String, Integer>> INTERNAL_DATA_TEMPLATE;
+	/**
+	 * 現在表示中の文章データの行番号を管理するためのキーを表します。
+	 */
+	public static final String INTERNAL_DATA_WORDS_LINE = "wordsline";
+	/**
+	 * 現在再生中のBGMのIDを管理するためのキーを表します。
+	 */
+	public static final String INTERNAL_DATA_BGM = "bgm";
+	/**
+	 * 現在のメッセージボックスの表示状態を管理するためのキーを表します。
+	 */
+	public static final String INTERNAL_DATA_BOX = "box";
 	/**
 	 * 文章データがこのパネルに設定されていないことを表します。
 	 */
@@ -58,7 +94,7 @@ public class PanelStory extends Panel {
 	/**
 	 * 現在処理を行なっている {@link hide92795.novelengine.story.Story Story} データのリストです。
 	 */
-	private LinkedList<Story> processList;
+	private LinkedHashSet<Story> processList;
 	/**
 	 * 現在画面に描画されている {@link hide92795.novelengine.gui.entity.EntityGui EntityGui} オブジェクトを管理するマップです。
 	 */
@@ -79,24 +115,76 @@ public class PanelStory extends Panel {
 	 * ブロック内のストーリーデータの処理が終わったかどうかを表します。
 	 */
 	private boolean finishAll;
+	/**
+	 * 現在のブロックの先頭ブロックの位置です。
+	 */
+	private int currentStartBlockLine;
+	/**
+	 * ロードする際に必要なデータです。
+	 */
+	private Map<String, Integer> internalData;
+	/**
+	 * 開始時に展開する背景データです。
+	 */
+	private DataSavedBackGround savedBackGround;
 
 	/**
+	 * 指定行からストーリーデータを再開するパネルを生成します。
 	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
+	 * @param line
+	 *            再開する行番号
 	 * @param story
 	 *            画面の描画に使用するストーリーデータ
+	 * @param internalData
+	 *            ロードする際に必要なデータ
+	 * @param savedBackGround
+	 *            開始時に展開する背景データ
 	 */
-	public PanelStory(NovelEngine engine, DataStory story) {
+	public PanelStory(NovelEngine engine, DataStory story, int line, Map<String, Integer> internalData,
+			DataSavedBackGround savedBackGround) {
 		super(engine);
 		this.story = story;
-		this.processList = new LinkedList<Story>();
+		this.processList = new LinkedHashSet<Story>();
 		this.guiList = new HashMap<Integer, EntityGui>();
 		this.guiIdProvider = new UniqueNumberProvider();
+		this.currentStartBlockLine = line;
+		if (internalData == null) {
+			this.internalData = new HashMap<String, Integer>();
+		} else {
+			this.internalData = internalData;
+		}
+		this.savedBackGround = savedBackGround;
+		story.setCurrentLine(currentStartBlockLine);
 	}
 
 	@Override
 	public void init() {
+		engine().getBackGroundManager().clear();
+		if (savedBackGround != null) {
+			engine().getBackGroundManager().restore(savedBackGround);
+		}
+		nextBlock();
+		if (internalData.containsKey(INTERNAL_DATA_WORDS_LINE)) {
+			int wordsLine = internalData.get(INTERNAL_DATA_WORDS_LINE);
+			Story s_wl = story.getStory(wordsLine);
+			if (s_wl instanceof StoryShowWords) {
+				s_wl.init(this);
+				if (words != null) {
+					words.forceFinish();
+				}
+			}
+		}
+		if (internalData.containsKey(INTERNAL_DATA_BGM)) {
+			int bgm = internalData.get(INTERNAL_DATA_BGM);
+			Story s_bgm = new StoryPlayBGM(-1, bgm);
+			s_bgm.update(this, 0);
+		}
+		if (internalData.containsKey(INTERNAL_DATA_BOX)) {
+			int boxState = internalData.get(INTERNAL_DATA_BOX);
+			engine().getBoxManager().getCurrentBox().setMode(boxState);
+		}
 	}
 
 	@Override
@@ -104,45 +192,21 @@ public class PanelStory extends Panel {
 		if (finishAll) {
 			// すべてが完了
 			// 終了通知
-			Iterator<Story> iterator = processList.iterator();
-			while (iterator.hasNext()) {
-				Story story = iterator.next();
+			for (Story story : processList) {
 				story.dispose(this);
 			}
-			// 処理リストをクリア
-			processList.clear();
-			Story s;
-			boolean b = false;
-			do {
-				s = story.next();
-				if (s instanceof StoryBlock) {
-					b = ((StoryBlock) s).isStartBlock();
-				}
-			} while (!b);
-			s = story.next();
-			while (b) {
-				System.out.println(s.getClass());
-				if (s instanceof StoryBlock) {
-					b = ((StoryBlock) s).isStartBlock();
-				} else {
-					s.init(this);
-					processList.add(s);
-					s = story.next();
-				}
-
-			}
+			nextBlock();
 		}
 
 		finishAll = true;
 
-		Iterator<Story> iterator_s = processList.iterator();
-		while (iterator_s.hasNext()) {
-			Story story = iterator_s.next();
+		for (Story story : processList) {
 			story.update(this, delta);
 			if (!story.isFinish()) {
 				finishAll = false;
 			}
 		}
+
 		Set<Integer> set_g = guiList.keySet();
 		for (Integer id : set_g) {
 			EntityGui entityGui = guiList.get(id);
@@ -152,13 +216,39 @@ public class PanelStory extends Panel {
 		updateWords(delta);
 	}
 
+	/**
+	 * 次のブロックを作業用リストに追加します。
+	 */
+	private void nextBlock() {
+		// 処理リストをクリア
+		processList.clear();
+		Story s;
+		boolean b = false;
+		do {
+			s = story.next();
+			if (s instanceof StoryBlock) {
+				b = ((StoryBlock) s).isStartBlock();
+				currentStartBlockLine = story.getCurrentLine();
+			}
+		} while (!b);
+		s = story.next();
+		while (b) {
+			System.out.println(s.getClass());
+			if (s instanceof StoryBlock) {
+				b = ((StoryBlock) s).isStartBlock();
+			} else {
+				s.init(this);
+				processList.add(s);
+				s = story.next();
+			}
+		}
+	}
+
 	@Override
 	public void render(NovelEngine engine) {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		engine.getBackGroundManager().render(engine);
-		Iterator<Story> iterator_s = processList.iterator();
-		while (iterator_s.hasNext()) {
-			Story story = iterator_s.next();
+		for (Story story : processList) {
 			story.render(engine);
 		}
 		renderBox(engine);
@@ -178,7 +268,7 @@ public class PanelStory extends Panel {
 	 */
 	private void updateBox(int delta) {
 		Box box = engine().getBoxManager().getCurrentBox();
-		box.update(delta);
+		box.update(this, delta);
 	}
 
 	/**
@@ -245,9 +335,7 @@ public class PanelStory extends Panel {
 				return;
 			}
 		}
-		Iterator<Story> iterator_s = processList.iterator();
-		while (iterator_s.hasNext()) {
-			Story story = iterator_s.next();
+		for (Story story : processList) {
 			story.onLeftClickStart(event);
 			if (event.isConsumed()) {
 				return;
@@ -267,9 +355,7 @@ public class PanelStory extends Panel {
 				return;
 			}
 		}
-		Iterator<Story> iterator_s = processList.iterator();
-		while (iterator_s.hasNext()) {
-			Story story = iterator_s.next();
+		for (Story story : processList) {
 			story.onLeftClickFinish(event);
 			if (event.isConsumed()) {
 				return;
@@ -284,9 +370,7 @@ public class PanelStory extends Panel {
 			EntityGui entityGui = guiList.get(id);
 			entityGui.render(engine);
 		}
-		Iterator<Story> iterator_s = processList.iterator();
-		while (iterator_s.hasNext()) {
-			Story story = iterator_s.next();
+		for (Story story : processList) {
 			story.onKeyPressed(engine, eventKey);
 		}
 	}
@@ -323,8 +407,12 @@ public class PanelStory extends Panel {
 	 *            表示する文章データ
 	 */
 	public void setWords(EntityWords words) {
-		words.init(this);
-		this.words = words;
+		if (words == null) {
+			this.words = null;
+		} else {
+			words.init(this);
+			this.words = words;
+		}
 	}
 
 	/**
@@ -334,5 +422,69 @@ public class PanelStory extends Panel {
 	 */
 	public int getWordsState() {
 		return wordsState;
+	}
+
+	/**
+	 * 現在のストーリーを保存します。
+	 * 
+	 * @param saveId
+	 *            セーブ番号
+	 * @throws Exception
+	 *             何らかのエラーが発生した場合
+	 */
+	public void save(int saveId) throws Exception {
+		File dir = new File(NovelEngine.getCurrentDir(), "save");
+		File file = new File(dir, "save." + saveId + ".neb");
+		CipherOutputStream cos = Utils.createCipherOutputStream(file);
+		MessagePack msgpack = new MessagePack();
+		Packer p = msgpack.createPacker(cos);
+		p.write(story.getChapterId());
+		p.write(currentStartBlockLine);
+		updateInternalData();
+		p.write(internalData);
+		p.flush();
+		ZipOutputStream zos = new ZipOutputStream(cos);
+		ZipEntry ze_local = new ZipEntry("private.neb");
+		zos.putNextEntry(ze_local);
+		engine().getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_PRIVATE).store(zos);
+		ZipEntry ze_render = new ZipEntry("render.neb");
+		zos.putNextEntry(ze_render);
+		engine().getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER).store(zos);
+		ZipEntry ze_background = new ZipEntry("background.neb");
+		zos.putNextEntry(ze_background);
+		engine().getBackGroundManager().save(zos);
+		zos.flush();
+		zos.close();
+	}
+
+	/**
+	 * 内部データを更新します。
+	 */
+	private void updateInternalData() {
+		int boxCurrentState = engine().getBoxManager().getCurrentBox().getMode();
+		switch (boxCurrentState) {
+		case Box.SHOWING:
+		case Box.SHOWED:
+			internalData.put(INTERNAL_DATA_BOX, Box.SHOWED);
+			break;
+		case Box.HIDING:
+		case Box.HIDED:
+			internalData.put(INTERNAL_DATA_BOX, Box.HIDED);
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 内部データを設定します。
+	 * 
+	 * @param key
+	 *            データのキー
+	 * @param value
+	 *            値
+	 */
+	public void setInternalData(String key, int value) {
+		internalData.put(key, value);
 	}
 }

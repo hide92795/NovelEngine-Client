@@ -34,10 +34,10 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandPlaySE implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// int サウンドID
 		int seId = iterator.next().asIntegerValue().getInt();
-		StoryPlaySE story = new StoryPlaySE(seId);
+		StoryPlaySE story = new StoryPlaySE(line, seId);
 		return story;
 	}
 }

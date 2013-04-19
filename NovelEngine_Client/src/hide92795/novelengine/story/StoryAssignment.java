@@ -22,7 +22,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * 変数への代入を行うストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryAssignment extends Story {
@@ -41,7 +41,9 @@ public class StoryAssignment extends Story {
 
 	/**
 	 * 変数に値を代入するストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param varType
 	 *            値を代入する変数の種類
 	 * @param varName
@@ -49,7 +51,8 @@ public class StoryAssignment extends Story {
 	 * @param value
 	 *            代入する値
 	 */
-	public StoryAssignment(byte varType, String varName, int value) {
+	public StoryAssignment(int line, byte varType, String varName, int value) {
+		super(line);
 		this.varType = varType;
 		this.varName = varName;
 		this.value = value;

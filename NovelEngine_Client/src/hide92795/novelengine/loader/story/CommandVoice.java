@@ -34,11 +34,11 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandVoice implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// int キャラクターID, int ボイスID
 		int characterId = iterator.next().asIntegerValue().getInt();
 		int voiceId = iterator.next().asIntegerValue().getInt();
-		StoryVoice story = new StoryVoice(characterId, voiceId);
+		StoryVoice story = new StoryVoice(line, characterId, voiceId);
 		return story;
 	}
 }

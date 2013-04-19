@@ -77,7 +77,7 @@ public class LoaderCharacter extends Loader {
 					for (int k = 0; k < image_num; k++) {
 						images[k] = unpacker.readInt();
 					}
-					Face face = new Face(images, interval);
+					Face face = new Face(faceId, images, interval);
 					character.addFace(faceId, face);
 				}
 				manager.addCharacter(characterId, character);

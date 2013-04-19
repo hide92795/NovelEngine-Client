@@ -21,7 +21,7 @@ import hide92795.novelengine.panel.PanelStory;
 
 /**
  * チャプターを移動するためのストーリーデータです。
- *
+ * 
  * @author hide92795
  */
 public class StoryMoveChapter extends Story {
@@ -32,11 +32,14 @@ public class StoryMoveChapter extends Story {
 
 	/**
 	 * チャプターを移動するためのストーリーデータを生成します。
-	 *
+	 * 
+	 * @param line
+	 *            このストーリーデータの行番号
 	 * @param chapterId
 	 *            移動先のチャプターID
 	 */
-	public StoryMoveChapter(int chapterId) {
+	public StoryMoveChapter(int line, int chapterId) {
+		super(line);
 		this.chapterId = chapterId;
 	}
 
@@ -46,6 +49,6 @@ public class StoryMoveChapter extends Story {
 
 	@Override
 	public void update(PanelStory story, int delta) {
-		story.engine().prestartStory(chapterId);
+		story.engine().prestartStory(chapterId, 0, null);
 	}
 }

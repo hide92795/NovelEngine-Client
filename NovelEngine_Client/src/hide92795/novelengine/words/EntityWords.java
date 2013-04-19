@@ -106,7 +106,7 @@ public class EntityWords {
 		times = new int[num];
 
 		int speed = story.engine().getConfigurationManager()
-				.getValue(ConfigurationManager.VARIABLE_RENDER, Setting.RENDER_WORDS_SPEED);
+				.getValue(ConfigurationManager.VARIABLE_SETTING, Setting.SETTING_WORDS_SPEED);
 		for (int i = 0; i < num; i++) {
 			ratios[i] = 0.0f;
 			int time = Math.round((float) lineWords[i].width / speed * 1000);
@@ -316,7 +316,5 @@ public class EntityWords {
 				Renderer.renderImage(t, 1.0f, x, y, x1, y1, 0.0f, 0.0f, renderRatio, 1.0f);
 			}
 		}
-
 	}
-
 }

@@ -34,11 +34,11 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandChangeBackGroundFigure implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable) throws Exception {
+			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
 		// byte 対象, int フィギュアID
 		byte target = iterator.next().asIntegerValue().getByte();
 		int figureId = iterator.next().asIntegerValue().getInt();
-		StoryChangeBackGroundFigure story = new StoryChangeBackGroundFigure(target, figureId);
+		StoryChangeBackGroundFigure story = new StoryChangeBackGroundFigure(line, target, figureId);
 		return story;
 	}
 }
