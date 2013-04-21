@@ -19,10 +19,10 @@ package hide92795.novelengine.loader;
 
 import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.Properties;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.box.Box;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.manager.ConfigurationManager;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 
 import java.io.File;
 import java.io.IOException;
@@ -187,7 +187,7 @@ public class LoaderBox extends Loader {
 			// デフォルトボックス
 			int defaultId = unpacker.readInt();
 			Properties p = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
-			p.setProperty(Setting.RENDER_MESSAGE_BOX, defaultId);
+			p.setProperty(SystemSettings.RENDER_MESSAGE_BOX, defaultId);
 		} catch (Exception e) {
 			throw new NovelEngineException(e, "");
 		} finally {

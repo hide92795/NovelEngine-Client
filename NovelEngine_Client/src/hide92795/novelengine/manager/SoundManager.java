@@ -19,8 +19,8 @@ package hide92795.novelengine.manager;
 
 import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.Properties;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.soundsystem.XCodecJOrbis;
 
 import java.net.URL;
@@ -87,9 +87,9 @@ public class SoundManager {
 	 */
 	public void playAsBGM(URL url, String identifier) {
 		Properties properties = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
-		int enable_fade = properties.getProperty(Setting.RENDER_ENABLE_FADE_BGM);
+		int enable_fade = properties.getProperty(SystemSettings.RENDER_ENABLE_FADE_BGM);
 		if (enable_fade == 1) {
-			int duration_fade = properties.getProperty(Setting.RENDER_DURATION_FADE_BGM);
+			int duration_fade = properties.getProperty(SystemSettings.RENDER_DURATION_FADE_BGM);
 			if (sound.playing("BGM")) {
 				sound.fadeOut("BGM", url, identifier, duration_fade);
 				return;

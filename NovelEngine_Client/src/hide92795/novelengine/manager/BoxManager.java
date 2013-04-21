@@ -17,11 +17,11 @@
 //
 package hide92795.novelengine.manager;
 
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.box.Box;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.LoaderBox;
 import hide92795.novelengine.loader.LoaderResource;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 
 import java.util.HashMap;
 
@@ -72,7 +72,7 @@ public class BoxManager {
 	 */
 	public Box getCurrentBox() {
 		int boxId = engine.getConfigurationManager().getValue(ConfigurationManager.VARIABLE_RENDER,
-				Setting.RENDER_MESSAGE_BOX);
+				SystemSettings.RENDER_MESSAGE_BOX);
 		return boxes.get(boxId);
 
 	}

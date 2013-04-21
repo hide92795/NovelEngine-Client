@@ -40,6 +40,7 @@ import static org.lwjgl.opengl.GL11.glOrtho;
 import hide92795.novelengine.Logger;
 import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.Properties;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.Utils;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.loader.Loader;
@@ -87,7 +88,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GLContext;
 import org.msgpack.MessagePack;
 import org.msgpack.unpacker.Unpacker;
 
@@ -104,7 +104,7 @@ public class NovelEngine {
 	/**
 	 * NovelEngineのバージョンです。
 	 */
-	public static final String VERSION = "a1.6.0";
+	public static final String VERSION = "a1.6.1";
 	/**
 	 * キューデータを実行するキューマネージャーです。
 	 */
@@ -258,6 +258,21 @@ public class NovelEngine {
 	}
 
 	/**
+	 * クライアントjarがあるフォルダを返します。
+	 * 
+	 * @return jarファイルのある場所を示すFile。エラーが発生した場合はnull
+	 */
+	public static File getCurrentDir() {
+		URI uri = null;
+		try {
+			uri = NovelEngine.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return new File(uri).getParentFile();
+	}
+
+	/**
 	 * 実行に必要なネイティブライブラリをパスに追加します。
 	 */
 	private static void initNativeLibrary() {
@@ -314,33 +329,13 @@ public class NovelEngine {
 	}
 
 	/**
-	 * クライアントjarがあるフォルダを返します。
-	 * 
-	 * @return jarファイルのある場所を示すFile。エラーが発生した場合はnull
-	 */
-	public static File getCurrentDir() {
-		URI uri = null;
-		try {
-			uri = NovelEngine.class.getProtectionDomain().getCodeSource().getLocation().toURI();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		return new File(uri).getParentFile();
-	}
-
-	/**
 	 * ディスプレイ表示、メインループなどの処理を行います。
 	 */
 	private void start() {
 		try {
 			// ディスプレイ初期化
-			Display.setDisplayMode(new DisplayMode(dataBasic.getWidth(), dataBasic.getHeight()));
-			Display.setResizable(dataBasic.isAllowResize());
-			Display.setVSyncEnabled(true);
-			Display.setIcon(dataBasic.getIcons());
-			Display.setTitle(dataBasic.getGamename());
+			initDisplay();
 			Display.create();
-			GLContext.loadOpenGLLibrary();
 		} catch (LWJGLException e) {
 			crash(new NovelEngineException(e, "null"));
 		}
@@ -348,13 +343,8 @@ public class NovelEngine {
 		width = getDefaultWidth();
 		height = getDefaultHeight();
 		initGL();
-		// try {
-		// startStoryFromSave(1);
-		// } catch (Exception e1) {
-		// // TODO 自動生成された catch ブロック
-		// e1.printStackTrace();
-		// }
 		setCurrentPanel(new PanelPrestartStory(this, StoryManager.CHAPTER_BOOT, 0, null, null));
+		dataBasic.getAspectRatio().adjust(this, Display.getWidth(), Display.getHeight());
 		closeRequested = false;
 		while (!Display.isCloseRequested() && !closeRequested) {
 			try {
@@ -384,19 +374,46 @@ public class NovelEngine {
 				Display.sync(60);
 			}
 		}
+		writeDisplaySettings();
+		configurationManager.save();
 		Display.destroy();
 		soundManager.clean();
 		AL.destroy();
-		configurationManager.save();
 		Logger.info("NovelEngine shutdowned!");
 		System.exit(0);
+	}
+
+	/**
+	 * ディスプレイを初期化します。
+	 * 
+	 * @throws LWJGLException
+	 *             初期化中にエラーが発生した場合
+	 */
+	private void initDisplay() throws LWJGLException {
+		Properties prop = configurationManager.getProperties(ConfigurationManager.VARIABLE_SETTING);
+		if (prop.containsKey(SystemSettings.SETTING_WINDOW_X) && prop.containsKey(SystemSettings.SETTING_WINDOW_Y)) {
+			int x = prop.getProperty(SystemSettings.SETTING_WINDOW_X);
+			int y = prop.getProperty(SystemSettings.SETTING_WINDOW_Y);
+			Display.setLocation(x, y);
+		}
+		int width = dataBasic.getWidth();
+		int height = dataBasic.getHeight();
+		if (prop.containsKey(SystemSettings.SETTING_WINDOW_WIDTH)
+				&& prop.containsKey(SystemSettings.SETTING_WINDOW_HEIGHT)) {
+			width = prop.getProperty(SystemSettings.SETTING_WINDOW_WIDTH);
+			height = prop.getProperty(SystemSettings.SETTING_WINDOW_HEIGHT);
+		}
+		Display.setDisplayMode(new DisplayMode(width, height));
+		Display.setResizable(dataBasic.isAllowResize());
+		Display.setVSyncEnabled(true);
+		Display.setIcon(dataBasic.getIcons());
+		Display.setTitle(dataBasic.getGamename());
 	}
 
 	/**
 	 * OpenGL系の初期化処理を行います。
 	 */
 	private void initGL() {
-
 		glClearColor(0f, 0f, 0f, 0f);
 		glEnable(GL_BLEND);
 		glEnable(GL_STENCIL_TEST);
@@ -547,6 +564,17 @@ public class NovelEngine {
 			lastFPS += 1000;
 		}
 		fps++;
+	}
+
+	/**
+	 * ディスプレイの情報を設定に書き出します。
+	 */
+	private void writeDisplaySettings() {
+		Properties prop = configurationManager.getProperties(ConfigurationManager.VARIABLE_SETTING);
+		prop.setProperty(SystemSettings.SETTING_WINDOW_X, Display.getX());
+		prop.setProperty(SystemSettings.SETTING_WINDOW_Y, Display.getY());
+		prop.setProperty(SystemSettings.SETTING_WINDOW_WIDTH, Display.getWidth());
+		prop.setProperty(SystemSettings.SETTING_WINDOW_HEIGHT, Display.getHeight());
 	}
 
 	/**

@@ -19,9 +19,9 @@ package hide92795.novelengine.loader;
 
 import hide92795.novelengine.NovelEngineException;
 import hide92795.novelengine.Properties;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.manager.ConfigurationManager;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.manager.FontManager;
 import hide92795.novelengine.manager.FontManager.DataFont;
 
@@ -87,7 +87,7 @@ public class LoaderFont extends Loader {
 
 			int defaultId = unpacker.readInt();
 			Properties p = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
-			p.setProperty(Setting.RENDER_FONT, defaultId);
+			p.setProperty(SystemSettings.RENDER_FONT, defaultId);
 
 			HashMap<Integer, Font> fontdata = new HashMap<Integer, Font>();
 

@@ -19,10 +19,10 @@ package hide92795.novelengine.panel;
 
 import hide92795.novelengine.Properties;
 import hide92795.novelengine.Renderer;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.item.DataSavedBackGround;
 import hide92795.novelengine.manager.ConfigurationManager;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 
 import java.util.Map;
 
@@ -86,7 +86,7 @@ public class PanelPrestartStory extends Panel {
 	@Override
 	public void render(NovelEngine engine) {
 		Properties prop = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
-		int rgb = prop.getProperty(Setting.RENDER_PRESTART_BACKGROUND_COLOR);
+		int rgb = prop.getProperty(SystemSettings.RENDER_PRESTART_BACKGROUND_COLOR);
 		int r = (rgb & 0x00FF0000) >> 16;
 		int g = (rgb & 0x0000FF00) >> 8;
 		int b = (rgb & 0x000000FF);

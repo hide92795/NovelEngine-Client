@@ -17,7 +17,6 @@
 //
 package hide92795.novelengine;
 
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -43,21 +42,21 @@ public class SystemPropertyProvider {
 	 */
 	public static final int getSystemProperty(String name) {
 		switch (name) {
-		case Setting.SYSTEM_YEAR:
+		case SystemSettings.SYSTEM_YEAR:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.YEAR);
-		case Setting.SYSTEM_MONTH:
+		case SystemSettings.SYSTEM_MONTH:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.MONTH) + 1;
-		case Setting.SYSTEM_DATE:
+		case SystemSettings.SYSTEM_DATE:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.DATE);
-		case Setting.SYSTEM_DAY:
+		case SystemSettings.SYSTEM_DAY:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.DAY_OF_WEEK);
-		case Setting.SYSTEM_HOUR:
+		case SystemSettings.SYSTEM_HOUR:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.HOUR_OF_DAY);
-		case Setting.SYSTEM_MINUTE:
+		case SystemSettings.SYSTEM_MINUTE:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.MINUTE);
-		case Setting.SYSTEM_SECOND:
+		case SystemSettings.SYSTEM_SECOND:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.SECOND);
-		case Setting.SYSTEM_MILLISECOND:
+		case SystemSettings.SYSTEM_MILLISECOND:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.MILLISECOND);
 		default:
 			return 0;

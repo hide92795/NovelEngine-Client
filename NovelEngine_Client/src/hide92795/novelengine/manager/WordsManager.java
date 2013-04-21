@@ -18,9 +18,9 @@
 package hide92795.novelengine.manager;
 
 import hide92795.novelengine.Properties;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.box.Box;
 import hide92795.novelengine.client.NovelEngine;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.manager.FontManager.DataFont;
 import hide92795.novelengine.queue.QueueImage;
 import hide92795.novelengine.words.EntityWords;
@@ -85,19 +85,19 @@ public class WordsManager {
 		Properties renderProp = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
 
 		int boxId;
-		if (initVariable.containsKey(ConfigurationManager.VARIABLE_RENDER + Setting.RENDER_MESSAGE_BOX)) {
-			boxId = initVariable.get(ConfigurationManager.VARIABLE_RENDER + Setting.RENDER_MESSAGE_BOX);
+		if (initVariable.containsKey(ConfigurationManager.VARIABLE_RENDER + SystemSettings.RENDER_MESSAGE_BOX)) {
+			boxId = initVariable.get(ConfigurationManager.VARIABLE_RENDER + SystemSettings.RENDER_MESSAGE_BOX);
 		} else {
-			boxId = renderProp.getProperty(Setting.RENDER_MESSAGE_BOX);
+			boxId = renderProp.getProperty(SystemSettings.RENDER_MESSAGE_BOX);
 		}
 		Box box = engine.getBoxManager().getBox(boxId);
 		int width = box.getAreaWidth();
 
 		int fontId;
-		if (initVariable.containsKey(ConfigurationManager.VARIABLE_RENDER + Setting.RENDER_FONT)) {
-			fontId = initVariable.get(ConfigurationManager.VARIABLE_RENDER + Setting.RENDER_FONT);
+		if (initVariable.containsKey(ConfigurationManager.VARIABLE_RENDER + SystemSettings.RENDER_FONT)) {
+			fontId = initVariable.get(ConfigurationManager.VARIABLE_RENDER + SystemSettings.RENDER_FONT);
 		} else {
-			fontId = renderProp.getProperty(Setting.RENDER_FONT);
+			fontId = renderProp.getProperty(SystemSettings.RENDER_FONT);
 		}
 		DataFont fontdata = engine.getFontManager().getFont(fontId);
 

@@ -18,10 +18,10 @@
 package hide92795.novelengine.story;
 
 import hide92795.novelengine.NovelEngineException;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.manager.ConfigurationManager;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.panel.PanelStory;
 
 import java.io.File;
@@ -92,7 +92,7 @@ public class StoryPlaySE extends Story {
 		} else if (!isFinish()) {
 			sourcename = story.engine().getSoundManager().playAsSE(url, identifier);
 			if (story.engine().getConfigurationManager()
-					.getValue(ConfigurationManager.VARIABLE_RENDER, Setting.RENDER_WAIT_SE_FINISHED) == 1) {
+					.getValue(ConfigurationManager.VARIABLE_RENDER, SystemSettings.RENDER_WAIT_SE_FINISHED) == 1) {
 				playing = true;
 			} else {
 				finish();
@@ -104,7 +104,7 @@ public class StoryPlaySE extends Story {
 	public void dispose(PanelStory story) {
 		if (playing
 				&& story.engine().getConfigurationManager()
-						.getValue(ConfigurationManager.VARIABLE_RENDER, Setting.RENDER_STOP_SE_SKIPPED) == 1) {
+						.getValue(ConfigurationManager.VARIABLE_RENDER, SystemSettings.RENDER_STOP_SE_SKIPPED) == 1) {
 			story.engine().getSoundManager().stop(sourcename);
 		}
 	}

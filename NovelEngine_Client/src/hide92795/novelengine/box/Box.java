@@ -18,9 +18,9 @@
 package hide92795.novelengine.box;
 
 import hide92795.novelengine.Renderer;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.manager.ConfigurationManager;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.panel.PanelStory;
 
 import org.newdawn.slick.opengl.Texture;
@@ -271,7 +271,7 @@ public abstract class Box {
 	 */
 	private void checkWordsHide(PanelStory story) {
 		int i = story.engine().getConfigurationManager()
-				.getValue(ConfigurationManager.VARIABLE_RENDER, Setting.RENDER_WORDS_CLEAR_ON_CLOSE_BOX);
+				.getValue(ConfigurationManager.VARIABLE_RENDER, SystemSettings.RENDER_WORDS_CLEAR_ON_CLOSE_BOX);
 		if (i == 1) {
 			story.setWords(null);
 			story.setInternalData(PanelStory.INTERNAL_DATA_WORDS_LINE, -1);

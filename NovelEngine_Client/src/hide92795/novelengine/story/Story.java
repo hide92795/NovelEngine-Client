@@ -18,12 +18,12 @@
 package hide92795.novelengine.story;
 
 import hide92795.novelengine.Properties;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.gui.event.MouseEvent;
 import hide92795.novelengine.gui.listener.KeybordListener;
 import hide92795.novelengine.gui.listener.MouseListener;
 import hide92795.novelengine.manager.ConfigurationManager;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.panel.PanelStory;
 
 /**
@@ -274,7 +274,7 @@ public abstract class Story implements MouseListener, KeybordListener {
 	 */
 	public final boolean canSkip(final NovelEngine engine) {
 		Properties properties = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
-		int i = properties.getProperty(Setting.RENDER_SKIPPABLE);
+		int i = properties.getProperty(SystemSettings.RENDER_SKIPPABLE);
 		return i == 1;
 	}
 

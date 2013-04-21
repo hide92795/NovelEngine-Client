@@ -18,11 +18,11 @@
 package hide92795.novelengine.words;
 
 import hide92795.novelengine.Renderer;
+import hide92795.novelengine.SystemSettings;
 import hide92795.novelengine.box.Box;
 import hide92795.novelengine.character.DataCharacter;
 import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.manager.ConfigurationManager;
-import hide92795.novelengine.manager.ConfigurationManager.Setting;
 import hide92795.novelengine.panel.PanelStory;
 
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class EntityWords {
 		times = new int[num];
 
 		int speed = story.engine().getConfigurationManager()
-				.getValue(ConfigurationManager.VARIABLE_SETTING, Setting.SETTING_WORDS_SPEED);
+				.getValue(ConfigurationManager.VARIABLE_SETTING, SystemSettings.SETTING_WORDS_SPEED);
 		for (int i = 0; i < num; i++) {
 			ratios[i] = 0.0f;
 			int time = Math.round((float) lineWords[i].width / speed * 1000);
