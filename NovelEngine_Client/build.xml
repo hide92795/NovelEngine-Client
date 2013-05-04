@@ -2,7 +2,7 @@
 <project default="create_run_jar" name="Create Runnable Jar for Project NovelEngine_Client with libraries in sub-folder" basedir=".">
 	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
 	<!--ANT 1.7 is required                                        -->
-
+	
 	<target name="version">
 		<loadfile property="version_old" srcfile="${basedir}/version.txt" />
 		<echo message="現在のバージョン :" level="info" />
@@ -15,28 +15,55 @@
 		<echo message="${version_new}" level="info" />
 		<echo message="${version_new}" level="info" file="${basedir}/version.txt" />
 	</target>
-
+	
 	<target name="dir">
 		<mkdir dir="${basedir}/jar" />
 		<mkdir dir="${basedir}/jar/lib" />
 		<mkdir dir="${basedir}/jar/lib/native" />
 		<mkdir dir="${basedir}/jar/license" />
 	</target>
-	
-	<target name="create_run_jar" depends="version,dir">
-		<jar destfile="${basedir}/jar/NovelEngine.jar">
-			<manifest>
-				<attribute name="Main-Class" value="hide92795.novelengine.client.NovelEngine" />
-				<attribute name="Class-Path" value=". lib/json-simple-1.1.jar lib/slf4j-api-1.7.2.jar lib/lwjgl.jar lib/lwjgl_util.jar lib/slick-util.jar lib/logback-classic-1.0.9.jar lib/logback-core-1.0.9.jar lib/msgpack-0.6.8-SNAPSHOT.jar lib/jogg-0.0.7.jar lib/jorbis-0.0.15.jar lib/jinput.jar lib/jna.jar lib/platform.jar lib/vlcj.jar lib/javassist-3.17.1-GA.jar lib/LibraryLWJGLOpenAL.jar lib/SoundSystem.jar" />
-			</manifest>
-			<fileset dir="${basedir}/bin" />
-		</jar>
 
+	<target name="compile">
+		<path id="classpath">
+			<fileset dir="lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		
+		<javac
+			srcdir="${basedir}/src"
+			destdir="${basedir}/bin"
+			classpathref="classpath"
+			source="1.7"
+			encoding="UTF-8"
+			includeantruntime="false"
+		/>
+	</target>
+	
+	<target name="jar">
 		<copy todir="${basedir}/jar/lib">
 			<fileset dir="${basedir}/lib" includes="*.jar">
 			</fileset>
 		</copy>
+		
+		<manifestclasspath property="jar.classpath" jarfile="${basedir}/jar/NovelEngine.jar">
+			<classpath>
+				<fileset dir="${basedir}/jar/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</manifestclasspath>
 
+		<jar destfile="${basedir}/jar/NovelEngine.jar">
+			<manifest>
+				<attribute name="Main-Class" value="hide92795.novelengine.client.NovelEngine" />
+				<attribute name="Class-Path" value="${jar.classpath}"/>
+			</manifest>
+			<fileset dir="${basedir}/bin" />
+		</jar>
+	</target>
+	
+	<target name="zip">
 		<copy todir="${basedir}/jar/lib/native">
 			<fileset dir="${basedir}/lib/native">
 			</fileset>
@@ -56,5 +83,8 @@
 			<fileset dir="." includes="license.txt" />
 		</zip>
 		<delete dir="${basedir}/jar" />
+	</target>
+	
+	<target name="create_run_jar" depends="dir,version,compile,jar,zip">
 	</target>
 </project>
