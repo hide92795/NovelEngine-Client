@@ -22,7 +22,7 @@ import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryChangeBackGround;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.msgpack.unpacker.UnpackerIterator;
 
@@ -34,7 +34,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandChangeBackGround implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
+			Map<String, Integer> initVariable, int line) throws Exception {
 		// byte 対象, int 遅延（ms）, int 画像ID, int 左上X座標, int 左上Y座標, int 拡大率
 		byte target = iterator.next().asIntegerValue().getByte();
 		int delay = iterator.next().asIntegerValue().getInt();

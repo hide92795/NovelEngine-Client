@@ -21,7 +21,7 @@ import hide92795.novelengine.client.NovelEngine;
 import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.story.Story;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.msgpack.unpacker.UnpackerIterator;
 
@@ -41,7 +41,8 @@ public interface Command {
 	 * @param resourceLoader
 	 *            リソースをロードするためのローダー
 	 * @param initVariable
-	 *            初期変数
+	 *            初期変数<br>
+	 *            このマップに新しく要素を追加することはできません。
 	 * @param line
 	 *            このストーリーデータの行番号
 	 * @return ストーリーデータ
@@ -49,5 +50,5 @@ public interface Command {
 	 *             何らかのエラーが発生した場合
 	 */
 	Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception;
+			Map<String, Integer> initVariable, int line) throws Exception;
 }

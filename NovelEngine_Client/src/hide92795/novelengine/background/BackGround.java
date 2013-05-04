@@ -58,7 +58,7 @@ public class BackGround {
 	 */
 	private float magnificartion = 1.0f;
 	/**
-	 * 描画範囲を示す{@link hide92795.novelengine.background.figure.Figure Figure}です
+	 * 描画範囲を示す {@link hide92795.novelengine.background.figure.Figure Figure} です。
 	 */
 	private Figure figure;
 	/**

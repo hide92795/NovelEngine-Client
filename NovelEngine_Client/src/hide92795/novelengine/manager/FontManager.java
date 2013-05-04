@@ -43,7 +43,7 @@ public class FontManager {
 	 */
 	public static final int TEXT_EDGED = 2;
 	/**
-	 * フォントデータを格納するマップ
+	 * フォントデータを格納するマップです。
 	 */
 	private HashMap<Integer, DataFont> fonts;
 

@@ -25,7 +25,7 @@ import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryShowWords;
 import hide92795.novelengine.words.EntityWords;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.msgpack.unpacker.UnpackerIterator;
 
@@ -37,7 +37,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandShowWords implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
+			Map<String, Integer> initVariable, int line) throws Exception {
 		// int キャラID, String 文章
 		int characterId = iterator.next().asIntegerValue().getInt();
 		String words_str = iterator.next().asRawValue().getString();

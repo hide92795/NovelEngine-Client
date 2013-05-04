@@ -35,7 +35,7 @@ import javax.crypto.CipherOutputStream;
  */
 public final class Utils {
 	/**
-	 * 乱数生成用の{@link java.util.Random Random}
+	 * 乱数生成用の {@link java.util.Random Random} インスタンスです。
 	 */
 	private static Random random = new Random();
 
@@ -72,7 +72,6 @@ public final class Utils {
 		Throwable ourCause = e.getCause();
 		if (ourCause != null) {
 			printStackTraceToLoggerAsCause(ourCause, trace);
-
 		}
 	}
 

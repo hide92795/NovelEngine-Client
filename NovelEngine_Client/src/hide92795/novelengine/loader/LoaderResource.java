@@ -27,7 +27,7 @@ import hide92795.novelengine.words.EntityWords;
 import java.awt.image.BufferedImage;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashSet;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 /**
  * 各種リソースの読み込みを非同期で行うために読み込み専用スレッドにキューの登録、実行を行うクラスです。
@@ -143,7 +143,7 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 	 * @param initVariable
 	 *            初期変数
 	 */
-	public void loadWords(EntityWords words, String words_str, ConcurrentHashMap<String, Integer> initVariable) {
+	public void loadWords(EntityWords words, String words_str, Map<String, Integer> initVariable) {
 		Object[] data = { words, words_str, initVariable };
 		wordsQueue.add(data);
 	}
@@ -224,6 +224,7 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 		 * @param data
 		 *            読み込む音楽の音楽ID
 		 */
+
 		private void loadWords(Object[] data) {
 			Object o = data[0];
 			if (o instanceof EntityWords) {
@@ -231,7 +232,7 @@ public class LoaderResource extends Loader implements UncaughtExceptionHandler {
 				EntityWords words = (EntityWords) data[0];
 				String words_str = (String) data[1];
 				@SuppressWarnings("unchecked")
-				ConcurrentHashMap<String, Integer> initVariable = (ConcurrentHashMap<String, Integer>) data[2];
+				Map<String, Integer> initVariable = (Map<String, Integer>) data[2];
 				engine.getWordsManager().createWords(engine, words, words_str, initVariable);
 			} else if (o instanceof String) {
 				// 名前

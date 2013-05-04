@@ -24,7 +24,7 @@ import static org.lwjgl.opengl.GL11.glVertex2i;
 import hide92795.novelengine.client.NovelEngine;
 
 /**
- * 画面全体を描画範囲とするフィギュアデータです
+ * 画面全体を描画範囲とするフィギュアデータです。
  * 
  * @author hide92795
  */

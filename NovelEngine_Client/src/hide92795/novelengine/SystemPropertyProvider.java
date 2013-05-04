@@ -17,7 +17,6 @@
 //
 package hide92795.novelengine;
 
-
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -26,7 +25,7 @@ import java.util.Locale;
  * 
  * @author hide92795
  */
-public class SystemPropertyProvider {
+public final class SystemPropertyProvider {
 	/**
 	 * このクラスはユーティリティクラスのためオブジェクト化できません。
 	 */
@@ -40,7 +39,7 @@ public class SystemPropertyProvider {
 	 *            取得する変数の名前
 	 * @return 取得したシステム変数
 	 */
-	public static final int getSystemProperty(String name) {
+	public static int getSystemProperty(String name) {
 		switch (name) {
 		case SystemSettings.SYSTEM_YEAR:
 			return Calendar.getInstance(Locale.JAPAN).get(Calendar.YEAR);

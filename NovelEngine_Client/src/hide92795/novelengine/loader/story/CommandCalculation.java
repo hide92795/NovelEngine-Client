@@ -22,7 +22,7 @@ import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryCalculation;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.msgpack.unpacker.UnpackerIterator;
 
@@ -34,7 +34,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandCalculation implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
+			Map<String, Integer> initVariable, int line) throws Exception {
 		// byte 代入先変数タイプ, String 代入先変数名, byte 演算子, byte 左辺の変数タイプ,
 		// String 左辺の変数名, byte 右辺の変数タイプ, String 右辺の変数名,
 		byte varType = iterator.next().asIntegerValue().getByte();

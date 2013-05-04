@@ -25,7 +25,7 @@ import hide92795.novelengine.panel.Panel;
 
 /**
  * ユーザーがマウス及びキーボードなどで操作可能なオブジェクトを提供します。
- *
+ * 
  * @author hide92795
  */
 public abstract class EntityGui implements KeybordListener, Clickable {
@@ -39,7 +39,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 	private int y;
 
 	/**
-	 * このGuiオブジェクトがクリック可能かを表します
+	 * このGuiオブジェクトがクリック可能かを表します。
 	 */
 	private boolean enabled;
 
@@ -50,7 +50,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * このGUIオブジェクトを初期化します。
-	 *
+	 * 
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
@@ -58,7 +58,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * GUIオブジェクトを更新します。
-	 *
+	 * 
 	 * @param panel
 	 *            現在、画面を描画している{@link hide92795.novelengine.panel.Panel Panel} オブジェクト
 	 * @param delta
@@ -68,7 +68,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * GUIオブジェクトを描画します。
-	 *
+	 * 
 	 * @param engine
 	 *            　実行中の{@link hide92795.novelengine.client.NovelEngine}オブジェクト
 	 */
@@ -76,7 +76,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * クリックされた点がこのGuiオブジェクトのクリック範囲内かを判定します。
-	 *
+	 * 
 	 * @param x
 	 *            クリックされたウィンドウ内のX座標
 	 * @param y
@@ -110,8 +110,8 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 	}
 
 	/**
-	 * このGuiオブジェクトのX座標を返します
-	 *
+	 * このGuiオブジェクトのX座標を返します。
+	 * 
 	 * @return GuiオブジェクトのX座標
 	 */
 	public int getX() {
@@ -120,7 +120,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * このGuiオブジェクトのX座標を設定します。
-	 *
+	 * 
 	 * @param x
 	 *            GuiオブジェクトのX 座標
 	 */
@@ -129,8 +129,8 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 	}
 
 	/**
-	 * このGuiオブジェクトのY座標を返します
-	 *
+	 * このGuiオブジェクトのY座標を返します。
+	 * 
 	 * @return GuiオブジェクトのY座標
 	 */
 	public int getY() {
@@ -139,7 +139,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * このGuiオブジェクトのY座標を設定します。
-	 *
+	 * 
 	 * @param y
 	 *            GuiオブジェクトのY座標
 	 */
@@ -149,7 +149,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * このGuiオブジェクトが有効かを返します。
-	 *
+	 * 
 	 * @return このGuiオブジェクトが有効ならtrue
 	 */
 	public boolean isEnabled() {
@@ -158,7 +158,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * このGuiオブジェクトが現在有効か無効かを設定します。
-	 *
+	 * 
 	 * @param enabled
 	 *            このGuiオブジェクトを有効にするならtrue、無効にするならfalse
 	 */
@@ -168,7 +168,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * このGuiオブジェクトが描画されるかを設定します。
-	 *
+	 * 
 	 * @return このGuiオブジェクトが描画されるならtrue
 	 */
 	public boolean isVisible() {
@@ -177,7 +177,7 @@ public abstract class EntityGui implements KeybordListener, Clickable {
 
 	/**
 	 * このGuiオブジェクトが描画されるかどうかを設定します。
-	 *
+	 * 
 	 * @param visible
 	 *            このGuiオブジェクトを描画するならtrue、しないならfalse
 	 */

@@ -24,7 +24,7 @@ import hide92795.novelengine.manager.EffectManager.ClassData;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryBackGroundEffect;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.msgpack.unpacker.UnpackerIterator;
 
@@ -36,7 +36,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandBackGroundEffect implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
+			Map<String, Integer> initVariable, int line) throws Exception {
 		// 数値 対象, 数値 遅延（ms）, 背景エフェクト エフェクト
 		byte target = iterator.next().asIntegerValue().getByte();
 		int delay = iterator.next().asIntegerValue().getInt();

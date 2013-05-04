@@ -30,11 +30,11 @@ public class MouseEvent {
 	 */
 	private NovelEngine engine;
 	/**
-	 * イベントが発生した地点のX座標
+	 * イベントが発生した地点のX座標です。
 	 */
 	private int x;
 	/**
-	 * イベントが発生した地点のY座標
+	 * イベントが発生した地点のY座標です。
 	 */
 	private int y;
 	/**

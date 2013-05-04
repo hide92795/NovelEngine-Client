@@ -31,7 +31,7 @@ import org.newdawn.slick.opengl.Texture;
 
 /**
  * 複数行の文章データを保管し、描画などを行うクラスです。
- * 
+ *
  * @author hide92795
  */
 public class EntityWords {
@@ -83,7 +83,7 @@ public class EntityWords {
 	/**
 	 * 文章データを作成します。<br>
 	 * この時点ではまだ画像データの作成はされていません。
-	 * 
+	 *
 	 * @param characterId
 	 *            この文章の名前に使用するキャラクターのID
 	 */
@@ -94,7 +94,7 @@ public class EntityWords {
 
 	/**
 	 * 文章データを初期化します。
-	 * 
+	 *
 	 * @param story
 	 *            この文章データを表示している {@link hide92795.novelengine.panel.PanelStory PanelStory} オブジェクト
 	 */
@@ -119,7 +119,7 @@ public class EntityWords {
 
 	/**
 	 * 文章データを更新します。
-	 * 
+	 *
 	 * @param story
 	 *            この文章データを表示している {@link hide92795.novelengine.panel.PanelStory PanelStory} オブジェクト
 	 * @param delta
@@ -184,7 +184,7 @@ public class EntityWords {
 
 	/**
 	 * メッセージボックスに文章を描画します。
-	 * 
+	 *
 	 * @param engine
 	 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 	 */
@@ -199,7 +199,7 @@ public class EntityWords {
 
 	/**
 	 * 行を追加します。
-	 * 
+	 *
 	 * @param imageId
 	 *            この行の文章のイメージID
 	 * @param width
@@ -222,7 +222,7 @@ public class EntityWords {
 
 	/**
 	 * 文字送り完了時に呼ばれるリスナーを設定します。
-	 * 
+	 *
 	 * @param listener
 	 *            文字送りが終わった際に通知を受け取るリスナー
 	 */
@@ -246,7 +246,7 @@ public class EntityWords {
 
 	/**
 	 * 全ての文字送りが終わったかどうかを取得します。
-	 * 
+	 *
 	 * @return 全ての文字送りが終わったかどうか
 	 */
 	public final boolean isFinish() {
@@ -255,7 +255,7 @@ public class EntityWords {
 
 	/**
 	 * 文章データの１行のデータを表します。
-	 * 
+	 *
 	 * @author hide92795
 	 */
 	private class LineWords {
@@ -282,7 +282,7 @@ public class EntityWords {
 
 		/**
 		 * 文章データ内の１行分のデータを作成します。
-		 * 
+		 *
 		 * @param imageId
 		 *            表示するイメージID
 		 * @param width
@@ -298,7 +298,7 @@ public class EntityWords {
 
 		/**
 		 * この行を描画します。
-		 * 
+		 *
 		 * @param engine
 		 *            実行中の {@link hide92795.novelengine.client.NovelEngine NovelEngine} オブジェクト
 		 * @param ratio

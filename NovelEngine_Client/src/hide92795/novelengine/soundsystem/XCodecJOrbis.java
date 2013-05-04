@@ -17,6 +17,7 @@
 //
 package hide92795.novelengine.soundsystem;
 
+import hide92795.novelengine.Utils;
 import hide92795.novelengine.loader.Loader;
 
 import java.io.File;
@@ -24,22 +25,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import javax.sound.sampled.AudioFormat;
 
-// From the JOrbis library, http://www.jcraft.com/jorbis/
-import com.jcraft.jogg.Packet;
-import com.jcraft.jogg.Page;
-import com.jcraft.jogg.StreamState;
-import com.jcraft.jogg.SyncState;
-import com.jcraft.jorbis.DspState;
-import com.jcraft.jorbis.Block;
-import com.jcraft.jorbis.Comment;
-import com.jcraft.jorbis.Info;
+import javax.sound.sampled.AudioFormat;
 
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystemLogger;
+
+import com.jcraft.jogg.Packet;
+import com.jcraft.jogg.Page;
+import com.jcraft.jogg.StreamState;
+import com.jcraft.jogg.SyncState;
+import com.jcraft.jorbis.Block;
+import com.jcraft.jorbis.Comment;
+import com.jcraft.jorbis.DspState;
+import com.jcraft.jorbis.Info;
+
+// From the JOrbis library, http://www.jcraft.com/jorbis/
 
 /**
  * This class was modified by hide92795 based CodecJOrbis.java .<br>
@@ -89,11 +92,10 @@ public class XCodecJOrbis implements ICodec {
 	 */
 	private static final boolean XXX = false;
 
-	/**
-	 * URL to the audio file to stream from.
-	 */
-	private URL url;
-
+	// /**
+	// * URL to the audio file to stream from.
+	// */
+	// private URL url;
 	// /**
 	// * Used for connecting to the URL.
 	// */
@@ -162,11 +164,11 @@ public class XCodecJOrbis implements ICodec {
 	/**
 	 * Data packet.
 	 */
-	private Packet joggPacket = new Packet();
+	private final Packet joggPacket = new Packet();
 	/**
 	 * Data Page.
 	 */
-	private Page joggPage = new Page();
+	private final Page joggPage = new Page();
 	/**
 	 * Stream state.
 	 */
@@ -186,7 +188,7 @@ public class XCodecJOrbis implements ICodec {
 	/**
 	 * Comment fields.
 	 */
-	private Comment jorbisComment = new Comment();
+	private final Comment jorbisComment = new Comment();
 	/**
 	 * Info about the data.
 	 */
@@ -195,7 +197,7 @@ public class XCodecJOrbis implements ICodec {
 	/**
 	 * Processes status messages, warnings, and error messages.
 	 */
-	private SoundSystemLogger logger;
+	private final SoundSystemLogger logger;
 
 	/**
 	 * Constructor: Grabs a handle to the logger.
@@ -206,43 +208,50 @@ public class XCodecJOrbis implements ICodec {
 
 	/**
 	 * This method is ignored by CodecJOrbis, because it produces "nice" data.
-	 *
+	 * 
 	 * @param b
 	 *            True if the calling audio library requires byte-reversal from certain codecs
 	 */
+	@Override
 	public void reverseByteOrder(boolean b) {
 	}
 
 	/**
 	 * Prepares an input stream to read from. If another stream is already opened, it will be closed and a new input
 	 * stream opened in its place.
-	 *
+	 * 
 	 * @param url
 	 *            URL to an ogg file to stream from.
 	 * @return False if an error occurred or if end of stream was reached.
 	 */
+	@Override
 	public boolean initialize(URL url) {
 		initialized(SET, false);
 
-		if (joggStreamState != null)
+		if (joggStreamState != null) {
 			joggStreamState.clear();
-		if (jorbisBlock != null)
+		}
+		if (jorbisBlock != null) {
 			jorbisBlock.clear();
-		if (jorbisDspState != null)
+		}
+		if (jorbisDspState != null) {
 			jorbisDspState.clear();
-		if (jorbisInfo != null)
+		}
+		if (jorbisInfo != null) {
 			jorbisInfo.clear();
-		if (joggSyncState != null)
+		}
+		if (joggSyncState != null) {
 			joggSyncState.clear();
-
+		}
 		if (inputStream != null) {
 			try {
 				inputStream.close();
 			} catch (IOException ioe) {
+				Utils.printStackTraceToLogger(ioe);
 			}
 		}
 
-		this.url = url;
+		// this.url = url;
 		// this.bufferSize = SoundSystemConfig.getStreamingBufferSize() / 2;
 		this.bufferSize = 4096 * 2;
 
@@ -327,7 +336,7 @@ public class XCodecJOrbis implements ICodec {
 		int channels = jorbisInfo.channels;
 		int rate = jorbisInfo.rate;
 
-		audioFormat = new AudioFormat((float) rate, 16, channels, true, false);
+		audioFormat = new AudioFormat(rate, 16, channels, true, false);
 		pcmInfo = new float[1][][];
 		pcmIndex = new int[jorbisInfo.channels];
 
@@ -338,9 +347,10 @@ public class XCodecJOrbis implements ICodec {
 
 	/**
 	 * Returns false if the stream is busy initializing.
-	 *
+	 * 
 	 * @return True if steam is initialized.
 	 */
+	@Override
 	public boolean initialized() {
 		return initialized(GET, XXX);
 	}
@@ -348,23 +358,25 @@ public class XCodecJOrbis implements ICodec {
 	/**
 	 * Reads in one stream buffer worth of audio data. See {@link paulscode.sound.SoundSystemConfig SoundSystemConfig}
 	 * for more information about accessing and changing default settings.
-	 *
+	 * 
 	 * @return The audio data wrapped into a SoundBuffer context.
 	 */
+	@Override
 	public SoundBuffer read() {
 		byte[] returnBuffer = null;
 
 		while (!endOfStream(GET, XXX)
 				&& (returnBuffer == null || returnBuffer.length < SoundSystemConfig.getStreamingBufferSize())) {
-			if (returnBuffer == null)
+			if (returnBuffer == null) {
 				returnBuffer = readBytes();
-			else
+			} else {
 				returnBuffer = appendByteArrays(returnBuffer, readBytes());
+			}
 		}
 
-		if (returnBuffer == null)
+		if (returnBuffer == null) {
 			return null;
-
+		}
 		return new SoundBuffer(returnBuffer, audioFormat);
 	}
 
@@ -372,30 +384,33 @@ public class XCodecJOrbis implements ICodec {
 	 * Reads in all the audio data from the stream (up to the default "maximum file size". See
 	 * {@link paulscode.sound.SoundSystemConfig SoundSystemConfig} for more information about accessing and changing
 	 * default settings.
-	 *
+	 * 
 	 * @return the audio data wrapped into a SoundBuffer context.
 	 */
+	@Override
 	public SoundBuffer readAll() {
 		byte[] returnBuffer = null;
 
 		while (!endOfStream(GET, XXX)) {
-			if (returnBuffer == null)
+			if (returnBuffer == null) {
 				returnBuffer = readBytes();
-			else
+			} else {
 				returnBuffer = appendByteArrays(returnBuffer, readBytes());
+			}
 		}
 
-		if (returnBuffer == null)
+		if (returnBuffer == null) {
 			return null;
-
+		}
 		return new SoundBuffer(returnBuffer, audioFormat);
 	}
 
 	/**
 	 * Returns false if there is still more data available to be read in.
-	 *
+	 * 
 	 * @return True if end of stream was reached.
 	 */
+	@Override
 	public boolean endOfStream() {
 		return endOfStream(GET, XXX);
 	}
@@ -403,6 +418,7 @@ public class XCodecJOrbis implements ICodec {
 	/**
 	 * Closes the input stream and remove references to all instantiated objects.
 	 */
+	@Override
 	public void cleanup() {
 		joggStreamState.clear();
 		jorbisBlock.clear();
@@ -414,6 +430,7 @@ public class XCodecJOrbis implements ICodec {
 			try {
 				inputStream.close();
 			} catch (IOException ioe) {
+				Utils.printStackTraceToLogger(ioe);
 			}
 		}
 
@@ -427,33 +444,37 @@ public class XCodecJOrbis implements ICodec {
 
 	/**
 	 * Returns the audio format of the data being returned by the read() and readAll() methods.
-	 *
+	 * 
 	 * @return Information wrapped into an AudioFormat context.
 	 */
+	@Override
 	public AudioFormat getAudioFormat() {
 		return audioFormat;
 	}
 
 	/**
 	 * Reads in the header information for the ogg file, which is contained in the first three packets of data.
-	 *
+	 * 
 	 * @return True if successful.
+	 * @throws IOException
+	 *             何らかの入出力エラーが発生した場合
 	 */
 	private boolean readHeader() throws IOException {
 		// Update up JOrbis internal buffer:
 		index = joggSyncState.buffer(bufferSize);
 		// Read in a buffer of data:
 		int bytes = inputStream.read(joggSyncState.data, index, bufferSize);
-		if (bytes < 0)
+		if (bytes < 0) {
 			bytes = 0;
+		}
 		// Let JOrbis know how many bytes we got:
 		joggSyncState.wrote(bytes);
 
 		if (joggSyncState.pageout(joggPage) != 1) {
 			// Finished reading the entire file:
-			if (bytes < bufferSize)
+			if (bytes < bufferSize) {
 				return true;
-
+			}
 			errorMessage("Ogg header not recognized in method 'readHeader'.");
 			return false;
 		}
@@ -482,15 +503,16 @@ public class XCodecJOrbis implements ICodec {
 		while (i < 2) {
 			while (i < 2) {
 				int result = joggSyncState.pageout(joggPage);
-				if (result == 0)
+				if (result == 0) {
 					break;
+				}
 				if (result == 1) {
 					joggStreamState.pagein(joggPage);
 					while (i < 2) {
 						result = joggStreamState.packetout(joggPacket);
-						if (result == 0)
+						if (result == 0) {
 							break;
-
+						}
 						if (result == -1) {
 							errorMessage("Secondary Ogg header corrupt in " + "method 'readHeader'.");
 							return false;
@@ -503,8 +525,9 @@ public class XCodecJOrbis implements ICodec {
 			}
 			index = joggSyncState.buffer(bufferSize);
 			bytes = inputStream.read(joggSyncState.data, index, bufferSize);
-			if (bytes < 0)
+			if (bytes < 0) {
 				bytes = 0;
+			}
 			if (bytes == 0 && i < 2) {
 				errorMessage("End of file reached before finished reading" + "Ogg header in method 'readHeader'");
 				return false;
@@ -521,18 +544,19 @@ public class XCodecJOrbis implements ICodec {
 
 	/**
 	 * Reads and decodes a chunk of data of length "convertedBufferSize".
-	 *
+	 * 
 	 * @return Array containing the converted audio data.
 	 */
 	private byte[] readBytes() {
-		if (!initialized(GET, XXX))
+		if (!initialized(GET, XXX)) {
 			return null;
-
-		if (endOfStream(GET, XXX))
+		}
+		if (endOfStream(GET, XXX)) {
 			return null;
-
-		if (convertedBuffer == null)
+		}
+		if (convertedBuffer == null) {
 			convertedBuffer = new byte[convertedBufferSize];
+		}
 		byte[] returnBuffer = null;
 
 		float[][] pcmf;
@@ -556,9 +580,9 @@ public class XCodecJOrbis implements ICodec {
 				case (-1):
 					break;
 				default: {
-					if (jorbisBlock.synthesis(joggPacket) == 0)
+					if (jorbisBlock.synthesis(joggPacket) == 0) {
 						jorbisDspState.synthesis_blockin(jorbisBlock);
-
+					}
 					while ((samples = jorbisDspState.synthesis_pcmout(pcmInfo, pcmIndex)) > 0) {
 						pcmf = pcmInfo[0];
 						bout = (samples < convertedBufferSize ? samples : convertedBufferSize);
@@ -567,12 +591,15 @@ public class XCodecJOrbis implements ICodec {
 							mono = pcmIndex[i];
 							for (j = 0; j < bout; j++) {
 								val = (int) (pcmf[i][mono + j] * 32767.);
-								if (val > 32767)
+								if (val > 32767) {
 									val = 32767;
-								if (val < -32768)
+								}
+								if (val < -32768) {
 									val = -32768;
-								if (val < 0)
+								}
+								if (val < 0) {
 									val = val | 0x8000;
+								}
 								convertedBuffer[ptr] = (byte) (val);
 								convertedBuffer[ptr + 1] = (byte) (val >>> 8);
 								ptr += 2 * (jorbisInfo.channels);
@@ -586,8 +613,9 @@ public class XCodecJOrbis implements ICodec {
 				}
 			}
 
-			if (joggPage.eos() != 0)
+			if (joggPage.eos() != 0) {
 				endOfStream(SET, true);
+			}
 		}
 		}
 
@@ -600,12 +628,13 @@ public class XCodecJOrbis implements ICodec {
 				printStackTrace(e);
 				return null;
 			}
-			if (count == -1)
+			if (count == -1) {
 				return returnBuffer;
-
+			}
 			joggSyncState.wrote(count);
-			if (count == 0)
+			if (count == 0) {
 				endOfStream(SET, true);
+			}
 		}
 
 		return returnBuffer;
@@ -613,7 +642,7 @@ public class XCodecJOrbis implements ICodec {
 
 	/**
 	 * Internal method for synchronizing access to the boolean 'initialized'.
-	 *
+	 * 
 	 * @param action
 	 *            GET or SET.
 	 * @param value
@@ -621,14 +650,15 @@ public class XCodecJOrbis implements ICodec {
 	 * @return True if steam is initialized.
 	 */
 	private synchronized boolean initialized(boolean action, boolean value) {
-		if (action == SET)
+		if (action == SET) {
 			initialized = value;
+		}
 		return initialized;
 	}
 
 	/**
 	 * Internal method for synchronizing access to the boolean 'endOfStream'.
-	 *
+	 * 
 	 * @param action
 	 *            GET or SET.
 	 * @param value
@@ -636,32 +666,33 @@ public class XCodecJOrbis implements ICodec {
 	 * @return True if end of stream was reached.
 	 */
 	private synchronized boolean endOfStream(boolean action, boolean value) {
-		if (action == SET)
+		if (action == SET) {
 			endOfStream = value;
+		}
 		return endOfStream;
 	}
 
-	/**
-	 * Trims down the size of the array if it is larger than the specified maximum length.
-	 *
-	 * @param array
-	 *            Array containing audio data.
-	 * @param maxLength
-	 *            Maximum size this array may be.
-	 * @return New array.
-	 */
-	private static byte[] trimArray(byte[] array, int maxLength) {
-		byte[] trimmedArray = null;
-		if (array != null && array.length > maxLength) {
-			trimmedArray = new byte[maxLength];
-			System.arraycopy(array, 0, trimmedArray, 0, maxLength);
-		}
-		return trimmedArray;
-	}
+	// /**
+	// * Trims down the size of the array if it is larger than the specified maximum length.
+	// *
+	// * @param array
+	// * Array containing audio data.
+	// * @param maxLength
+	// * Maximum size this array may be.
+	// * @return New array.
+	// */
+	// private static byte[] trimArray(byte[] array, int maxLength) {
+	// byte[] trimmedArray = null;
+	// if (array != null && array.length > maxLength) {
+	// trimmedArray = new byte[maxLength];
+	// System.arraycopy(array, 0, trimmedArray, 0, maxLength);
+	// }
+	// return trimmedArray;
+	// }
 
 	/**
 	 * Creates a new array with the second array appended to the end of the first array.
-	 *
+	 * 
 	 * @param arrayOne
 	 *            The first array.
 	 * @param arrayTwo
@@ -675,10 +706,11 @@ public class XCodecJOrbis implements ICodec {
 		int bytes = arrayTwoBytes;
 
 		// Make sure we aren't trying to append more than is there:
-		if (arrayTwo == null || arrayTwo.length == 0)
+		if (arrayTwo == null || arrayTwo.length == 0) {
 			bytes = 0;
-		else if (arrayTwo.length < arrayTwoBytes)
+		} else if (arrayTwo.length < arrayTwoBytes) {
 			bytes = arrayTwo.length;
+		}
 
 		if (arrayOne == null && (arrayTwo == null || bytes <= 0)) {
 			// no data, just return
@@ -710,7 +742,7 @@ public class XCodecJOrbis implements ICodec {
 
 	/**
 	 * Creates a new array with the second array appended to the end of the first array.
-	 *
+	 * 
 	 * @param arrayOne
 	 *            The first array.
 	 * @param arrayTwo
@@ -749,7 +781,7 @@ public class XCodecJOrbis implements ICodec {
 
 	/**
 	 * Prints an error message.
-	 *
+	 * 
 	 * @param message
 	 *            Message to print.
 	 */
@@ -759,7 +791,7 @@ public class XCodecJOrbis implements ICodec {
 
 	/**
 	 * Prints an exception's error message followed by the stack trace.
-	 *
+	 * 
 	 * @param e
 	 *            Exception containing the information to print.
 	 */

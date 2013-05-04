@@ -22,7 +22,7 @@ package hide92795.novelengine;
  * 
  * @author hide92795
  */
-public class SystemSettings {
+public final class SystemSettings {
 	/**
 	 * このクラスはユーティリティクラスのためオブジェクト化できません。
 	 */
@@ -51,7 +51,7 @@ public class SystemSettings {
 	 */
 	public static final String SETTING_WORDS_SPEED = "words_speed";
 	/**
-	 * {@link hide92795.novelengine.panel.PanelPrestartStory PanelPrestartStory 上で描画する背景色を表します。}
+	 * {@link hide92795.novelengine.panel.PanelPrestartStory PanelPrestartStory} 上で描画する背景色を表します。
 	 */
 	public static final String RENDER_PRESTART_BACKGROUND_COLOR = "prestart_bgcolor";
 	/**

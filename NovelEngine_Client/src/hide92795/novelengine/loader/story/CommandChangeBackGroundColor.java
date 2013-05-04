@@ -22,7 +22,7 @@ import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryChangeBackGroundColor;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.msgpack.unpacker.UnpackerIterator;
 
@@ -34,7 +34,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandChangeBackGroundColor implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
+			Map<String, Integer> initVariable, int line) throws Exception {
 		// byte 対象, int 色, int アルファ値
 		byte target = iterator.next().asIntegerValue().getByte();
 		int rgb = iterator.next().asIntegerValue().getInt();

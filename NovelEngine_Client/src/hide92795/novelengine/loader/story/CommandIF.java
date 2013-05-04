@@ -22,7 +22,7 @@ import hide92795.novelengine.loader.LoaderResource;
 import hide92795.novelengine.story.Story;
 import hide92795.novelengine.story.StoryIF;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.msgpack.unpacker.UnpackerIterator;
 
@@ -34,7 +34,7 @@ import org.msgpack.unpacker.UnpackerIterator;
 public class CommandIF implements Command {
 	@Override
 	public Story load(NovelEngine engine, UnpackerIterator iterator, LoaderResource resourceLoader,
-			ConcurrentHashMap<String, Integer> initVariable, int line) throws Exception {
+			Map<String, Integer> initVariable, int line) throws Exception {
 		// byte 演算子, byte 左変数タイプ ,int 左数字, byte 右変数タイプ ,int 右数字, int 真, int 偽
 		byte operator = iterator.next().asIntegerValue().getByte();
 		byte leftVarType = iterator.next().asIntegerValue().getByte();

@@ -41,7 +41,7 @@ import org.newdawn.slick.opengl.Texture;
  * 
  * @author hide92795
  */
-public class Renderer {
+public final class Renderer {
 	/**
 	 * このクラスはユーティリティクラスのためオブジェクト化できません。
 	 */

@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
 
 /**
  * 進行中のゲームの基本データを格納します。
- *
+ * 
  * @author hide92795
  */
 public class DataBasic {
@@ -58,7 +58,7 @@ public class DataBasic {
 
 	/**
 	 * ゲーム名を取得します。
-	 *
+	 * 
 	 * @return 実行中のゲームの名前
 	 */
 	public String getGamename() {
@@ -67,7 +67,7 @@ public class DataBasic {
 
 	/**
 	 * ゲーム名を設定します。
-	 *
+	 * 
 	 * @param gamename
 	 *            設定するゲーム名
 	 */
@@ -77,7 +77,7 @@ public class DataBasic {
 
 	/**
 	 * ゲームのバージョンを取得します。
-	 *
+	 * 
 	 * @return 実行中のゲームのバージョン
 	 */
 	public String getVersion() {
@@ -86,7 +86,7 @@ public class DataBasic {
 
 	/**
 	 * ゲームのバージョンを設定します。
-	 *
+	 * 
 	 * @param version
 	 *            設定するゲームのバージョン
 	 */
@@ -95,8 +95,8 @@ public class DataBasic {
 	}
 
 	/**
-	 * ゲームのデフォルトの画面横幅を取得します
-	 *
+	 * ゲームのデフォルトの画面横幅を取得します。
+	 * 
 	 * @return ゲームのデフォルトの画面横幅
 	 */
 	public int getWidth() {
@@ -104,8 +104,8 @@ public class DataBasic {
 	}
 
 	/**
-	 * ゲームのデフォルトの画面横幅を設定します
-	 *
+	 * ゲームのデフォルトの画面横幅を設定します。
+	 * 
 	 * @param width
 	 *            ゲームのデフォルトの画面横幅
 	 */
@@ -114,8 +114,8 @@ public class DataBasic {
 	}
 
 	/**
-	 * ゲームのデフォルトの画面縦幅を取得します
-	 *
+	 * ゲームのデフォルトの画面縦幅を取得します。
+	 * 
 	 * @return ゲームのデフォルトの画面縦幅
 	 */
 	public int getHeight() {
@@ -123,8 +123,8 @@ public class DataBasic {
 	}
 
 	/**
-	 * ゲームのデフォルトの画面縦幅を設定します
-	 *
+	 * ゲームのデフォルトの画面縦幅を設定します。
+	 * 
 	 * @param height
 	 *            ゲームのデフォルトの画面縦幅
 	 */
@@ -134,7 +134,7 @@ public class DataBasic {
 
 	/**
 	 * ゲームのウィンドウのサイズをユーザーが変更できるかを取得します。
-	 *
+	 * 
 	 * @return ユーザーが変更できる場合はtrue
 	 */
 	public boolean isAllowResize() {
@@ -143,7 +143,7 @@ public class DataBasic {
 
 	/**
 	 * ゲームのウィンドウのサイズをユーザーが変更できるかを設定します。
-	 *
+	 * 
 	 * @param allowResize
 	 *            ユーザーが変更できる場合はtrue
 	 */
@@ -153,7 +153,7 @@ public class DataBasic {
 
 	/**
 	 * ゲームのウィンドウに表示するアイコンを格納した配列を取得します。
-	 *
+	 * 
 	 * @return 表示するアイコンを格納した配列
 	 */
 	public ByteBuffer[] getIcons() {
@@ -162,7 +162,7 @@ public class DataBasic {
 
 	/**
 	 * ゲームのウィンドウに表示するアイコンを格納した配列を設定します。
-	 *
+	 * 
 	 * @param icons
 	 *            表示するアイコンを格納した配列
 	 */
@@ -172,7 +172,7 @@ public class DataBasic {
 
 	/**
 	 * ウィンドウ内のゲーム画面のアスペクト比を保つための {@link hide92795.novelengine.AspectRatio AspectRatio} オブジェクトを取得します。
-	 *
+	 * 
 	 * @return アスペクト比を保つための {@link hide92795.novelengine.AspectRatio AspectRatio} オブジェクト
 	 */
 	public AspectRatio getAspectRatio() {
@@ -181,7 +181,7 @@ public class DataBasic {
 
 	/**
 	 * ウィンドウ内のゲーム画面のアスペクト比を保つための {@link hide92795.novelengine.AspectRatio AspectRatio} オブジェクトを設定します。
-	 *
+	 * 
 	 * @param width
 	 *            横幅の比
 	 * @param height

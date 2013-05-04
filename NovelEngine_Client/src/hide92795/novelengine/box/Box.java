@@ -128,19 +128,19 @@ public abstract class Box {
 	 */
 	private final int areaHeight;
 	/**
-	 * 更新時のモード
+	 * 更新時のモードです。
 	 */
 	private int mode;
 	/**
-	 * 現在のX座標
+	 * 現在のX座標です。
 	 */
 	private float x;
 	/**
-	 * 現在のY座標
+	 * 現在のY座標です。
 	 */
 	private float y;
 	/**
-	 * 現在のアルファ値
+	 * 現在のアルファ値です。
 	 */
 	private float alpha;
 	/**

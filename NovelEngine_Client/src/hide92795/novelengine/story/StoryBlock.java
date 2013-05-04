@@ -25,7 +25,7 @@ import hide92795.novelengine.panel.PanelStory;
  * 
  * @author hide92795
  */
-public class StoryBlock extends Story {
+public final class StoryBlock extends Story {
 	/**
 	 * 開始ブロックを表すストーリーデータです。
 	 */

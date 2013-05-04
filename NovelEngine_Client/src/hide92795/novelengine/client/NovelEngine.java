@@ -71,9 +71,12 @@ import hide92795.novelengine.story.StoryBlock;
 import hide92795.novelengine.story.StoryMoveChapter;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -104,7 +107,7 @@ public class NovelEngine {
 	/**
 	 * NovelEngineのバージョンです。
 	 */
-	public static final String VERSION = "a1.6.1";
+	public static final String VERSION = "a1.6.2";
 	/**
 	 * キューデータを実行するキューマネージャーです。
 	 */
@@ -244,17 +247,37 @@ public class NovelEngine {
 	}
 
 	/**
-	 * NovelEngineシステムを起動します。
+	 * NovelEngineシステムを起動します。<br>
+	 * もし、既に別のプロセス上にてNovelEngineシステムが起動していた場合には起動せずに終了します。
 	 * 
 	 * @param arg
 	 *            起動時に与えられた引数
 	 */
 	public static void main(String[] arg) {
-		Logger.init();
-		Logger.info("NovelEngine " + VERSION + " launched!");
-		initNativeLibrary();
-		NovelEngine engine = new NovelEngine();
-		engine.start();
+		// ファイルロックを行う
+		File lockFile = new File(getCurrentDir(), ".lock");
+		lockFile.deleteOnExit();
+		try (FileOutputStream fos = new FileOutputStream(lockFile)) {
+			FileChannel fc = fos.getChannel();
+			FileLock lock = fc.tryLock();
+			if (lock == null) {
+				throw new RuntimeException("NovelEngine already launched!");
+			}
+
+			// システム起動
+			Logger.init();
+			Logger.info("NovelEngine " + VERSION + " launched!");
+			initNativeLibrary();
+			NovelEngine engine = new NovelEngine();
+			engine.start();
+
+			// ロック解除
+			lock.release();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		System.exit(0);
 	}
 
 	/**
@@ -380,7 +403,6 @@ public class NovelEngine {
 		soundManager.clean();
 		AL.destroy();
 		Logger.info("NovelEngine shutdowned!");
-		System.exit(0);
 	}
 
 	/**

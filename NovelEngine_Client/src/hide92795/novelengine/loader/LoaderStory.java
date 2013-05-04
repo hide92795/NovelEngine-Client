@@ -50,7 +50,9 @@ import hide92795.novelengine.story.StoryScene;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.CipherInputStream;
@@ -113,7 +115,7 @@ public class LoaderStory extends Loader {
 	public static DataStory load(NovelEngine engine, File file, int id) {
 		LoaderResource resourceLoader = new LoaderResource(engine, id);
 		DataStory data = new DataStory(id);
-		ConcurrentHashMap<String, Integer> initVariable = new ConcurrentHashMap<String, Integer>();
+		Map<String, Integer> initVariable = Collections.unmodifiableMap(new ConcurrentHashMap<String, Integer>());
 		CipherInputStream cis = null;
 		try {
 			cis = Loader.createCipherInputStream(file);
@@ -144,7 +146,7 @@ public class LoaderStory extends Loader {
 					// シーン
 					int sceneId = iterator.next().asIntegerValue().getInt();
 					StoryScene story = new StoryScene(currentLine, sceneId);
-					initVariable = new ConcurrentHashMap<String, Integer>();
+					initVariable = Collections.unmodifiableMap(new ConcurrentHashMap<String, Integer>());
 					data.addStory(story);
 					break;
 				}

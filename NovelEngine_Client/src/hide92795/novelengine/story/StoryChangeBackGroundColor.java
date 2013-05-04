@@ -31,19 +31,19 @@ public class StoryChangeBackGroundColor extends Story {
 	 */
 	private final byte target;
 	/**
-	 * 変更する背景色の赤成分です
+	 * 変更する背景色の赤成分です。
 	 */
 	private final byte r;
 	/**
-	 * 変更する背景色の緑成分です
+	 * 変更する背景色の緑成分です。
 	 */
 	private final byte g;
 	/**
-	 * 変更する背景色の青成分です
+	 * 変更する背景色の青成分です。
 	 */
 	private final byte b;
 	/**
-	 * 変更する背景色のアルファ成分です
+	 * 変更する背景色のアルファ成分です。
 	 */
 	private final byte a;
 

@@ -45,7 +45,7 @@ public class StoryVoice extends Story {
 	 */
 	private String sourcename;
 	/**
-	 * このボイスの識別子
+	 * このボイスの識別子です。
 	 */
 	private String identifier;
 	/**
@@ -54,7 +54,7 @@ public class StoryVoice extends Story {
 	 */
 	private boolean playing;
 	/**
-	 * 現在、画面を描画している {@link hide92795.novelengine.panel.PanelStory PanelStory} オブジェクト
+	 * 現在、画面を描画している {@link hide92795.novelengine.panel.PanelStory PanelStory} オブジェクトです。
 	 */
 	private PanelStory story;
 

@@ -36,7 +36,7 @@ import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.text.AttributedString;
 import java.util.LinkedList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,8 +80,7 @@ public class WordsManager {
 	 * @param initVariable
 	 *            初期変数
 	 */
-	public void createWords(NovelEngine engine, EntityWords words, String words_str,
-			ConcurrentHashMap<String, Integer> initVariable) {
+	public void createWords(NovelEngine engine, EntityWords words, String words_str, Map<String, Integer> initVariable) {
 		Properties renderProp = engine.getConfigurationManager().getProperties(ConfigurationManager.VARIABLE_RENDER);
 
 		int boxId;

@@ -25,10 +25,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ログに関係するクラスです。
- *
+ * 
  * @author hide92795
  */
-public class Logger {
+public final class Logger {
 	/**
 	 * このクラスはユーティリティクラスのためオブジェクト化できません。
 	 */
@@ -70,11 +70,13 @@ public class Logger {
 			public void write(int b) throws IOException {
 			}
 		}) {
+			@Override
 			public void println(String s) {
 				logger_stdout.info(s);
 				stdout.println(s);
 			}
 
+			@Override
 			public void print(String s) {
 				logger_stdout.info(s);
 				stdout.println(s);
@@ -85,11 +87,13 @@ public class Logger {
 			public void write(int b) throws IOException {
 			}
 		}) {
+			@Override
 			public void println(String s) {
 				logger_stderr.info(s);
 				stderr.println(s);
 			}
 
+			@Override
 			public void print(String s) {
 				logger_stderr.info(s);
 				stderr.println(s);
@@ -99,7 +103,7 @@ public class Logger {
 
 	/**
 	 * ログレベルINFOでログを出力します。
-	 *
+	 * 
 	 * @param msg
 	 *            出力するメッセージ
 	 */
@@ -109,7 +113,7 @@ public class Logger {
 
 	/**
 	 * ログレベルERRORでログを出力します。
-	 *
+	 * 
 	 * @param msg
 	 *            出力するメッセージ
 	 */
@@ -119,7 +123,7 @@ public class Logger {
 
 	/**
 	 * ログレベルWARNでログを出力します。
-	 *
+	 * 
 	 * @param msg
 	 *            出力するメッセージ
 	 */
@@ -129,7 +133,7 @@ public class Logger {
 
 	/**
 	 * ログレベルDEBUGでログを出力します。
-	 *
+	 * 
 	 * @param msg
 	 *            出力するメッセージ
 	 */
@@ -139,7 +143,7 @@ public class Logger {
 
 	/**
 	 * 元のシステム「標準」出力ストリームのみへ出力します。
-	 *
+	 * 
 	 * @param msg
 	 *            出力するメッセージ
 	 */
@@ -149,7 +153,7 @@ public class Logger {
 
 	/**
 	 * 元のシステム「標準」エラー出力ストリームのみへ出力します。
-	 *
+	 * 
 	 * @param msg
 	 *            出力するメッセージ
 	 */

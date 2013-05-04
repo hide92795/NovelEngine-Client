@@ -45,7 +45,7 @@ public class StoryPlaySE extends Story {
 	 */
 	private String sourcename;
 	/**
-	 * このサウンドの識別子
+	 * このサウンドの識別子です。
 	 */
 	private String identifier;
 	/**
